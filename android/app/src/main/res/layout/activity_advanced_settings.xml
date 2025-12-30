@@ -150,7 +150,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Parallel lighting & effects computation"
+                    android:text="Parallel lighting &amp; effects computation"
                     android:textColor="#8b949e"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -255,7 +255,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="⚠️ Thermal Throttle Bypass"
+                    android:text="WARNING: Thermal Throttle Bypass"
                     android:textColor="#f85149"
                     android:textSize="16sp"
                     android:textStyle="bold" />
