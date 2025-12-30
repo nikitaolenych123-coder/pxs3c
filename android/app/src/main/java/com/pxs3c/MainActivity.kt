@@ -125,11 +125,11 @@ class MainActivity : BaseActivity() {
             }
         })
 
-        btnSettings.setOnClickListener {
+        btnSettings?.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
         
-        btnLoadGame.setOnClickListener {
+        btnLoadGame?.setOnClickListener {
             statusText.text = "Select PKG/ISO/ELF file..."
             filePickerLauncher.launch("*/*")
         }

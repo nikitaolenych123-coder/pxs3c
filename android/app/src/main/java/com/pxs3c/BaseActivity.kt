@@ -14,7 +14,7 @@ import java.lang.Exception
 abstract class BaseActivity : AppCompatActivity() {
     
     companion object {
-        private const val TAG = "PXS3C-BaseActivity"
+        const val TAG = "PXS3C-BaseActivity"
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
