@@ -153,7 +153,6 @@ class AdvancedSettingsActivity : AppCompatActivity() {
         return true
     }
     
-    /* TODO: Implement native methods in pxs3c_jni.cpp
     // Native methods
     private external fun nativeSetSVE2Enabled(enabled: Boolean)
     private external fun nativeSetVulkanGPL(enabled: Boolean)
@@ -161,5 +160,10 @@ class AdvancedSettingsActivity : AppCompatActivity() {
     private external fun nativeSetThermalBypass(enabled: Boolean)
     private external fun nativeSetAsyncCompute(enabled: Boolean)
     private external fun nativeSetTargetFPS(fps: Int)
-    */
+    
+    companion object {
+        init {
+            System.loadLibrary("pxs3c_jni")
+        }
+    }
 }
