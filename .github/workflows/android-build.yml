@@ -54,9 +54,7 @@ jobs:
         CMAKE_BUILD_TYPE: Release
       run: |
         echo "🚀 Building High-Performance Release APK for Snapdragon 8s Gen 3"
-        gradle assembleRelease --stacktrace \
-          -DCMAKE_C_FLAGS="-O3 -Ofast -march=armv9-a+sve2 -mtune=cortex-x4 -flto=full" \
-          -DCMAKE_CXX_FLAGS="-O3 -Ofast -march=armv9-a+sve2 -mtune=cortex-x4 -flto=full"
+        gradle assembleRelease --stacktrace
 
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4

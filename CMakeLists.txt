@@ -8,13 +8,13 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # High-Performance Build Flags for Snapdragon 8s Gen 3 (Cortex-X4 + Adreno 735)
 if(ANDROID)
     message(STATUS "🚀 PXS3C High-Performance Build Mode")
-    message(STATUS "Target: Snapdragon 8s Gen 3 (ARMv9-A + SVE2 + Cortex-X4)")
+    message(STATUS "Target: Snapdragon 8s Gen 3 (ARMv9-A + SVE2)")
     
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Ofast -march=armv9-a+sve2 -mtune=cortex-x4")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Ofast -march=armv9-a+sve2")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto=full -fomit-frame-pointer -ffast-math")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftree-vectorize -fvectorize")
     
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -Ofast -march=armv9-a+sve2 -mtune=cortex-x4")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -Ofast -march=armv9-a+sve2")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -flto=full -fomit-frame-pointer -ffast-math")
     
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flto=full -Wl,--gc-sections -Wl,-O3")
