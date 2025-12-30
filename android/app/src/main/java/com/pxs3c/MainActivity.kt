@@ -38,6 +38,9 @@ class MainActivity : AppCompatActivity() {
     private var isRunning = false
     private lateinit var surfaceView: SurfaceView
     private lateinit var statusText: TextView
+    private lateinit var fpsText: TextView
+    private lateinit var btnStop: Button
+    private lateinit var btnBootGame: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +48,12 @@ class MainActivity : AppCompatActivity() {
         
         surfaceView = findViewById(R.id.surfaceView)
         statusText = findViewById(R.id.statusText)
+        fpsText = findViewById(R.id.fpsText)
         val btnSettings = findViewById<Button>(R.id.btnSettings)
         val btnLoadGame = findViewById<Button>(R.id.btnLoadGame)
+        btnBootGame = findViewById(R.id.btnBootGame)
+        btnStop = findViewById(R.id.btnStop)
+        val btnRefresh = findViewById<Button>(R.id.btnRefresh)
         
         // Use SAF (Storage Access Framework) for file picking
         filePickerLauncher = registerForActivityResult(
@@ -113,7 +120,37 @@ class MainActivity : AppCompatActivity() {
         }
         
         btnLoadGame.setOnClickListener {
-            filePickerLauncher.launch("*/*") // Allow all file types
+            statusText.text = "Select PKG/ISO/ELF file..."
+            filePickerLauncher.launch("*/*")
+        }
+        
+        btnBootGame.setOnClickListener {
+            if (!gameLoaded) {
+                Toast.makeText(this, "Please load a game first", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (!isRunning) {
+                startFrameLoop()
+                btnStop.isEnabled = true
+                btnBootGame.text = "Pause"
+            } else {
+                stopFrameLoop()
+                btnBootGame.text = "Resume"
+            }
+        }
+        
+        btnStop.setOnClickListener {
+            stopFrameLoop()
+            gameLoaded = false
+            btnStop.isEnabled = false
+            btnBootGame.text = "Boot Game"
+            statusText.text = "Stopped"
+            fpsText.text = "FPS: 0"
+        }
+        
+        btnRefresh.setOnClickListener {
+            // Refresh game list (placeholder)
+            Toast.makeText(this, "Game list refresh (not implemented)", Toast.LENGTH_SHORT).show()
         }
     }
     
