@@ -13,15 +13,31 @@ static std::unique_ptr<pxs3c::Emulator> g_emu;
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_pxs3c_MainActivity_nativeInit(JNIEnv* env, jobject thiz) {
-    g_emu = std::make_unique<pxs3c::Emulator>();
-    return g_emu->init() ? JNI_TRUE : JNI_FALSE;
+    LOGI("nativeInit called - Starting initialization");
+    try {
+        g_emu = std::make_unique<pxs3c::Emulator>();
+        if (!g_emu->init()) {
+            LOGE("Emulator initialization failed");
+            return JNI_FALSE;
+        }
+        LOGI("Emulator initialization successful");
+        return JNI_TRUE;
+    } catch (const std::exception& e) {
+        LOGE("Exception in nativeInit: %s", e.what());
+        return JNI_FALSE;
+    } catch (...) {
+        LOGE("Unknown exception in nativeInit");
+        return JNI_FALSE;
+    }
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_pxs3c_MainActivity_nativeLoadGame(JNIEnv* env, jobject thiz, jstring jpath) {
-    const char* path = env->GetStringUTFChars(jpath, nullptr);
-    
-    LOGI("╔════════════════════════════════════════╗");
+    try {
+        const char* path = env->GetStringUTFChars(jpath, nullptr);
+        if (!path) return JNI_FALSE;
+        
+        LOGI("╔════════════════════════════════════════╗");
     LOGI("║   PXS3C - RPCS3 ARM64 Port            ║");
     LOGI("║   Based on RPCS3 by Nekotekina       ║");
     LOGI("╚════════════════════════════════════════╝");
@@ -164,14 +180,27 @@ Java_com_pxs3c_MainActivity_nativeShutdown(JNIEnv* env, jobject thiz) {
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_pxs3c_MainActivity_nativeAttachSurface(JNIEnv* env, jobject thiz, jobject surface) {
 #ifdef __ANDROID__
-    if (!g_emu) {
-        g_emu = std::make_unique<pxs3c::Emulator>();
-        if (!g_emu->init()) return JNI_FALSE;
+    try {
+        if (!g_emu) {
+            LOGI("Re-initializing emulator in attachSurface");
+            g_emu = std::make_unique<pxs3c::Emulator>();
+            if (!g_emu->init()) return JNI_FALSE;
+        }
+        ANativeWindow* window = ANativeWindow_fromSurface(env, surface);
+        if (!window) {
+            LOGE("Failed to get ANativeWindow from surface");
+            return JNI_FALSE;
+        }
+        bool ok = g_emu->attachAndroidWindow(window);
+        ANativeWindow_release(window);
+        return ok ? JNI_TRUE : JNI_FALSE;
+    } catch (const std::exception& e) {
+        LOGE("Exception in nativeAttachSurface: %s", e.what());
+        return JNI_FALSE;
+    } catch (...) {
+        LOGE("Unknown exception in nativeAttachSurface");
+        return JNI_FALSE;
     }
-    ANativeWindow* window = ANativeWindow_fromSurface(env, surface);
-    bool ok = g_emu->attachAndroidWindow(window);
-    ANativeWindow_release(window);
-    return ok ? JNI_TRUE : JNI_FALSE;
 #else
     (void)env; (void)thiz; (void)surface;
     return JNI_FALSE;
