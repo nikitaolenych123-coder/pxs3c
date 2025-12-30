@@ -1,36 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#1e1e1e">
 
     <SurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- Status bar at bottom -->
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="12dp"
+        android:text="Ready"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        android:background="#80000000" />
+
+    <!-- Control panel at top right -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_margin="12dp"
-        android:orientation="vertical"
-        android:spacing="8dp">
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btnLoadGame"
-            android:layout_width="120dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:text="Load Game"
+            android:text="Boot Game"
             android:layout_marginBottom="8dp"
-            android:backgroundTint="#51cf66"
-            android:textColor="#ffffff" />
+            android:backgroundTint="#268bd2"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnSettings"
-            android:layout_width="120dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:text="Settings"
-            android:backgroundTint="#4dabf7"
+            android:text="Configuration"
+            android:backgroundTint="#586e75"
             android:textColor="#ffffff" />
     </LinearLayout>
 </FrameLayout>

@@ -1,48 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <SeekBar
-        android:id="@+id/fpsSeek"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Switch
-        android:id="@+id/vsyncSwitch"
-        android:text="VSync (FIFO)"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    android:background="#1e1e1e">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/editR"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="R" />
-        <EditText
-            android:id="@+id/editG"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="G" />
-        <EditText
-            android:id="@+id/editB"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="B" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <Button
-        android:id="@+id/applyBtn"
-        android:text="Apply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PXS3C Configuration"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:paddingBottom="16dp" />
+
+        <!-- CPU Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CPU"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#268bd2"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PPU Decoder"
+            android:textColor="#b0b0b0"
+            android:paddingBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/ppuDecoderSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#2b2b2b"
+            android:paddingBottom="12dp" />
+
+        <!-- GPU Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GPU"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#268bd2"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Renderer"
+            android:textColor="#b0b0b0"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vulkan (Android)"
+            android:textColor="#ffffff"
+            android:paddingBottom="4dp"
+            android:background="#2b2b2b"
+            android:padding="12dp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/vsyncSwitch"
+            android:text="VSync"
+            android:textColor="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp" />
+
+        <!-- Performance Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Performance"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#268bd2"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/fpsLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Target FPS: 60"
+            android:textColor="#b0b0b0"
+            android:paddingBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/fpsSeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="3"
+            android:progress="2" />
+
+        <!-- Clear Color Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Clear Color (RGB)"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#268bd2"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/editR"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="R"
+                android:textColorHint="#808080"
+                android:textColor="#ffffff"
+                android:inputType="numberDecimal"
+                android:background="#2b2b2b"
+                android:padding="12dp"
+                android:layout_marginEnd="4dp" />
+            <EditText
+                android:id="@+id/editG"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="G"
+                android:textColorHint="#808080"
+                android:textColor="#ffffff"
+                android:inputType="numberDecimal"
+                android:background="#2b2b2b"
+                android:padding="12dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp" />
+            <EditText
+                android:id="@+id/editB"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="B"
+                android:textColorHint="#808080"
+                android:textColor="#ffffff"
+                android:inputType="numberDecimal"
+                android:background="#2b2b2b"
+                android:padding="12dp"
+                android:layout_marginStart="4dp" />
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:gravity="end">
+
+            <Button
+                android:id="@+id/cancelBtn"
+                android:text="Cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#586e75"
+                android:textColor="#ffffff"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/applyBtn"
+                android:text="Save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#268bd2"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
