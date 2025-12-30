@@ -8,17 +8,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # If not available, builds will use interpreter fallback
 # LLVM_FOUND will be set by root CMakeLists.txt
 
-# Build pxs3c_core from root
+# Build pxs3c_core and pxs3c_jni from root
 add_subdirectory(${CMAKE_SOURCE_DIR}/../.. ${CMAKE_BINARY_DIR}/pxs3c_root)
-
-add_library(pxs3c_jni SHARED
-  ../../src/android/jni/pxs3c_jni.cpp
-)
-
-target_include_directories(pxs3c_jni PRIVATE ../../src)
-
-target_link_libraries(pxs3c_jni PRIVATE pxs3c_core
-    log
-    android
-    vulkan
-)
