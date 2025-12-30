@@ -1,6 +1,8 @@
 #include "cpu/PPUJIT.h"
 #include "cpu/PPUInterpreter.h"
+#ifdef LLVM_AVAILABLE
 #include "cpu/LLVMJITCompiler.h"
+#endif
 #include "memory/MemoryManager.h"
 #include <iostream>
 #include <chrono>
@@ -21,6 +23,7 @@ bool PPUJIT::init(PPUInterpreter* ppu, MemoryManager* memory) {
     ppu_ = ppu;
     memory_ = memory;
     
+#ifdef LLVM_AVAILABLE
     // Initialize LLVM JIT compiler
     llvmJit_ = std::make_unique<LLVMJITCompiler>();
     if (!llvmJit_->init()) {
@@ -30,6 +33,9 @@ bool PPUJIT::init(PPUInterpreter* ppu, MemoryManager* memory) {
     }
     
     std::cout << "PPU JIT compiler initialized with LLVM backend" << std::endl;
+#else
+    std::cout << "PPU JIT compiler initialized (LLVM not available, using interpreter only)" << std::endl;
+#endif
     return true;
 }
 
