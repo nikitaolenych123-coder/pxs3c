@@ -107,7 +107,7 @@ if(ANDROID)
     src/android/jni/pxs3c_jni.cpp
   )
   target_include_directories(pxs3c_jni PRIVATE src)
-  target_link_libraries(pxs3c_jni PRIVATE pxs3c_core)
+  target_link_libraries(pxs3c_jni PRIVATE pxs3c_core android vulkan)
 endif()
 
 if(UNIX)
