@@ -16,7 +16,12 @@ Java_com_pxs3c_MainActivity_nativeInit(JNIEnv* env, jobject thiz) {
     g_emu = std::make_unique<pxs3c::Emulator>();
     return g_emu->init() ? JNI_TRUE : JNI_FALSE;
 }
-LOGI("╔════════════════════════════════════════╗");
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_pxs3c_MainActivity_nativeLoadGame(JNIEnv* env, jobject thiz, jstring jpath) {
+    const char* path = env->GetStringUTFChars(jpath, nullptr);
+    
+    LOGI("╔════════════════════════════════════════╗");
     LOGI("║   PXS3C - RPCS3 ARM64 Port            ║");
     LOGI("║   Based on RPCS3 by Nekotekina       ║");
     LOGI("╚════════════════════════════════════════╝");
