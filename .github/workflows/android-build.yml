@@ -33,6 +33,8 @@ jobs:
       env:
         ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
       run: |
+        export JAVA_HOME="${JAVA_HOME_17_X64:-$JAVA_HOME}"
+        export PATH="$JAVA_HOME/bin:$PATH"
         mkdir -p "$ANDROID_SDK_ROOT"
         cd "$ANDROID_SDK_ROOT"
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdtools.zip
