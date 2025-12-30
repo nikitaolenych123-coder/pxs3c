@@ -9,6 +9,7 @@ class FramePacer;
 class MemoryManager;
 class ElfLoader;
 class PPUInterpreter;
+class SPUManager;
 
 class Emulator {
 public:
@@ -34,6 +35,7 @@ public:
     // Component access
     MemoryManager* getMemory() { return memory_.get(); }
     PPUInterpreter* getPPU() { return ppu_.get(); }
+    SPUManager* getSPUs() { return spuManager_.get(); }
     
 private:
     std::unique_ptr<VulkanRenderer> renderer_;
@@ -41,6 +43,7 @@ private:
     std::unique_ptr<MemoryManager> memory_;
     std::unique_ptr<ElfLoader> elfLoader_;
     std::unique_ptr<PPUInterpreter> ppu_;
+    std::unique_ptr<SPUManager> spuManager_;
     std::unique_ptr<class FramePacer> pacer_;
     std::unique_ptr<Engine> engine_;
     bool initializeEngine();

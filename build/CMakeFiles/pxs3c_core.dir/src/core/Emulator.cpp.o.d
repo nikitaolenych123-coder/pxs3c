@@ -174,7 +174,8 @@ CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o: \
  /usr/include/c++/13/bits/erase_if.h \
  /workspaces/pxs3c/src/loader/ElfLoader.h \
  /workspaces/pxs3c/src/cpu/PPUInterpreter.h /usr/include/c++/13/array \
- /usr/include/c++/13/compare /usr/include/c++/13/iostream \
+ /usr/include/c++/13/compare /workspaces/pxs3c/src/cpu/SPUManager.h \
+ /workspaces/pxs3c/src/cpu/SPUInterpreter.h /usr/include/c++/13/iostream \
  /usr/include/c++/13/ostream /usr/include/c++/13/ios \
  /usr/include/c++/13/bits/ios_base.h \
  /usr/include/c++/13/bits/locale_classes.h \

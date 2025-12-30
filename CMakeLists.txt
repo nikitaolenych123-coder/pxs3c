@@ -11,6 +11,8 @@ add_library(pxs3c_core
     src/core/Config.cpp
     src/cpu/engines/Rpcs3Bridge.cpp
     src/cpu/PPUInterpreter.cpp
+    src/cpu/SPUInterpreter.cpp
+    src/cpu/SPUManager.cpp
     src/rsx/VulkanRenderer.cpp
     src/loader/ElfLoader.cpp
     src/memory/MemoryManager.cpp

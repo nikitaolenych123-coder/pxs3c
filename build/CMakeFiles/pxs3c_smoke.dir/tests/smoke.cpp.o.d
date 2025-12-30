@@ -131,7 +131,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: \
  /usr/include/c++/13/bits/stl_multimap.h \
  /usr/include/c++/13/bits/erase_if.h \
  /workspaces/pxs3c/src/cpu/PPUInterpreter.h /usr/include/c++/13/array \
- /usr/include/c++/13/compare /usr/include/c++/13/iostream \
+ /usr/include/c++/13/compare /workspaces/pxs3c/src/cpu/SPUInterpreter.h \
+ /workspaces/pxs3c/src/cpu/SPUManager.h /usr/include/c++/13/iostream \
  /usr/include/c++/13/ostream /usr/include/c++/13/ios \
  /usr/include/c++/13/bits/char_traits.h \
  /usr/include/c++/13/bits/localefwd.h \

@@ -238,6 +238,54 @@ src/cpu/PPUInterpreter.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.s
 .PHONY : src/cpu/PPUInterpreter.cpp.s
 
+src/cpu/SPUInterpreter.o: src/cpu/SPUInterpreter.cpp.o
+.PHONY : src/cpu/SPUInterpreter.o
+
+# target to build an object file
+src/cpu/SPUInterpreter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o
+.PHONY : src/cpu/SPUInterpreter.cpp.o
+
+src/cpu/SPUInterpreter.i: src/cpu/SPUInterpreter.cpp.i
+.PHONY : src/cpu/SPUInterpreter.i
+
+# target to preprocess a source file
+src/cpu/SPUInterpreter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.i
+.PHONY : src/cpu/SPUInterpreter.cpp.i
+
+src/cpu/SPUInterpreter.s: src/cpu/SPUInterpreter.cpp.s
+.PHONY : src/cpu/SPUInterpreter.s
+
+# target to generate assembly for a file
+src/cpu/SPUInterpreter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.s
+.PHONY : src/cpu/SPUInterpreter.cpp.s
+
+src/cpu/SPUManager.o: src/cpu/SPUManager.cpp.o
+.PHONY : src/cpu/SPUManager.o
+
+# target to build an object file
+src/cpu/SPUManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o
+.PHONY : src/cpu/SPUManager.cpp.o
+
+src/cpu/SPUManager.i: src/cpu/SPUManager.cpp.i
+.PHONY : src/cpu/SPUManager.i
+
+# target to preprocess a source file
+src/cpu/SPUManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.i
+.PHONY : src/cpu/SPUManager.cpp.i
+
+src/cpu/SPUManager.s: src/cpu/SPUManager.cpp.s
+.PHONY : src/cpu/SPUManager.s
+
+# target to generate assembly for a file
+src/cpu/SPUManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.s
+.PHONY : src/cpu/SPUManager.cpp.s
+
 src/cpu/engines/Rpcs3Bridge.o: src/cpu/engines/Rpcs3Bridge.cpp.o
 .PHONY : src/cpu/engines/Rpcs3Bridge.o
 
@@ -380,6 +428,12 @@ help:
 	@echo "... src/cpu/PPUInterpreter.o"
 	@echo "... src/cpu/PPUInterpreter.i"
 	@echo "... src/cpu/PPUInterpreter.s"
+	@echo "... src/cpu/SPUInterpreter.o"
+	@echo "... src/cpu/SPUInterpreter.i"
+	@echo "... src/cpu/SPUInterpreter.s"
+	@echo "... src/cpu/SPUManager.o"
+	@echo "... src/cpu/SPUManager.i"
+	@echo "... src/cpu/SPUManager.s"
 	@echo "... src/cpu/engines/Rpcs3Bridge.o"
 	@echo "... src/cpu/engines/Rpcs3Bridge.i"
 	@echo "... src/cpu/engines/Rpcs3Bridge.s"

@@ -5,6 +5,7 @@
 #include "memory/MemoryManager.h"
 #include "loader/ElfLoader.h"
 #include "cpu/PPUInterpreter.h"
+#include "cpu/SPUManager.h"
 #include <iostream>
 
 namespace pxs3c {
@@ -24,6 +25,15 @@ bool Emulator::init() {
     ppu_ = std::make_unique<PPUInterpreter>();
     if (!ppu_->init(memory_.get())) {
         std::cerr << "PPU interpreter init failed" << std::endl;
+        return false;
+    }
+    
+    // Initialize SPU manager (6 cores)
+    spuManager_ = std::make_unique<SPUManager>();
+    // Convert unique_ptr to shared_ptr for SPU usage
+    std::shared_ptr<MemoryManager> memShared(memory_.get(), [](void*) {});
+    if (!spuManager_->init(memShared)) {
+        std::cerr << "SPU manager init failed" << std::endl;
         return false;
     }
     
@@ -77,6 +87,11 @@ void Emulator::runFrame() {
     // Execute PPU instructions (1000 per frame for ~60fps)
     if (ppu_) {
         ppu_->executeBlock(1000);
+    }
+    
+    // Execute SPU instructions in parallel (6 cores)
+    if (spuManager_) {
+        spuManager_->executeAllSPUs(500);
     }
     
     // Fallback to engine if available

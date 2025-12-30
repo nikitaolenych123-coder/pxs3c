@@ -1,6 +1,8 @@
 #include "core/Emulator.h"
 #include "memory/MemoryManager.h"
 #include "cpu/PPUInterpreter.h"
+#include "cpu/SPUInterpreter.h"
+#include "cpu/SPUManager.h"
 #include <iostream>
 
 int main(int argc, char** argv) {
@@ -62,7 +64,25 @@ int main(int argc, char** argv) {
         }
     }
     
-    std::cout << "\n=== Running Frame Test ===" << std::endl;
+    std::cout << "\n=== Testing SPU Manager ===" << std::endl;
+    auto* spuMgr = emu.getSPUs();
+    if (spuMgr) {
+        for (int i = 0; i < 6; ++i) {
+            auto* spu = spuMgr->getSPU(i);
+            if (spu) {
+                spu->setPC(0x100 * i);
+                pxs3c::SPUVector reg;
+                reg.u32[0] = 0xDEADBEEF;
+                spu->setRegister(1, reg);
+                
+                pxs3c::SPUVector readReg = spu->getRegister(1);
+                std::cout << "SPU" << i << " PC: 0x" << std::hex << spu->getPC() 
+                          << " R1: 0x" << readReg.u32[0] << std::dec << std::endl;
+            }
+        }
+        std::cout << "✓ SPU test PASSED" << std::endl;
+    }
+    
     for (int i = 0; i < 3; ++i) {
         emu.runFrame();
     }
