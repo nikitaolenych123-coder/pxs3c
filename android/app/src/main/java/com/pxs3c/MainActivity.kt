@@ -57,11 +57,11 @@ class MainActivity : AppCompatActivity() {
             surfaceView = findViewById(R.id.surfaceView)
             statusText = findViewById(R.id.statusText)
             fpsText = findViewById(R.id.fpsText)
-            val btnSettings = findViewById<Button>(R.id.btnSettings)
+            val btnSettings = findViewById<android.widget.ImageButton>(R.id.btnSettings)
             val btnLoadGame = findViewById<Button>(R.id.btnLoadGame)
             btnBootGame = findViewById(R.id.btnBootGame)
             btnStop = findViewById(R.id.btnStop)
-            val btnRefresh = findViewById<Button>(R.id.btnRefresh)
+            val btnRefresh = findViewById<android.widget.ImageButton>(R.id.btnRefresh)
             
             statusText.text = "✓ UI Initialized"
             android.util.Log.i("PXS3C-Main", "✓ onCreate started successfully")
