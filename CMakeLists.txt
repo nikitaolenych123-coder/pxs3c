@@ -103,6 +103,9 @@ target_link_libraries(pxs3c_smoke pxs3c_core)
 
 # Android-specific JNI shared lib is only built when targeting ANDROID
 if(ANDROID)
+  # Vulkan and native window symbols provided by NDK
+  target_link_libraries(pxs3c_core PRIVATE vulkan android)
+
   add_library(pxs3c_jni SHARED
     src/android/jni/pxs3c_jni.cpp
   )
