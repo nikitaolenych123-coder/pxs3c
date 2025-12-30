@@ -17,7 +17,9 @@ public:
     void drawFrame();
 
     // Android-specific: attach native window and initialize Vulkan surface
+#ifdef __ANDROID__
     bool attachAndroidWindow(ANativeWindow* window);
+#endif
     bool resize(uint32_t width, uint32_t height);
     void setClearColor(float r, float g, float b);
     void setPresentModeAndroid(int mode); // 0=FIFO,1=MAILBOX,2=IMMEDIATE (Android)
