@@ -20,6 +20,52 @@
             android:textColor="#ffffff"
             android:paddingBottom="16dp" />
 
+        <!-- System Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="System"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#268bd2"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Firmware"
+            android:textColor="#b0b0b0"
+            android:paddingBottom="4dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp">
+            
+            <TextView
+                android:id="@+id/firmwarePathText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Not installed"
+                android:textColor="#808080"
+                android:padding="12dp"
+                android:background="#2b2b2b"
+                android:layout_marginEnd="8dp"
+                android:singleLine="true"
+                android:ellipsize="middle" />
+
+            <Button
+                android:id="@+id/btnLoadFirmware"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Install"
+                android:backgroundTint="#268bd2"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
         <!-- CPU Section -->
         <TextView
             android:layout_width="match_parent"
@@ -28,7 +74,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#268bd2"
-            android:paddingTop="8dp"
+            android:paddingTop="16dp"
             android:paddingBottom="8dp" />
 
         <TextView
@@ -43,7 +89,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#2b2b2b"
+            android:padding="12dp"
             android:paddingBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SPU Decoder"
+            android:textColor="#b0b0b0"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/spuDecoderSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#2b2b2b"
+            android:padding="12dp"
+            android:paddingBottom="12dp" />
+
+        <TextView
+            android:id="@+id/threadCountLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SPU Threads: 6"
+            android:textColor="#b0b0b0"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/threadCountSeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="5"
+            android:progress="5" />
 
         <!-- GPU Section -->
         <TextView
@@ -71,6 +150,74 @@
             android:paddingBottom="4dp"
             android:background="#2b2b2b"
             android:padding="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Custom Driver"
+            android:textColor="#b0b0b0"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp">
+            
+            <TextView
+                android:id="@+id/driverPathText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="System default"
+                android:textColor="#808080"
+                android:padding="12dp"
+                android:background="#2b2b2b"
+                android:layout_marginEnd="8dp"
+                android:singleLine="true"
+                android:ellipsize="middle" />
+
+            <Button
+                android:id="@+id/btnLoadDriver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Install"
+                android:backgroundTint="#268bd2"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Resolution Scale"
+            android:textColor="#b0b0b0"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/resolutionSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#2b2b2b"
+            android:padding="12dp"
+            android:paddingBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Anisotropic Filtering"
+            android:textColor="#b0b0b0"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/anisotropicSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#2b2b2b"
+            android:padding="12dp"
+            android:paddingBottom="12dp" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/vsyncSwitch"
@@ -106,14 +253,89 @@
             android:max="3"
             android:progress="2" />
 
+        <!-- Audio Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Audio"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#268bd2"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Audio Backend"
+            android:textColor="#b0b0b0"
+            android:paddingBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/audioBackendSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#2b2b2b"
+            android:padding="12dp"
+            android:paddingBottom="12dp" />
+
+        <TextView
+            android:id="@+id/audioLatencyLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Audio Latency: 60ms"
+            android:textColor="#b0b0b0"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/audioLatencySeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="4"
+            android:progress="2" />
+
+        <!-- Advanced Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Advanced"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#268bd2"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/debugConsoleSwitch"
+            android:text="Debug Console Output"
+            android:textColor="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/accurateCacheSwitch"
+            android:text="Accurate PPU Cache"
+            android:textColor="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/disableFrameSkipSwitch"
+            android:text="Disable Frame Skip"
+            android:textColor="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp" />
+
         <!-- Clear Color Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Clear Color (RGB)"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#268bd2"
+            android:textColor="#b0b0b0"
             android:paddingTop="16dp"
             android:paddingBottom="8dp" />
 
@@ -169,6 +391,15 @@
             android:gravity="end">
 
             <Button
+                android:id="@+id/resetBtn"
+                android:text="Reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#dc322f"
+                android:textColor="#ffffff"
+                android:layout_marginEnd="8dp" />
+
+            <Button
                 android:id="@+id/cancelBtn"
                 android:text="Cancel"
                 android:layout_width="wrap_content"
@@ -182,7 +413,7 @@
                 android:text="Save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#268bd2"
+                android:backgroundTint="#859900"
                 android:textColor="#ffffff" />
         </LinearLayout>
     </LinearLayout>
