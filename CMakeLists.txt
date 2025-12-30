@@ -1,9 +1,19 @@
 cmake_minimum_required(VERSION 3.15)
-project(pxs3c LANGUAGES CXX)
+project(pxs3c LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# Find LLVM for JIT compilation
+find_package(LLVM QUIET)
+if(LLVM_FOUND)
+  message(STATUS "LLVM found: ${LLVM_PACKAGE_VERSION}")
+  include_directories(${LLVM_INCLUDE_DIRS})
+  add_definitions(${LLVM_DEFINITIONS})
+else()
+  message(STATUS "LLVM not found, building without JIT optimization")
+endif()
 
 add_library(pxs3c_core
     src/core/Emulator.cpp
@@ -22,6 +32,13 @@ add_library(pxs3c_core
     src/loader/SELFLoader.cpp
     src/memory/MemoryManager.cpp
 )
+
+# Add LLVM source if available
+if(LLVM_FOUND)
+  target_sources(pxs3c_core PRIVATE src/cpu/LLVMJITCompiler.cpp)
+  target_link_libraries(pxs3c_core ${LLVM_LIBS})
+  target_compile_definitions(pxs3c_core PRIVATE LLVM_AVAILABLE=1)
+endif()
 
 target_include_directories(pxs3c_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

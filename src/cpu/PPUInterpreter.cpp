@@ -6,7 +6,12 @@
 
 namespace pxs3c {
 
-PPUInterpreter::PPUInterpreter() : memory_(nullptr), syscalls_(nullptr), halted_(false) {}
+PPUInterpreter::PPUInterpreter() : memory_(nullptr), syscalls_(nullptr), halted_(false) {
+    // Initialize register pointers after regs_ is created
+    gpr = regs_.gpr.data();
+    fpr = regs_.fpr.data();
+    vr = regs_.vr.data();
+}
 
 PPUInterpreter::~PPUInterpreter() {}
 
@@ -15,6 +20,10 @@ bool PPUInterpreter::init(MemoryManager* memory, SyscallHandler* syscalls) {
     memory_ = memory;
     syscalls_ = syscalls;
     reset();
+    // Re-update pointers after reset
+    gpr = regs_.gpr.data();
+    fpr = regs_.fpr.data();
+    vr = regs_.vr.data();
     return true;
 }
 

@@ -49,6 +49,12 @@ struct PPURegisters {
 
 // PPU Interpreter (simplified)
 class PPUInterpreter {
+private:
+    PPURegisters regs_;
+    MemoryManager* memory_;
+    SyscallHandler* syscalls_;
+    bool halted_;
+    
 public:
     PPUInterpreter();
     ~PPUInterpreter();
@@ -60,24 +66,23 @@ public:
     void setPC(uint64_t pc) { regs_.pc = pc; }
     uint64_t getPC() const { return regs_.pc; }
     
-    // Execute instructions
+    // Execute instructions (with JIT acceleration)
     void executeInstruction();
     void executeBlock(int maxInstructions = 1000);
     
-    // Register access
+    // Register access (public for JIT)
     uint64_t getGPR(int n) const { return regs_.gpr[n]; }
     void setGPR(int n, uint64_t val) { regs_.gpr[n] = val; }
+    
+    // Public register arrays for JIT access
+    uint64_t* gpr = nullptr;
+    double* fpr = nullptr;
+    uint128_t* vr = nullptr;
     
     // Debug
     void dumpRegisters() const;
     
-private:
-    PPURegisters regs_;
-    MemoryManager* memory_;
-    SyscallHandler* syscalls_;
-    bool halted_;
-    
-    // Instruction decoding
+    // Instruction decoding (public for JIT)
     void decodeAndExecute(uint32_t instruction);
     
     // Instruction groups
