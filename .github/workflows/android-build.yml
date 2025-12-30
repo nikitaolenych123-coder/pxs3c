@@ -37,21 +37,26 @@ jobs:
     - name: Install Android SDK Components
       run: |
         export ANDROID_SDK_ROOT=/opt/android-sdk
-        sdkmanager --sdk_root=/opt/android-sdk "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653" "cmake;3.22.1"
+        sdkmanager --sdk_root=/opt/android-sdk "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;27.0.12077973" "cmake;3.22.1"
 
     - name: Build APK (Debug)
       working-directory: ./android
       env:
         ANDROID_SDK_ROOT: /opt/android-sdk
-        GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m"
+        GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m"
       run: gradle assembleDebug --stacktrace
 
-    - name: Build APK (Release)
+    - name: Build APK (Release - High Performance)
       working-directory: ./android
       env:
         ANDROID_SDK_ROOT: /opt/android-sdk
-        GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m"
-      run: gradle assembleRelease --stacktrace
+        GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m"
+        CMAKE_BUILD_TYPE: Release
+      run: |
+        echo "🚀 Building High-Performance Release APK for Snapdragon 8s Gen 3"
+        gradle assembleRelease --stacktrace \
+          -DCMAKE_C_FLAGS="-O3 -Ofast -march=armv9-a+sve2 -mtune=cortex-x4 -flto=full" \
+          -DCMAKE_CXX_FLAGS="-O3 -Ofast -march=armv9-a+sve2 -mtune=cortex-x4 -flto=full"
 
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4

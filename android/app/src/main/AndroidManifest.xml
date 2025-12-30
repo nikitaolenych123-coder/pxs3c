@@ -31,6 +31,9 @@
         <activity android:name="com.pxs3c.SettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity android:name="com.pxs3c.AdvancedSettingsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity android:name="com.pxs3c.FilePickerActivity"
             android:exported="false" />
     </application>

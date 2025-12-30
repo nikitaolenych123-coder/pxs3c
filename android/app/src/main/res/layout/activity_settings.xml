@@ -391,6 +391,15 @@
             android:gravity="end">
 
             <Button
+                android:id="@+id/btnAdvancedSettings"
+                android:text="⚡ Advanced"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#1f6feb"
+                android:textColor="#ffffff"
+                android:layout_marginEnd="8dp" />
+
+            <Button
                 android:id="@+id/resetBtn"
                 android:text="Reset"
                 android:layout_width="wrap_content"

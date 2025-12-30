@@ -187,6 +187,11 @@ class SettingsActivity : AppCompatActivity() {
             resetSettings()
             Toast.makeText(this, "Settings reset to defaults", Toast.LENGTH_SHORT).show()
         }
+        
+        // Advanced Settings button
+        findViewById<Button>(R.id.btnAdvancedSettings)?.setOnClickListener {
+            startActivity(android.content.Intent(this, AdvancedSettingsActivity::class.java))
+        }
     }
 
     private fun saveSettings() {
