@@ -90,11 +90,13 @@ bool PPUJIT::compileBlock(uint64_t pc, uint32_t maxInstructions) {
     header->compiledAt = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     header->compiled = nullptr;
     
+#ifdef LLVM_AVAILABLE
     // Try to compile with LLVM JIT
     if (llvmJit_) {
         auto compiled = llvmJit_->compileBlock(ppu_, memory_, pc, maxInstructions);
         header->compiled = compiled;
     }
+#endif
     
     totalCompilations_++;
     cache_[pc] = std::move(header);
