@@ -9,8 +9,14 @@ namespace pxs3c {
 
 SPUInterpreter::SPUInterpreter(int id)
     : id_(id), halted_(false) {
-    // Initialize local store
-    localStorage_.resize(SPU_LOCAL_STORE_SIZE, 0);
+    try {
+        // Initialize local store with lazy allocation attempt
+        localStorage_.resize(SPU_LOCAL_STORE_SIZE, 0);
+    } catch (const std::exception& e) {
+        std::cerr << "SPU" << id_ << " failed to allocate local store: " << e.what() << std::endl;
+        // Fallback: only allocate minimal local store (64KB instead of 256KB)
+        localStorage_.resize(64 * 1024, 0);
+    }
 }
 
 SPUInterpreter::~SPUInterpreter() {}
@@ -153,24 +159,24 @@ void SPUInterpreter::executeArithmetic(uint32_t instr) {
     
     switch (opcode) {
         case 0x18: // ai (add immediate)
-            result = add128(regs_.regs[ra], SPUVector());
+            result = add128((*regs_.regs)[ra], SPUVector());
             result.u32[0] += imm;
-            regs_.regs[rt] = result;
+            (*regs_.regs)[rt] = result;
             break;
             
         case 0x08: // a (add)
-            result = add128(regs_.regs[ra], regs_.regs[rb]);
-            regs_.regs[rt] = result;
+            result = add128((*regs_.regs)[ra], (*regs_.regs)[rb]);
+            (*regs_.regs)[rt] = result;
             break;
             
         case 0x04: // s (subtract)
-            result = sub128(regs_.regs[ra], regs_.regs[rb]);
-            regs_.regs[rt] = result;
+            result = sub128((*regs_.regs)[ra], (*regs_.regs)[rb]);
+            (*regs_.regs)[rt] = result;
             break;
             
         case 0x14: // m (multiply)
-            result = mul128(regs_.regs[ra], regs_.regs[rb]);
-            regs_.regs[rt] = result;
+            result = mul128((*regs_.regs)[ra], (*regs_.regs)[rb]);
+            (*regs_.regs)[rt] = result;
             break;
             
         default:
@@ -185,20 +191,20 @@ void SPUInterpreter::executeLogical(uint32_t instr) {
     uint32_t ra = getBits(instr, 13, 17);
     uint32_t rb = getBits(instr, 18, 22);
     
-    SPUVector result = regs_.regs[ra];
+    SPUVector result = (*regs_.regs)[ra];
     
     switch (opcode) {
         case 0x0F: { // or, xor, and
             uint32_t subop = getBits(instr, 23, 31);
             if (subop == 0x0B8) { // or
-                result.u64[0] |= regs_.regs[rb].u64[0];
-                result.u64[1] |= regs_.regs[rb].u64[1];
+                result.u64[0] |= (*regs_.regs)[rb].u64[0];
+                result.u64[1] |= (*regs_.regs)[rb].u64[1];
             } else if (subop == 0x0B9) { // xor
-                result.u64[0] ^= regs_.regs[rb].u64[0];
-                result.u64[1] ^= regs_.regs[rb].u64[1];
+                result.u64[0] ^= (*regs_.regs)[rb].u64[0];
+                result.u64[1] ^= (*regs_.regs)[rb].u64[1];
             } else if (subop == 0x0BA) { // and
-                result.u64[0] &= regs_.regs[rb].u64[0];
-                result.u64[1] &= regs_.regs[rb].u64[1];
+                result.u64[0] &= (*regs_.regs)[rb].u64[0];
+                result.u64[1] &= (*regs_.regs)[rb].u64[1];
             }
             break;
         }
@@ -206,7 +212,7 @@ void SPUInterpreter::executeLogical(uint32_t instr) {
             break;
     }
     
-    regs_.regs[rt] = result;
+    (*regs_.regs)[rt] = result;
 }
 
 void SPUInterpreter::executeLoad(uint32_t instr) {
@@ -216,12 +222,12 @@ void SPUInterpreter::executeLoad(uint32_t instr) {
     int32_t offset = (int16_t)getBits(instr, 18, 31) << 2; // Offset is in quad-words
     
     if (opcode == 0x34) { // lqd
-        uint32_t addr = regs_.regs[ra].u32[0] + offset;
+        uint32_t addr = (*regs_.regs)[ra].u32[0] + offset;
         SPUVector val = loadWord(addr);
-        regs_.regs[rt] = val;
+        (*regs_.regs)[rt] = val;
     } else if (opcode == 0x24) { // stqd
-        uint32_t addr = regs_.regs[ra].u32[0] + offset;
-        storeWord(addr, regs_.regs[rt]);
+        uint32_t addr = (*regs_.regs)[ra].u32[0] + offset;
+        storeWord(addr, (*regs_.regs)[rt]);
     }
 }
 
@@ -263,7 +269,7 @@ void SPUInterpreter::executeImmediate(uint32_t instr) {
             break;
     }
     
-    regs_.regs[rt] = result;
+    (*regs_.regs)[rt] = result;
 }
 
 void SPUInterpreter::dumpRegisters() const {
@@ -276,7 +282,7 @@ void SPUInterpreter::dumpRegisters() const {
         std::cout << "R" << std::setw(2) << i << "-" << std::setw(2) << (i+3) << ": ";
         for (int j = 0; j < 4; ++j) {
             std::cout << "0x" << std::hex << std::setfill('0') << std::setw(8) 
-                      << regs_.regs[i + j].u32[0] << " ";
+                      << (*regs_.regs)[i + j].u32[0] << " ";
         }
         std::cout << std::dec << std::endl;
     }

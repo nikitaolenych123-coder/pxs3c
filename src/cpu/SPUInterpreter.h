@@ -26,7 +26,7 @@ union SPUVector {
 };
 
 struct SPURegisters {
-    std::array<SPUVector, 128> regs;  // 128 x 128-bit registers
+    std::shared_ptr<std::array<SPUVector, 128>> regs;  // 128 x 128-bit registers (dynamic)
     
     uint32_t pc;      // Program Counter
     uint32_t sp;      // Stack Pointer (r1)
@@ -34,7 +34,7 @@ struct SPURegisters {
     uint32_t ctr;     // Count Register
     uint32_t status;  // SPU Status Register
     
-    SPURegisters() {
+    SPURegisters() : regs(std::make_shared<std::array<SPUVector, 128>>()) {
         pc = 0;
         sp = 0x3FFF0;  // Top of local store
         lr = 0;
@@ -70,8 +70,8 @@ public:
     uint32_t getPC() const { return regs_.pc; }
     
     // Register access
-    SPUVector getRegister(int n) const { return regs_.regs[n]; }
-    void setRegister(int n, const SPUVector& val) { regs_.regs[n] = val; }
+    SPUVector getRegister(int n) const { if (n >= 0 && n < 128) return (*regs_.regs)[n]; return SPUVector(); }
+    void setRegister(int n, const SPUVector& val) { if (n >= 0 && n < 128) (*regs_.regs)[n] = val; }
     
     // Execute
     void executeInstruction();
