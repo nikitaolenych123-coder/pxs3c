@@ -9,8 +9,8 @@ android {
         applicationId 'com.pxs3c'
         minSdk 29
         targetSdk 34
-        versionCode 223
-        versionName '2.20.3'
+        versionCode 227
+        versionName '2.20.7'
 
         externalNativeBuild {
             cmake {
