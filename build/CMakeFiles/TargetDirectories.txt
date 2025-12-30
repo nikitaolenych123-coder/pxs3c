@@ -1,4 +1,0 @@
-/workspaces/pxs3c/build/CMakeFiles/pxs3c_core.dir
-/workspaces/pxs3c/build/CMakeFiles/pxs3c_smoke.dir
-/workspaces/pxs3c/build/CMakeFiles/edit_cache.dir
-/workspaces/pxs3c/build/CMakeFiles/rebuild_cache.dir
