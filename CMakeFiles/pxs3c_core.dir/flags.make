@@ -6,5 +6,5 @@ CXX_DEFINES = -DLLVM_AVAILABLE=1
 
 CXX_INCLUDES = -I/usr/lib/llvm-18/include -I/workspaces/pxs3c/src
 
-CXX_FLAGS = -std=gnu++17 -fPIC
+CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17 -fPIC
 
