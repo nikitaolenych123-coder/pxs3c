@@ -56,11 +56,11 @@ class MainActivity : BaseActivity() {
         surfaceView = findViewByIdSafe(R.id.surfaceView) ?: return
         statusText = findViewByIdSafe(R.id.statusText) ?: return
         fpsText = findViewByIdSafe(R.id.fpsText) ?: return
-        val btnSettings: android.widget.ImageButton? = findViewByIdSafe(R.id.btnSettings)
-        val btnLoadGame: Button? = findViewByIdSafe(R.id.btnLoadGame)
+        val btnSettings: android.view.View? = findViewByIdSafe(R.id.btnSettings)
+        val btnLoadGame: android.view.View? = findViewByIdSafe(R.id.btnLoadGame)
         btnBootGame = findViewByIdSafe(R.id.btnBootGame) ?: return
         btnStop = findViewByIdSafe(R.id.btnStop) ?: return
-        val btnRefresh: android.widget.ImageButton? = findViewByIdSafe(R.id.btnRefresh)
+        val btnRefresh: android.view.View? = findViewByIdSafe(R.id.btnRefresh)
         
         statusText.text = "✓ UI Initialized"
         android.util.Log.i("PXS3C-Main", "✓ onCreate started successfully")
