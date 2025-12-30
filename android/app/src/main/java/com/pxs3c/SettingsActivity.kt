@@ -58,7 +58,7 @@ class SettingsActivity : AppCompatActivity() {
         firmwarePathText = findViewById(R.id.firmwarePathText)
         
         firmwareBtn.setOnClickListener {
-            firmwarePicker.launch("application/zip")
+            firmwarePicker.launch("*/*") // Allow .pup and .zip
         }
     }
 
@@ -277,63 +277,122 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun loadFirmware(uri: Uri) {
-        try {
-            val firmwareDir = File(filesDir, "firmware")
-            firmwareDir.mkdirs()
-            
-            contentResolver.openInputStream(uri)?.use { input ->
-                ZipInputStream(input).use { zip ->
-                    var entry = zip.nextEntry
-                    var fileCount = 0
-                    while (entry != null) {
-                        if (!entry.isDirectory) {
-                            val file = File(firmwareDir, entry.name)
-                            file.parentFile?.mkdirs()
-                            FileOutputStream(file).use { output ->
-                                zip.copyTo(output)
-                            }
-                            fileCount++
+        val progressDialog = android.app.ProgressDialog(this)
+        progressDialog.setMessage("Installing firmware...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+        
+        Thread {
+            try {
+                val firmwareDir = File(filesDir, "firmware")
+                firmwareDir.mkdirs()
+                
+                val fileName = getFileName(uri) ?: "firmware"
+                val isPup = fileName.endsWith(".pup", ignoreCase = true)
+                
+                contentResolver.openInputStream(uri)?.use { input ->
+                    if (isPup) {
+                        // Copy .pup directly
+                        val pupFile = File(firmwareDir, fileName)
+                        FileOutputStream(pupFile).use { output ->
+                            input.copyTo(output, 8192)
                         }
-                        entry = zip.nextEntry
+                        runOnUiThread {
+                            prefs.edit().putString("firmware_path", pupFile.absolutePath).apply()
+                            firmwarePathText.text = "Firmware: $fileName"
+                            Toast.makeText(this, "Firmware installed: $fileName", Toast.LENGTH_SHORT).show()
+                            progressDialog.dismiss()
+                        }
+                    } else {
+                        // Extract ZIP
+                        ZipInputStream(input).use { zip ->
+                            var entry = zip.nextEntry
+                            var fileCount = 0
+                            while (entry != null) {
+                                if (!entry.isDirectory) {
+                                    val file = File(firmwareDir, entry.name)
+                                    file.parentFile?.mkdirs()
+                                    FileOutputStream(file).use { output ->
+                                        zip.copyTo(output, 8192)
+                                    }
+                                    fileCount++
+                                }
+                                entry = zip.nextEntry
+                            }
+                            
+                            runOnUiThread {
+                                prefs.edit().putString("firmware_path", firmwareDir.absolutePath).apply()
+                                firmwarePathText.text = firmwareDir.absolutePath
+                                Toast.makeText(this, "Firmware installed ($fileCount files)", Toast.LENGTH_SHORT).show()
+                                progressDialog.dismiss()
+                            }
+                        }
                     }
-                    
-                    prefs.edit().putString("firmware_path", firmwareDir.absolutePath).apply()
-                    firmwarePathText.text = firmwareDir.absolutePath
-                    Toast.makeText(this, "Firmware installed ($fileCount files)", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this, "Failed to load firmware: ${e.message}", Toast.LENGTH_LONG).show()
+                    progressDialog.dismiss()
                 }
             }
-        } catch (e: Exception) {
-            Toast.makeText(this, "Failed to load firmware: ${e.message}", Toast.LENGTH_LONG).show()
+        }.start()
+    }
+    
+    private fun getFileName(uri: Uri): String? {
+        var name: String? = null
+        contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                if (nameIndex >= 0) {
+                    name = cursor.getString(nameIndex)
+                }
+            }
         }
+        return name ?: uri.lastPathSegment
     }
 
     private fun loadCustomDriver(uri: Uri) {
-        try {
-            val driverDir = File(filesDir, "custom_driver")
-            driverDir.deleteRecursively()
-            driverDir.mkdirs()
-            
-            contentResolver.openInputStream(uri)?.use { input ->
-                ZipInputStream(input).use { zip ->
-                    var entry = zip.nextEntry
-                    while (entry != null) {
-                        if (!entry.isDirectory) {
-                            val file = File(driverDir, entry.name)
-                            file.parentFile?.mkdirs()
-                            FileOutputStream(file).use { output ->
-                                zip.copyTo(output)
+        val progressDialog = android.app.ProgressDialog(this)
+        progressDialog.setMessage("Installing custom driver...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+        
+        Thread {
+            try {
+                val driverDir = File(filesDir, "custom_driver")
+                driverDir.deleteRecursively()
+                driverDir.mkdirs()
+                
+                contentResolver.openInputStream(uri)?.use { input ->
+                    ZipInputStream(input).use { zip ->
+                        var entry = zip.nextEntry
+                        var fileCount = 0
+                        while (entry != null) {
+                            if (!entry.isDirectory) {
+                                val file = File(driverDir, entry.name)
+                                file.parentFile?.mkdirs()
+                                FileOutputStream(file).use { output ->
+                                    zip.copyTo(output, 8192)
+                                }
+                                fileCount++
                             }
+                            entry = zip.nextEntry
                         }
-                        entry = zip.nextEntry
+                        
+                        runOnUiThread {
+                            prefs.edit().putString("driver_path", driverDir.absolutePath).apply()
+                            driverPathText.text = "Custom ($fileCount files)"
+                            Toast.makeText(this, "Driver installed. Restart app.", Toast.LENGTH_LONG).show()
+                            progressDialog.dismiss()
+                        }
                     }
                 }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this, "Failed to load driver: ${e.message}", Toast.LENGTH_LONG).show()
+                    progressDialog.dismiss()
+                }
             }
-            
-            prefs.edit().putString("driver_path", driverDir.absolutePath).apply()
-            driverPathText.text = "Custom driver installed"
-            Toast.makeText(this, "Custom driver installed. Restart required.", Toast.LENGTH_LONG).show()
-        } catch (e: Exception) {
-            Toast.makeText(this, "Failed to load driver: ${e.message}", Toast.LENGTH_LONG).show()
-        }
+        }.start()
     }
 }

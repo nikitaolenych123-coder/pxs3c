@@ -2,49 +2,69 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1e1e1e">
+    android:background="#0d1117">
 
     <SurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:keepScreenOn="true" />
 
-    <!-- Status bar at bottom -->
-    <TextView
-        android:id="@+id/statusText"
+    <!-- Status bar at bottom - RPCS3 style -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:padding="12dp"
-        android:text="Ready"
-        android:textColor="#ffffff"
-        android:textSize="14sp"
-        android:background="#80000000" />
+        android:orientation="vertical"
+        android:background="#161b22">
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#30363d" />
+        
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Ready"
+            android:textColor="#c9d1d9"
+            android:textSize="13sp"
+            android:fontFamily="monospace" />
+    </LinearLayout>
 
-    <!-- Control panel at top right -->
+    <!-- Control panel at top right - RPCS3 style -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
-        android:layout_margin="12dp"
-        android:orientation="vertical">
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:background="#161b22"
+        android:padding="8dp"
+        android:elevation="4dp">
 
         <Button
             android:id="@+id/btnLoadGame"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:text="Boot Game"
+            android:layout_width="160dp"
+            android:layout_height="48dp"
+            android:text="Boot Game/Elf"
             android:layout_marginBottom="8dp"
-            android:backgroundTint="#268bd2"
+            android:backgroundTint="#238636"
             android:textColor="#ffffff"
-            android:textStyle="bold" />
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btnSettings"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
+            android:layout_width="160dp"
+            android:layout_height="48dp"
             android:text="Configuration"
-            android:backgroundTint="#586e75"
-            android:textColor="#ffffff" />
+            android:backgroundTint="#1f6feb"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:textAllCaps="false" />
     </LinearLayout>
 </FrameLayout>

@@ -85,31 +85,42 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun loadGameFromUri(uri: Uri) {
-        try {
-            // Copy URI content to temp file in cache dir
-            val fileName = getFileName(uri) ?: "game.tmp"
-            val tempFile = File(cacheDir, fileName)
-            
-            statusText.text = "Loading: $fileName..."
-            
-            contentResolver.openInputStream(uri)?.use { input ->
-                FileOutputStream(tempFile).use { output ->
-                    input.copyTo(output)
+        Thread {
+            try {
+                val fileName = getFileName(uri) ?: "game.tmp"
+                val tempFile = File(cacheDir, fileName)
+                
+                runOnUiThread {
+                    statusText.text = "Loading: $fileName..."
+                }
+                
+                // Buffered copy for performance
+                contentResolver.openInputStream(uri)?.use { input ->
+                    FileOutputStream(tempFile).buffered(16384).use { output ->
+                        input.copyTo(output, 16384)
+                    }
+                }
+                
+                val success = nativeLoadGame(tempFile.absolutePath)
+                
+                runOnUiThread {
+                    if (success) {
+                        gameLoaded = true
+                        statusText.text = "Game loaded: $fileName"
+                        Toast.makeText(this, "Game loaded successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        statusText.text = "Failed to load game"
+                        Toast.makeText(this, "Failed to load game", Toast.LENGTH_SHORT).show()
+                        tempFile.delete() // Cleanup on failure
+                    }
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    statusText.text = "Error: ${e.message}"
+                    Toast.makeText(this, "Error loading file: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
-            
-            if (nativeLoadGame(tempFile.absolutePath)) {
-                gameLoaded = true
-                statusText.text = "Game loaded: $fileName"
-                Toast.makeText(this, "Game loaded successfully", Toast.LENGTH_SHORT).show()
-            } else {
-                statusText.text = "Failed to load game"
-                Toast.makeText(this, "Failed to load game", Toast.LENGTH_SHORT).show()
-            }
-        } catch (e: Exception) {
-            statusText.text = "Error: ${e.message}"
-            Toast.makeText(this, "Error loading file: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
+        }.start()
     }
     
     private fun getFileName(uri: Uri): String? {
@@ -125,34 +136,55 @@ class MainActivity : AppCompatActivity() {
         return name ?: uri.lastPathSegment
     }
     
+    private var frameHandler: android.os.Handler? = null
+    private var frameRunnable: Runnable? = null
+    
     private fun startFrameLoop() {
         if (isRunning) return
         isRunning = true
         statusText.text = "Emulator running"
-        surfaceView.handler?.post(object : Runnable {
+        
+        frameHandler = android.os.Handler(android.os.Looper.getMainLooper())
+        frameRunnable = object : Runnable {
             override fun run() {
                 if (!isRunning) return
-                val delay = nativeTickFrame()
-                surfaceView.handler?.postDelayed(this, delay.toLong())
+                try {
+                    val delay = nativeTickFrame().toLong().coerceIn(1L, 100L)
+                    frameHandler?.postDelayed(this, delay)
+                } catch (e: Exception) {
+                    isRunning = false
+                    runOnUiThread {
+                        statusText.text = "Error: ${e.message}"
+                    }
+                }
             }
-        })
+        }
+        frameHandler?.post(frameRunnable!!)
+    }
+    
+    private fun stopFrameLoop() {
+        isRunning = false
+        frameRunnable?.let { frameHandler?.removeCallbacks(it) }
+        frameHandler = null
+        frameRunnable = null
     }
 
     override fun onDestroy() {
-        isRunning = false
+        stopFrameLoop()
         nativeShutdown()
+        // Cleanup cache
+        cacheDir.listFiles()?.forEach { it.delete() }
         super.onDestroy()
     }
     
     override fun onPause() {
         super.onPause()
-        isRunning = false
+        stopFrameLoop()
     }
     
     override fun onResume() {
         super.onResume()
-        if (gameLoaded) {
-            isRunning = true
+        if (gameLoaded && !isRunning) {
             startFrameLoop()
         }
     }
