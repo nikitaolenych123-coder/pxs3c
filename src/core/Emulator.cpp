@@ -78,6 +78,16 @@ bool Emulator::loadGame(const char* path) {
     
     // Check file extension
     std::string pathStr(path);
+    auto endsWith = [&](const char* suffix) {
+        const size_t n = std::strlen(suffix);
+        return pathStr.size() >= n && pathStr.compare(pathStr.size() - n, n, suffix) == 0;
+    };
+
+    if (endsWith(".pkg") || endsWith(".PKG") || endsWith(".iso") || endsWith(".ISO")) {
+        std::cerr << "Unsupported game format (PKG/ISO not implemented yet): " << pathStr << std::endl;
+        return false;
+    }
+
     bool isSelf = pathStr.size() > 5 && 
                   pathStr.substr(pathStr.size() - 5) == ".self";
     

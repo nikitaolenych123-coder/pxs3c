@@ -38,6 +38,18 @@ Java_com_pxs3c_MainActivity_nativeLoadGame(JNIEnv* env, jobject thiz, jstring jp
         path = env->GetStringUTFChars(jpath, nullptr);
         if (!path) return JNI_FALSE;
 
+        // Guard unsupported formats early to avoid native crashes.
+        std::string pathStr(path);
+        auto endsWith = [&](const char* suffix) {
+            const size_t n = std::strlen(suffix);
+            return pathStr.size() >= n && pathStr.compare(pathStr.size() - n, n, suffix) == 0;
+        };
+        if (endsWith(".pkg") || endsWith(".PKG") || endsWith(".iso") || endsWith(".ISO")) {
+            LOGE("Unsupported game format (PKG/ISO not implemented yet): %s", path);
+            env->ReleaseStringUTFChars(jpath, path);
+            return JNI_FALSE;
+        }
+
         LOGI("╔════════════════════════════════════════╗");
         LOGI("║   PXS3C - RPCS3 ARM64 Port            ║");
         LOGI("║   Based on RPCS3 by Nekotekina       ║");

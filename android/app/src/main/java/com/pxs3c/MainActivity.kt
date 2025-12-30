@@ -167,6 +167,22 @@ class MainActivity : BaseActivity() {
         Thread {
             try {
                 val fileName = getFileName(uri) ?: "game.tmp"
+                val lowerName = fileName.lowercase()
+
+                // Current core loader supports ELF/SELF only.
+                // PKG/ISO require additional install/mount + decryption pipeline.
+                if (lowerName.endsWith(".pkg") || lowerName.endsWith(".iso")) {
+                    runOnUiThread {
+                        statusText.text = "Format not supported yet: $fileName"
+                        Toast.makeText(
+                            this,
+                            "PKG/ISO not supported yet. Use ELF/SELF (e.g. EBOOT.BIN) for now.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    return@Thread
+                }
+
                 val tempFile = File(cacheDir, fileName)
                 
                 runOnUiThread {
