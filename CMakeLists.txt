@@ -6,13 +6,49 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Find LLVM for JIT compilation
-find_package(LLVM QUIET)
-if(LLVM_FOUND)
-  message(STATUS "LLVM found: ${LLVM_PACKAGE_VERSION}")
-  include_directories(${LLVM_INCLUDE_DIRS})
-  add_definitions(${LLVM_DEFINITIONS})
+execute_process(
+  COMMAND llvm-config --version
+  OUTPUT_VARIABLE LLVM_VERSION
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  ERROR_QUIET
+)
+
+if(LLVM_VERSION)
+  message(STATUS "LLVM found: ${LLVM_VERSION}")
+  
+  # Get LLVM include directories
+  execute_process(
+    COMMAND llvm-config --includedir
+    OUTPUT_VARIABLE LLVM_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  
+  # Get LLVM libraries using llvm-config
+  execute_process(
+    COMMAND llvm-config --libs all
+    OUTPUT_VARIABLE LLVM_LIBS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  
+  # Get LLVM system libs
+  execute_process(
+    COMMAND llvm-config --system-libs
+    OUTPUT_VARIABLE LLVM_SYSTEM_LIBS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  
+  # Get LLVM flags
+  execute_process(
+    COMMAND llvm-config --cxxflags
+    OUTPUT_VARIABLE LLVM_CXXFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  
+  set(LLVM_FOUND TRUE)
+  include_directories(${LLVM_INCLUDE_DIR})
 else()
   message(STATUS "LLVM not found, building without JIT optimization")
+  set(LLVM_FOUND FALSE)
 endif()
 
 add_library(pxs3c_core
@@ -36,7 +72,7 @@ add_library(pxs3c_core
 # Add LLVM source if available
 if(LLVM_FOUND)
   target_sources(pxs3c_core PRIVATE src/cpu/LLVMJITCompiler.cpp)
-  target_link_libraries(pxs3c_core ${LLVM_LIBS})
+  target_link_libraries(pxs3c_core PRIVATE ${LLVM_LIBS} ${LLVM_SYSTEM_LIBS})
   target_compile_definitions(pxs3c_core PRIVATE LLVM_AVAILABLE=1)
 endif()
 

@@ -117,58 +117,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named intrinsics_gen
-
-# Build rule for target.
-intrinsics_gen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 intrinsics_gen
-.PHONY : intrinsics_gen
-
-# fast build rule for target.
-intrinsics_gen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/intrinsics_gen.dir/build.make CMakeFiles/intrinsics_gen.dir/build
-.PHONY : intrinsics_gen/fast
-
-#=============================================================================
-# Target rules for targets named omp_gen
-
-# Build rule for target.
-omp_gen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 omp_gen
-.PHONY : omp_gen
-
-# fast build rule for target.
-omp_gen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/omp_gen.dir/build.make CMakeFiles/omp_gen.dir/build
-.PHONY : omp_gen/fast
-
-#=============================================================================
-# Target rules for targets named acc_gen
-
-# Build rule for target.
-acc_gen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 acc_gen
-.PHONY : acc_gen
-
-# fast build rule for target.
-acc_gen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/acc_gen.dir/build.make CMakeFiles/acc_gen.dir/build
-.PHONY : acc_gen/fast
-
-#=============================================================================
-# Target rules for targets named RISCVTargetParserTableGen
-
-# Build rule for target.
-RISCVTargetParserTableGen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 RISCVTargetParserTableGen
-.PHONY : RISCVTargetParserTableGen
-
-# fast build rule for target.
-RISCVTargetParserTableGen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RISCVTargetParserTableGen.dir/build.make CMakeFiles/RISCVTargetParserTableGen.dir/build
-.PHONY : RISCVTargetParserTableGen/fast
-
-#=============================================================================
 # Target rules for targets named pxs3c_core
 
 # Build rule for target.
@@ -610,10 +558,6 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... RISCVTargetParserTableGen"
-	@echo "... acc_gen"
-	@echo "... intrinsics_gen"
-	@echo "... omp_gen"
 	@echo "... pxs3c_core"
 	@echo "... pxs3c_smoke"
 	@echo "... src/core/Config.o"

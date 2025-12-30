@@ -1,4 +1,5 @@
 #include "cpu/PPUInterpreter.h"
+#include "cpu/PPUJIT.h"
 #include "core/SyscallHandler.h"
 #include "memory/MemoryManager.h"
 #include <iostream>
@@ -6,7 +7,7 @@
 
 namespace pxs3c {
 
-PPUInterpreter::PPUInterpreter() : memory_(nullptr), syscalls_(nullptr), halted_(false) {
+PPUInterpreter::PPUInterpreter() : memory_(nullptr), syscalls_(nullptr), halted_(false), jit_(nullptr) {
     // Initialize register pointers after regs_ is created
     gpr = regs_.gpr.data();
     fpr = regs_.fpr.data();
@@ -24,6 +25,16 @@ bool PPUInterpreter::init(MemoryManager* memory, SyscallHandler* syscalls) {
     gpr = regs_.gpr.data();
     fpr = regs_.fpr.data();
     vr = regs_.vr.data();
+    
+    // Initialize LLVM JIT compiler for 60 FPS performance
+    jit_ = std::make_unique<PPUJIT>();
+    if (!jit_->init(this, memory)) {
+        std::cerr << "Warning: PPUJIT initialization failed, falling back to interpreter" << std::endl;
+        jit_.reset();
+    } else {
+        std::cout << "PPU JIT compiler initialized successfully" << std::endl;
+    }
+    
     return true;
 }
 

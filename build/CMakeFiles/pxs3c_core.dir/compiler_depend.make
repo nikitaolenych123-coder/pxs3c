@@ -1227,6 +1227,7 @@ CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o: /workspaces/pxs3c/src/cp
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h \
   /workspaces/pxs3c/src/core/SyscallHandler.h \
   /workspaces/pxs3c/src/cpu/PPUInterpreter.h \
+  /workspaces/pxs3c/src/cpu/PPUJIT.h \
   /workspaces/pxs3c/src/memory/MemoryManager.h
 
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o: /workspaces/pxs3c/src/cpu/PPUJIT.cpp \

@@ -2,11 +2,13 @@
 
 #include <cstdint>
 #include <array>
+#include <memory>
 
 namespace pxs3c {
 
 class MemoryManager;
 class SyscallHandler;
+class PPUJIT;
 
 // Helper union for 128-bit vectors (defined first)
 union uint128_t {
@@ -54,6 +56,7 @@ private:
     MemoryManager* memory_;
     SyscallHandler* syscalls_;
     bool halted_;
+    std::unique_ptr<PPUJIT> jit_;  // JIT compiler for 60 FPS
     
 public:
     PPUInterpreter();
@@ -61,6 +64,9 @@ public:
 
     bool init(MemoryManager* memory, SyscallHandler* syscalls = nullptr);
     void reset();
+    
+    // Get JIT compiler (for testing)
+    PPUJIT* getJIT() const { return jit_.get(); }
     
     // Set entry point
     void setPC(uint64_t pc) { regs_.pc = pc; }
