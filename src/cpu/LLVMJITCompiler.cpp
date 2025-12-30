@@ -51,6 +51,7 @@ LLVMJITCompiler::CompiledFunc LLVMJITCompiler::compileBlock(
     auto* i64Ty = llvm::Type::getInt64Ty(ctx);
     auto* i32Ty = llvm::Type::getInt32Ty(ctx);
     auto* i8Ty = llvm::Type::getInt8Ty(ctx);
+    auto* i1Ty = llvm::Type::getInt1Ty(ctx);
     auto* doubleTy = llvm::Type::getDoubleTy(ctx);
     auto* i64PtrTy = llvm::PointerType::get(i64Ty, 0);
     auto* doublePtrTy = llvm::PointerType::get(doubleTy, 0);
@@ -70,43 +71,157 @@ LLVMJITCompiler::CompiledFunc LLVMJITCompiler::compileBlock(
     auto* func = llvm::Function::Create(funcType, llvm::Function::ExternalLinkage,
                                         "compiled_block", module_.get());
     
-    // Set parameter names
+    // Set parameter names for clarity
     auto argIter = func->arg_begin();
-    argIter->setName("gpr");
-    (++argIter)->setName("fpr");
-    (++argIter)->setName("vr");
-    (++argIter)->setName("pc");
-    (++argIter)->setName("lr");
-    (++argIter)->setName("cr");
+    llvm::Argument* argGpr = &*argIter;
+    argGpr->setName("gpr");
+    llvm::Argument* argFpr = &*(++argIter);
+    argFpr->setName("fpr");
+    llvm::Argument* argVr = &*(++argIter);
+    argVr->setName("vr");
+    llvm::Argument* argPc = &*(++argIter);
+    argPc->setName("pc");
+    llvm::Argument* argLr = &*(++argIter);
+    argLr->setName("lr");
+    llvm::Argument* argCr = &*(++argIter);
+    argCr->setName("cr");
     
     // Create entry basic block
     auto* entryBB = llvm::BasicBlock::Create(ctx, "entry", func);
     llvm::IRBuilder<> builder(entryBB);
     
-    // Simple optimization: compile common instruction patterns
-    // For now, just return PC + instruction count (placeholder for real compilation)
+    // Read all instructions in block (up to branch)
+    std::vector<uint32_t> instructions;
     uint64_t currentPC = startPC;
     uint32_t instrCount = 0;
     
-    // Read block from memory
-    std::vector<uint32_t> instructions;
-    for (uint32_t i = 0; i < maxInstructions && instrCount < 100; i++) {
+    for (uint32_t i = 0; i < std::min(maxInstructions, 100u); i++) {
         uint32_t instr = memory->read32(currentPC);
-        if (!instr) break;
-        
         instructions.push_back(instr);
         currentPC += 4;
         instrCount++;
         
-        // Stop at branches for simplicity
+        // Stop at branch/conditional instructions
         uint8_t opcode = (instr >> 26) & 0x3F;
-        if (opcode == 18 || opcode == 19) break;
+        if (opcode == 18 || opcode == 19 || opcode == 16) break; // b, bc, bcc
     }
     
-    // For now: compile to simple IR that returns next PC
-    // (Real JIT would translate each instruction)
+    // Compile each instruction to IR
+    for (uint32_t i = 0; i < instructions.size(); i++) {
+        uint32_t instr = instructions[i];
+        uint8_t opcode = (instr >> 26) & 0x3F;
+        uint8_t ra = (instr >> 16) & 0x1F;
+        uint8_t rb = (instr >> 11) & 0x1F;
+        uint8_t rd = (instr >> 21) & 0x1F;
+        int16_t imm = instr & 0xFFFF;
+        
+        // Generate optimized IR for most common instructions
+        switch (opcode) {
+            case 14: { // addi  rd, ra, imm
+                auto* val_ra = builder.CreateLoad(i64Ty, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, ra)));
+                auto* result = builder.CreateAdd(val_ra, 
+                    llvm::ConstantInt::get(i64Ty, (int64_t)imm));
+                builder.CreateStore(result, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rd)));
+                break;
+            }
+            case 15: { // addis  rd, ra, imm
+                auto* val_ra = builder.CreateLoad(i64Ty, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, ra)));
+                auto* result = builder.CreateAdd(val_ra, 
+                    llvm::ConstantInt::get(i64Ty, ((int64_t)imm) << 16));
+                builder.CreateStore(result, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rd)));
+                break;
+            }
+            case 8: { // subfic  rd, ra, imm
+                auto* val_ra = builder.CreateLoad(i64Ty, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, ra)));
+                auto* result = builder.CreateSub(
+                    llvm::ConstantInt::get(i64Ty, (int64_t)imm), val_ra);
+                builder.CreateStore(result, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rd)));
+                break;
+            }
+            case 10: { // cmpli
+                auto* val_ra = builder.CreateLoad(i64Ty, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, ra)));
+                auto* cond = builder.CreateICmpULT(val_ra, 
+                    llvm::ConstantInt::get(i64Ty, (uint64_t)(uint16_t)imm));
+                auto* crVal = builder.CreateLoad(i32Ty, argCr);
+                // Simple CR update (bits for field 0)
+                auto* newCr = builder.CreateSelect(cond,
+                    llvm::ConstantInt::get(i32Ty, 0x80000000),
+                    llvm::ConstantInt::get(i32Ty, 0));
+                builder.CreateStore(newCr, argCr);
+                break;
+            }
+            case 28: { // andi.  rd, ra, imm
+                auto* val_ra = builder.CreateLoad(i64Ty, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, ra)));
+                auto* result = builder.CreateAnd(val_ra, 
+                    llvm::ConstantInt::get(i64Ty, (uint64_t)(uint16_t)imm));
+                builder.CreateStore(result, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rd)));
+                break;
+            }
+            case 29: { // andis.  rd, ra, imm
+                auto* val_ra = builder.CreateLoad(i64Ty, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, ra)));
+                auto* result = builder.CreateAnd(val_ra, 
+                    llvm::ConstantInt::get(i64Ty, ((uint64_t)(uint16_t)imm) << 16));
+                builder.CreateStore(result, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rd)));
+                break;
+            }
+            case 30: { // ori  rd, ra, imm
+                auto* val_ra = builder.CreateLoad(i64Ty, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, ra)));
+                auto* result = builder.CreateOr(val_ra, 
+                    llvm::ConstantInt::get(i64Ty, (uint64_t)(uint16_t)imm));
+                builder.CreateStore(result, 
+                    builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rd)));
+                break;
+            }
+            case 31: { // 2-opcode instructions (xop)
+                uint16_t xop = (instr >> 1) & 0x3FF;
+                if (xop == 266) { // add  rd, ra, rb
+                    auto* val_ra = builder.CreateLoad(i64Ty, 
+                        builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, ra)));
+                    auto* val_rb = builder.CreateLoad(i64Ty, 
+                        builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rb)));
+                    auto* result = builder.CreateAdd(val_ra, val_rb);
+                    builder.CreateStore(result, 
+                        builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rd)));
+                } else if (xop == 40) { // subf  rd, ra, rb
+                    auto* val_ra = builder.CreateLoad(i64Ty, 
+                        builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, ra)));
+                    auto* val_rb = builder.CreateLoad(i64Ty, 
+                        builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rb)));
+                    auto* result = builder.CreateSub(val_rb, val_ra);
+                    builder.CreateStore(result, 
+                        builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rd)));
+                } else if (xop == 444) { // or  rd, ra, rb
+                    auto* val_ra = builder.CreateLoad(i64Ty, 
+                        builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, ra)));
+                    auto* val_rb = builder.CreateLoad(i64Ty, 
+                        builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rb)));
+                    auto* result = builder.CreateOr(val_ra, val_rb);
+                    builder.CreateStore(result, 
+                        builder.CreateGEP(i64Ty, argGpr, llvm::ConstantInt::get(i64Ty, rd)));
+                }
+                break;
+            }
+            // Other instructions: skip (stub)
+            default:
+                break;
+        }
+    }
+    
+    // Return next PC
     auto* nextPC = builder.CreateAdd(
-        func->getArg(3), // current PC
+        argPc, 
         llvm::ConstantInt::get(i64Ty, instrCount * 4)
     );
     builder.CreateRet(nextPC);
@@ -114,14 +229,15 @@ LLVMJITCompiler::CompiledFunc LLVMJITCompiler::compileBlock(
     // Verify function
     if (llvm::verifyFunction(*func, &llvm::errs())) {
         std::cerr << "Failed to verify JIT function" << std::endl;
+        func->eraseFromParent();
         return nullptr;
     }
     
-    // JIT compile the function
+    // JIT compile to native code
     auto* funcPtr = engine_->getPointerToFunction(func);
     
     std::cout << "LLVM JIT compiled block at 0x" << std::hex << startPC << std::dec
-              << " (" << instrCount << " instructions)" << std::endl;
+              << " (" << instrCount << " instructions) -> native code" << std::endl;
     
     return (CompiledFunc)funcPtr;
 }

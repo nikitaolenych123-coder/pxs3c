@@ -10,20 +10,14 @@ namespace pxs3c {
 class MemoryManager;
 class SyscallHandler;
 class PPUInterpreter;
+class LLVMJITCompiler;
 
-// Simple uint128 helper
-union uint128 {
-    uint64_t u64[2];
-    uint32_t u32[4];
-    
-    uint128() { u64[0] = 0; u64[1] = 0; }
-};
+// Forward declare uint128_t (defined in PPUInterpreter.h)
+union uint128_t;
 
-// Simple PPU JIT compiler - translates PowerPC blocks to x86-64
-// For now, uses inline caching and basic optimization
-
-typedef uint64_t (*PPUCompiledBlock)(uint64_t* gpr, double* fpr, uint128* vr,
-                                      uint64_t pc, void* memory);
+// PPU JIT compiler - translates PowerPC blocks to native code via LLVM
+typedef uint64_t (*PPUCompiledBlock)(uint64_t* gpr, double* fpr, uint128_t* vr,
+                                      uint64_t pc, uint64_t lr, uint32_t cr);
 
 struct JITBlockHeader {
     uint64_t startPC;
@@ -34,7 +28,7 @@ struct JITBlockHeader {
     uint64_t compiledAt;  // When compiled
 };
 
-// JIT compilation cache
+// JIT compilation cache with LLVM backend
 class PPUJIT {
 public:
     PPUJIT();
@@ -59,19 +53,11 @@ public:
 private:
     PPUInterpreter* ppu_;
     MemoryManager* memory_;
+    std::unique_ptr<LLVMJITCompiler> llvmJit_;
     std::map<uint64_t, std::unique_ptr<JITBlockHeader>> cache_;
     uint64_t totalCompilations_;
     uint64_t cacheHits_;
     uint64_t cacheMisses_;
-    
-    // Stub: Actual JIT compilation not implemented (platform-specific)
-    // Would need:
-    // - x86-64 code generation
-    // - Register allocation
-    // - Instruction selection
-    // For now, return false to use interpreter
-    bool compileBlockX86(uint64_t pc, std::vector<uint32_t>& instructions,
-                         JITBlockHeader& header);
 };
 
 } // namespace pxs3c

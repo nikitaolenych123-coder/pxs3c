@@ -1,3 +1,7 @@
+/workspaces/pxs3c/build/CMakeFiles/intrinsics_gen.dir
+/workspaces/pxs3c/build/CMakeFiles/omp_gen.dir
+/workspaces/pxs3c/build/CMakeFiles/acc_gen.dir
+/workspaces/pxs3c/build/CMakeFiles/RISCVTargetParserTableGen.dir
 /workspaces/pxs3c/build/CMakeFiles/pxs3c_core.dir
 /workspaces/pxs3c/build/CMakeFiles/pxs3c_smoke.dir
 /workspaces/pxs3c/build/CMakeFiles/edit_cache.dir

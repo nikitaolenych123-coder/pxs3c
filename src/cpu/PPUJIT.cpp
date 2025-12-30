@@ -1,5 +1,6 @@
 #include "cpu/PPUJIT.h"
 #include "cpu/PPUInterpreter.h"
+#include "cpu/LLVMJITCompiler.h"
 #include "memory/MemoryManager.h"
 #include <iostream>
 #include <chrono>
@@ -8,7 +9,8 @@ namespace pxs3c {
 
 PPUJIT::PPUJIT()
     : ppu_(nullptr), memory_(nullptr),
-      totalCompilations_(0), cacheHits_(0), cacheMisses_(0) {}
+      totalCompilations_(0), cacheHits_(0), cacheMisses_(0),
+      llvmJit_(nullptr) {}
 
 PPUJIT::~PPUJIT() {
     shutdown();
@@ -18,12 +20,22 @@ bool PPUJIT::init(PPUInterpreter* ppu, MemoryManager* memory) {
     if (!ppu || !memory) return false;
     ppu_ = ppu;
     memory_ = memory;
-    std::cout << "PPU JIT compiler initialized" << std::endl;
+    
+    // Initialize LLVM JIT compiler
+    llvmJit_ = std::make_unique<LLVMJITCompiler>();
+    if (!llvmJit_->init()) {
+        std::cerr << "Failed to initialize LLVM JIT" << std::endl;
+        llvmJit_ = nullptr;
+        return false;
+    }
+    
+    std::cout << "PPU JIT compiler initialized with LLVM backend" << std::endl;
     return true;
 }
 
 void PPUJIT::shutdown() {
     clearCache();
+    llvmJit_ = nullptr;
     ppu_ = nullptr;
     memory_ = nullptr;
 }
@@ -72,17 +84,21 @@ bool PPUJIT::compileBlock(uint64_t pc, uint32_t maxInstructions) {
     header->compiledAt = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     header->compiled = nullptr;
     
-    // Try to compile to x86-64
-    bool compiled = compileBlockX86(pc, instructions, *header);
+    // Try to compile with LLVM JIT
+    if (llvmJit_) {
+        auto compiled = llvmJit_->compileBlock(ppu_, memory_, pc, maxInstructions);
+        header->compiled = compiled;
+    }
     
     totalCompilations_++;
     cache_[pc] = std::move(header);
     
-    if (compiled) {
-        std::cout << "JIT compiled block at 0x" << std::hex << pc << std::dec << std::endl;
+    if (cache_[pc]->compiled != nullptr) {
+        std::cout << "LLVM JIT compiled block at 0x" << std::hex << pc << std::dec << std::endl;
+        return true;
     }
     
-    return compiled;
+    return false;
 }
 
 bool PPUJIT::executeBlock(uint64_t& pc, uint64_t maxInstructions) {
@@ -118,23 +134,5 @@ void PPUJIT::clearCache() {
     cacheMisses_ = 0;
 }
 
-bool PPUJIT::compileBlockX86(uint64_t pc, std::vector<uint32_t>& instructions,
-                              JITBlockHeader& header) {
-    // For now: JIT framework is ready but actual x86-64 code generation
-    // would require:
-    // 1. Full x86-64 assembler implementation
-    // 2. PowerPC to x86-64 instruction translation
-    // 3. Register allocation and calling conventions
-    // 4. Handling of memory management and protection
-    //
-    // This is a complex task that would typically use LLVM or Cranelift.
-    // For now, we fall back to the interpreter.
-    //
-    // The framework is in place to support JIT later - when a real
-    // compilation backend is added, just fill in this function.
-    
-    header.compiled = nullptr; // Not compiled yet
-    return false; // Fall back to interpreter
-}
-
 } // namespace pxs3c
+

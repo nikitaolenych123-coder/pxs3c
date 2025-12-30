@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o -o pxs3c_smoke  libpxs3c_core.a -ldl 
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o -o pxs3c_smoke  libpxs3c_core.a -ldl 

@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/workspaces/pxs3c/src
+CXX_INCLUDES = -I/usr/lib/llvm-18/include -I/workspaces/pxs3c/src
 
-CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17 -fPIE
+CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17 -fPIE   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
 
