@@ -57,9 +57,11 @@ jobs:
       working-directory: ./android
       env:
         ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
+        GRADLE_JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
       run: |
         export JAVA_HOME="${JAVA_HOME_17_X64:-$JAVA_HOME}"
         export PATH="$JAVA_HOME/bin:$PATH"
+        echo "org.gradle.java.home=${JAVA_HOME_17_X64}" >> gradle.properties
         gradle assembleDebug --stacktrace
         gradle assembleRelease --stacktrace
 
