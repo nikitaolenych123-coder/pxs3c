@@ -96,7 +96,6 @@ add_library(pxs3c_core
     src/cpu/SPUManager.cpp
     src/cpu/SPURecompilerSVE2.cpp
     src/rsx/VulkanRenderer.cpp
-    src/rsx/VulkanRendererAdreno.cpp
     src/rsx/RSXCommands.cpp
     src/rsx/RSXProcessor.cpp
     src/loader/ElfLoader.cpp
