@@ -503,14 +503,26 @@ void VulkanRenderer::cleanupSwapchain() {
         if (iv) vkDestroyImageView(device, iv, nullptr);
     }
     imageViews_.clear();
-    // Free command buffers
-    if (commandPool_ && !commandBuffers_.empty()) {
-        std::vector<VkCommandBuffer> bufs;
-        bufs.reserve(commandBuffers_.size());
-        for (auto cbPtr : commandBuffers_) bufs.push_back((VkCommandBuffer)cbPtr);
-        vkFreeCommandBuffers(device, (VkCommandPool)commandPool_, (uint32_t)bufs.size(), bufs.data());
+    // Free command buffers (if any) and destroy the command pool.
+    if (commandPool_) {
+        if (!commandBuffers_.empty()) {
+            std::vector<VkCommandBuffer> bufs;
+            bufs.reserve(commandBuffers_.size());
+            for (auto cbPtr : commandBuffers_) {
+                VkCommandBuffer cb = (VkCommandBuffer)cbPtr;
+                if (cb) bufs.push_back(cb);
+            }
+            if (!bufs.empty()) {
+                vkFreeCommandBuffers(device, (VkCommandPool)commandPool_, (uint32_t)bufs.size(), bufs.data());
+            }
+        }
+        commandBuffers_.clear();
+
+        vkDestroyCommandPool(device, (VkCommandPool)commandPool_, nullptr);
+        commandPool_ = nullptr;
+    } else {
+        commandBuffers_.clear();
     }
-    commandBuffers_.clear();
     // Destroy swapchain
     if (swapchain_) {
         vkDestroySwapchainKHR(device, (VkSwapchainKHR)swapchain_, nullptr);
@@ -547,13 +559,29 @@ void VulkanRenderer::setClearColor(float r, float g, float b) {
 
 void VulkanRenderer::setPresentModeAndroid(int mode) {
 #ifdef __ANDROID__
+    if (mode == presentMode_) {
+        // Avoid destroying/recreating swapchain during startup when mode is already FIFO.
+        return;
+    }
     presentMode_ = mode;
-    if (device_) {
-        vkDeviceWaitIdle((VkDevice)device_);
-        cleanupSwapchain();
-        createSwapchain();
-        createFramebuffers();
-        createCommandPoolAndBuffers();
+    // If we don't have a ready swapchain yet, just remember the requested mode.
+    if (!device_ || !surface_ || !swapchain_) {
+        return;
+    }
+
+    vkDeviceWaitIdle((VkDevice)device_);
+    cleanupSwapchain();
+    if (!createSwapchain()) {
+        std::cerr << "setPresentModeAndroid: createSwapchain failed" << std::endl;
+        return;
+    }
+    if (!createFramebuffers()) {
+        std::cerr << "setPresentModeAndroid: createFramebuffers failed" << std::endl;
+        return;
+    }
+    if (!createCommandPoolAndBuffers()) {
+        std::cerr << "setPresentModeAndroid: createCommandPoolAndBuffers failed" << std::endl;
+        return;
     }
 #else
     (void)mode;
