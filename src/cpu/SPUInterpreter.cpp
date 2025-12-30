@@ -9,28 +9,42 @@ namespace pxs3c {
 
 SPUInterpreter::SPUInterpreter(int id)
     : id_(id), halted_(false) {
-    try {
-        // Initialize local store with lazy allocation attempt
-        localStorage_.resize(SPU_LOCAL_STORE_SIZE, 0);
-    } catch (const std::exception& e) {
-        std::cerr << "SPU" << id_ << " failed to allocate local store: " << e.what() << std::endl;
-        // Fallback: only allocate minimal local store (64KB instead of 256KB)
-        localStorage_.resize(64 * 1024, 0);
-    }
+    // Local store allocated later in init() with fallback
 }
 
 SPUInterpreter::~SPUInterpreter() {}
 
 bool SPUInterpreter::init(std::shared_ptr<MemoryManager> mainMemory) {
     mainMemory_ = mainMemory;
+    // Allocate local store with fallback to 64KB if 256KB fails
+    bool allocated = false;
+    try {
+        localStorage_.assign(SPU_LOCAL_STORE_SIZE, 0);
+        allocated = true;
+    } catch (const std::exception& e) {
+        std::cerr << "SPU" << id_ << " failed to allocate 256KB local store: " << e.what() << std::endl;
+    }
+    if (!allocated) {
+        try {
+            localStorage_.assign(64 * 1024, 0);
+            allocated = true;
+            std::cerr << "SPU" << id_ << " using fallback 64KB local store" << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "SPU" << id_ << " failed to allocate fallback local store: " << e.what() << std::endl;
+            return false;
+        }
+    }
+
     reset();
-    std::cout << "SPU" << id_ << " initialized (256KB local store)" << std::endl;
+    std::cout << "SPU" << id_ << " initialized (" << (localStorage_.size() / 1024) << "KB local store)" << std::endl;
     return true;
 }
 
 void SPUInterpreter::reset() {
     regs_ = SPURegisters();
-    std::fill(localStorage_.begin(), localStorage_.end(), 0);
+    if (!localStorage_.empty()) {
+        std::fill(localStorage_.begin(), localStorage_.end(), 0);
+    }
     halted_ = false;
 }
 
