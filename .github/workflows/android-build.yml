@@ -3,6 +3,8 @@ name: Android Build
 on:
   push:
     branches: [ main ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ main ]
 
@@ -44,7 +46,9 @@ jobs:
       env:
         ANDROID_SDK_ROOT: /opt/android-sdk
         GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m"
-      run: gradle assembleDebug --stacktrace
+      run: |
+        chmod +x ./gradlew
+        ./gradlew assembleDebug --stacktrace
 
     - name: Build APK (Release - High Performance)
       working-directory: ./android
@@ -54,7 +58,8 @@ jobs:
         CMAKE_BUILD_TYPE: Release
       run: |
         echo "🚀 Building High-Performance Release APK for Snapdragon 8s Gen 3"
-        gradle assembleRelease --stacktrace
+        chmod +x ./gradlew
+        ./gradlew assembleRelease --stacktrace
 
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4

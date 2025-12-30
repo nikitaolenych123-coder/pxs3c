@@ -86,10 +86,18 @@ class MainActivity : BaseActivity() {
                         }
                         
                         try {
-                            nativeSetTargetFps(60)
-                            nativeSetVsync(true)
+                            val prefs = getSharedPreferences("pxs3c_settings", MODE_PRIVATE)
+                            val fps = prefs.getInt("target_fps", 60)
+                            val vsync = prefs.getBoolean("vsync", true)
+                            val r = prefs.getFloat("clear_r", 0.03f)
+                            val g = prefs.getFloat("clear_g", 0.03f)
+                            val b = prefs.getFloat("clear_b", 0.08f)
+
+                            nativeSetTargetFps(fps)
+                            nativeSetClearColor(r, g, b)
+                            nativeSetVsync(vsync)
                         } catch (e: Exception) {
-                            android.util.Log.w("PXS3C-Main", "Failed to set FPS/Vsync: ${e.message}")
+                            android.util.Log.w("PXS3C-Main", "Failed to apply saved settings: ${e.message}")
                         }
                         
                         runOnUiThread {
@@ -126,7 +134,7 @@ class MainActivity : BaseActivity() {
             }
             
             btnLoadGame?.setOnClickListener {
-                statusText.text = "Select PKG/ISO/ELF file..."
+                statusText.text = "Select ELF/SELF executable (e.g. EBOOT.BIN)..."
                 filePickerLauncher.launch("*/*")
             }
             
@@ -176,7 +184,7 @@ class MainActivity : BaseActivity() {
                         statusText.text = "Format not supported yet: $fileName"
                         Toast.makeText(
                             this,
-                            "PKG/ISO not supported yet. Use ELF/SELF (e.g. EBOOT.BIN) for now.",
+                            "PKG/ISO not supported yet. Select an ELF/SELF executable (commonly EBOOT.BIN).",
                             Toast.LENGTH_LONG
                         ).show()
                     }
