@@ -8,11 +8,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/btnSettings"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
         android:layout_gravity="top|end"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:orientation="vertical"
+        android:spacing="8dp">
+
+        <Button
+            android:id="@+id/btnLoadGame"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="Load Game"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#51cf66"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/btnSettings"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:backgroundTint="#4dabf7"
+            android:textColor="#ffffff" />
+    </LinearLayout>
 </FrameLayout>

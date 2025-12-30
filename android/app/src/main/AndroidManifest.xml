@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pxs3c">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-feature android:name="android.hardware.vulkan.level" android:required="true" />
     <uses-feature android:name="android.hardware.vulkan.compute" android:required="false" />
     <uses-feature android:name="android.hardware.vulkan.version" android:required="false" />
@@ -17,6 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.pxs3c.SettingsActivity"
+            android:exported="false" />
+        <activity android:name="com.pxs3c.FilePickerActivity"
             android:exported="false" />
     </application>
 </manifest>
