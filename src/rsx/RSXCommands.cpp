@@ -5,11 +5,28 @@
 namespace pxs3c {
 
 RSXCommandBuffer::RSXCommandBuffer(uint32_t capacity)
-    : currentPos_(0), readPos_(0) {
-    buffer_.resize(capacity, 0);
+    : buffer_(), capacity_(capacity), currentPos_(0), readPos_(0) {
+    // Lazy allocation: avoid heap allocation in constructor on Android
+    // Buffer will be allocated on first write/read.
+}
+
+static bool ensureBufferAllocated(std::vector<uint8_t>& buffer, uint32_t capacity) {
+    if (!buffer.empty()) return true;
+    if (capacity == 0) return false;
+    try {
+        buffer.assign(capacity, 0);
+        return true;
+    } catch (...) {
+        return false;
+    }
 }
 
 void RSXCommandBuffer::writeCommand(uint32_t method, const std::vector<uint32_t>& data) {
+    if (!ensureBufferAllocated(buffer_, capacity_)) {
+        std::cerr << "RSX command buffer allocation failed" << std::endl;
+        return;
+    }
+
     // Write method header (upper 16 bits = method, lower 16 bits = count)
     if (currentPos_ + 4 + data.size() * 4 >= buffer_.size()) {
         std::cerr << "RSX command buffer overflow" << std::endl;
@@ -34,6 +51,9 @@ void RSXCommandBuffer::writeCommand(uint32_t method, uint32_t value) {
 }
 
 bool RSXCommandBuffer::readCommand(RSXCommand& cmd) {
+    if (!ensureBufferAllocated(buffer_, capacity_)) {
+        return false;
+    }
     if (readPos_ >= currentPos_) {
         return false;  // No more commands
     }
@@ -60,6 +80,10 @@ bool RSXCommandBuffer::readCommand(RSXCommand& cmd) {
 }
 
 bool RSXCommandBuffer::peekCommand(RSXCommand& cmd) const {
+    // const method: if buffer isn't allocated, it's effectively empty.
+    if (buffer_.empty()) {
+        return false;
+    }
     if (readPos_ >= currentPos_) {
         return false;
     }
@@ -85,6 +109,9 @@ bool RSXCommandBuffer::peekCommand(RSXCommand& cmd) const {
 }
 
 void RSXCommandBuffer::clear() {
+    if (!buffer_.empty()) {
+        // Keep allocated buffer to avoid re-allocations.
+    }
     currentPos_ = 0;
     readPos_ = 0;
 }

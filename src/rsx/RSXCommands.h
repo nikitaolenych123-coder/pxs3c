@@ -149,8 +149,9 @@ public:
     
 private:
     std::vector<uint8_t> buffer_;
-    uint32_t currentPos_;
-    uint32_t readPos_;
+    uint32_t capacity_ = 0;
+    uint32_t currentPos_ = 0;
+    uint32_t readPos_ = 0;
 };
 
 } // namespace pxs3c
