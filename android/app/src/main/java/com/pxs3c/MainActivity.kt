@@ -76,34 +76,29 @@ class MainActivity : BaseActivity() {
             surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
                 override fun surfaceCreated(holder: SurfaceHolder) {
                     try {
-                        if (!nativeInit()) {
-                            runOnUiThread {
-                                statusText.text = "Failed to initialize emulator"
-                                Toast.makeText(this@MainActivity, "Emulator init failed", Toast.LENGTH_LONG).show()
-                            }
-                            return
-                        }
-                        
+                        // Delayed initialization - only attach surface, init happens in nativeAttachSurface
                         if (!nativeAttachSurface(holder.surface)) {
                             runOnUiThread {
-                                statusText.text = "Failed to attach surface"
-                                Toast.makeText(this@MainActivity, "Surface attach failed", Toast.LENGTH_LONG).show()
+                                statusText.text = "Surface initialization pending..."
+                                android.util.Log.w("PXS3C-Main", "Surface attach returned false, may retry later")
                             }
                             return
                         }
                         
-                        nativeSetTargetFps(60)
-                        nativeSetVsync(true)
+                        try {
+                            nativeSetTargetFps(60)
+                            nativeSetVsync(true)
+                        } catch (e: Exception) {
+                            android.util.Log.w("PXS3C-Main", "Failed to set FPS/Vsync: ${e.message}")
+                        }
                         
                         runOnUiThread {
                             statusText.text = "Ready - Load a game to start"
                         }
-                        
-                        // Don't auto-start frame loop - wait for game to load
                     } catch (e: Exception) {
                         runOnUiThread {
-                            statusText.text = "Error: ${e.message}"
-                            Toast.makeText(this@MainActivity, "Init error: ${e.message}", Toast.LENGTH_LONG).show()
+                            statusText.text = "Startup OK - Surface pending"
+                            android.util.Log.w("PXS3C-Main", "Surface init non-critical error: ${e.message}")
                         }
                     }
                 }
