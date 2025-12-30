@@ -21,3 +21,4 @@ target_link_libraries(pxs3c_jni PRIVATE pxs3c_core
     log
     android
     vulkan
+)
