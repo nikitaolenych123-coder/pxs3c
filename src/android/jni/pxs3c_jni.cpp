@@ -143,12 +143,7 @@ Java_com_pxs3c_MainActivity_nativeLoadGame(JNIEnv* env, jobject thiz, jstring jp
     } else {
         LOGE("╔════════════════════════════════════════╗");
         LOGE("║   ✗ GAME LOAD FAILED!                 ║");
-        LOGE(SPU: %d threads", 6);
-        __android_log_print(ANDROID_LOG_INFO, "PXS3C", "Ready to run!");
-    } else {
-        __android_log_print(ANDROID_LOG_ERROR, "PXS3C", "╔════════════════════════════════════════╗");
-        __android_log_print(ANDROID_LOG_ERROR, "PXS3C", "║   ✗ GAME LOADING FAILED!              ║");
-        __android_log_print(ANDROID_LOG_ERROR, "PXS3C", "╚════════════════════════════════════════╝");
+        LOGE("╚════════════════════════════════════════╝");
     }
     
     env->ReleaseStringUTFChars(jpath, path);
