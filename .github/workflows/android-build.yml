@@ -9,69 +9,47 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: gradle:8.7-jdk11
 
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Set up JDK 17 (required for cmdline-tools)
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
 
-    - name: Set up JDK 11 (for gradle build)
-      uses: actions/setup-java@v4
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-
-    - name: Export JAVA_HOME for subsequent steps
+    - name: Install Android SDK Tools
       run: |
-        echo "JAVA_HOME=${JAVA_HOME_17_X64}" >> $GITHUB_ENV
-        echo "${JAVA_HOME_17_X64}/bin" >> $GITHUB_PATH
-        java -version
-
-    - name: Install Gradle 8.7
-      env:
-        JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
-      run: |
-        export JAVA_HOME="${JAVA_HOME_11_X64:-$JAVA_HOME}"
-        export PATH="$JAVA_HOME/bin:$PATH"
-        wget -q https://services.gradle.org/distributions/gradle-8.7-bin.zip -O /tmp/gradle.zip
-        unzip -q /tmp/gradle.zip -d /opt/gradle
-        echo "GRADLE_HOME=/opt/gradle/gradle-8.7" >> $GITHUB_ENV
-        echo "/opt/gradle/gradle-8.7/bin" >> $GITHUB_PATH
-
-    - name: Install Android SDK + NDK
-      env:
-        ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
-      run: |
-        export JAVA_HOME="${JAVA_HOME_17_X64:-$JAVA_HOME}"
-        export PATH="$JAVA_HOME/bin:$PATH"
-        mkdir -p "$ANDROID_SDK_ROOT"
-        cd "$ANDROID_SDK_ROOT"
-        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdtools.zip
-        unzip -q cmdtools.zip -d cmdline-tools-temp
+        apt-get update
+        apt-get install -y wget unzip
+        mkdir -p /opt/android-sdk
+        cd /opt/android-sdk
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        unzip -q commandlinetools-linux-11076708_latest.zip
         mkdir -p cmdline-tools/latest
-        mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
-        rm -rf cmdtools.zip cmdline-tools-temp
-        export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
-        yes | sdkmanager --licenses > /dev/null
-        sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653" "cmake;3.22.1"
-        echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
-        echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
-        echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
+        mv cmdline-tools/* cmdline-tools/latest/ 2>/dev/null || true
+        rm -rf commandlinetools-linux-11076708_latest.zip
+        echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> $GITHUB_ENV
+        echo "/opt/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
 
-    - name: Build APK
+    - name: Accept Android Licenses
+      run: |
+        export ANDROID_SDK_ROOT=/opt/android-sdk
+        yes | sdkmanager --licenses > /dev/null 2>&1 || true
+
+    - name: Install Android SDK Components
+      run: |
+        export ANDROID_SDK_ROOT=/opt/android-sdk
+        sdkmanager --sdk_root=/opt/android-sdk "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653" "cmake;3.22.1"
+
+    - name: Build APK (Debug)
       working-directory: ./android
       env:
-        ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
-      run: |
-        export JAVA_HOME="${JAVA_HOME_11_X64:-$JAVA_HOME}"
-        export PATH="$JAVA_HOME/bin:$PATH"
-        gradle assembleDebug --stacktrace
-        gradle assembleRelease --stacktrace
+        ANDROID_SDK_ROOT: /opt/android-sdk
+      run: gradle assembleDebug --stacktrace
+
+    - name: Build APK (Release)
+      working-directory: ./android
+      env:
+        ANDROID_SDK_ROOT: /opt/android-sdk
+      run: gradle assembleRelease --stacktrace
 
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
