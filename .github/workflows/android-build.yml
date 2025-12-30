@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: gradle:8.7-jdk11
+      image: gradle:8.7-jdk17
 
     steps:
     - uses: actions/checkout@v4
@@ -43,12 +43,14 @@ jobs:
       working-directory: ./android
       env:
         ANDROID_SDK_ROOT: /opt/android-sdk
+        GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m"
       run: gradle assembleDebug --stacktrace
 
     - name: Build APK (Release)
       working-directory: ./android
       env:
         ANDROID_SDK_ROOT: /opt/android-sdk
+        GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m"
       run: gradle assembleRelease --stacktrace
 
     - name: Upload Debug APK
