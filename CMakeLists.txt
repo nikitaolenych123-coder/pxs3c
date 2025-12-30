@@ -5,54 +5,60 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Find LLVM for JIT compilation (unless explicitly disabled)
+# Find LLVM for JIT compilation (unless explicitly disabled or cross-compiling for Android)
 if(NOT DEFINED LLVM_FOUND)
-  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config)
-
-  if(LLVM_CONFIG_EXECUTABLE)
-    execute_process(
-      COMMAND ${LLVM_CONFIG_EXECUTABLE} --version
-      OUTPUT_VARIABLE LLVM_VERSION
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-      ERROR_QUIET
-    )
-  endif()
-  
-  if(LLVM_CONFIG_EXECUTABLE AND LLVM_VERSION)
-    message(STATUS "LLVM found: ${LLVM_VERSION}")
-    
-    # Get LLVM include directories
-    execute_process(
-      COMMAND ${LLVM_CONFIG_EXECUTABLE} --includedir
-      OUTPUT_VARIABLE LLVM_INCLUDE_DIR
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    
-    # Get LLVM libraries using llvm-config
-    execute_process(
-      COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs all
-      OUTPUT_VARIABLE LLVM_LIBS
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    
-    # Get LLVM system libs
-    execute_process(
-      COMMAND ${LLVM_CONFIG_EXECUTABLE} --system-libs
-      OUTPUT_VARIABLE LLVM_SYSTEM_LIBS
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    
-    # Get LLVM flags
-    execute_process(
-      COMMAND ${LLVM_CONFIG_EXECUTABLE} --cxxflags
-      OUTPUT_VARIABLE LLVM_CXXFLAGS
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    
-    set(LLVM_FOUND TRUE)
-  else()
-    message(STATUS "LLVM not found, building without JIT optimization")
+  # Disable LLVM for Android NDK builds since LLVM is not available
+  if(ANDROID)
+    message(STATUS "Building for Android NDK - LLVM JIT disabled")
     set(LLVM_FOUND FALSE)
+  else()
+    find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config)
+
+    if(LLVM_CONFIG_EXECUTABLE)
+      execute_process(
+        COMMAND ${LLVM_CONFIG_EXECUTABLE} --version
+        OUTPUT_VARIABLE LLVM_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+      )
+    endif()
+    
+    if(LLVM_CONFIG_EXECUTABLE AND LLVM_VERSION)
+      message(STATUS "LLVM found: ${LLVM_VERSION}")
+      
+      # Get LLVM include directories
+      execute_process(
+        COMMAND ${LLVM_CONFIG_EXECUTABLE} --includedir
+        OUTPUT_VARIABLE LLVM_INCLUDE_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+      
+      # Get LLVM libraries using llvm-config
+      execute_process(
+        COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs all
+        OUTPUT_VARIABLE LLVM_LIBS
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+      
+      # Get LLVM system libs
+      execute_process(
+        COMMAND ${LLVM_CONFIG_EXECUTABLE} --system-libs
+        OUTPUT_VARIABLE LLVM_SYSTEM_LIBS
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+      
+      # Get LLVM flags
+      execute_process(
+        COMMAND ${LLVM_CONFIG_EXECUTABLE} --cxxflags
+        OUTPUT_VARIABLE LLVM_CXXFLAGS
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+      
+      set(LLVM_FOUND TRUE)
+    else()
+      message(STATUS "LLVM not found, building without JIT optimization")
+      set(LLVM_FOUND FALSE)
+    endif()
   endif()
 else()
   if(LLVM_FOUND)
