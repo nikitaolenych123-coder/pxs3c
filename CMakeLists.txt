@@ -50,7 +50,6 @@ if(NOT DEFINED LLVM_FOUND)
     )
     
     set(LLVM_FOUND TRUE)
-    include_directories(${LLVM_INCLUDE_DIR})
   else()
     message(STATUS "LLVM not found, building without JIT optimization")
     set(LLVM_FOUND FALSE)
@@ -79,11 +78,16 @@ add_library(pxs3c_core
     src/memory/MemoryManager.cpp
 )
 
-# Add LLVM source if available
+# Add LLVM source and settings if available
 if(LLVM_FOUND)
+  message(STATUS "Configuring LLVM JIT support")
   target_sources(pxs3c_core PRIVATE src/cpu/LLVMJITCompiler.cpp)
+  target_include_directories(pxs3c_core PRIVATE ${LLVM_INCLUDE_DIR})
   target_link_libraries(pxs3c_core PRIVATE ${LLVM_LIBS} ${LLVM_SYSTEM_LIBS})
+  target_compile_options(pxs3c_core PRIVATE ${LLVM_CXXFLAGS})
   target_compile_definitions(pxs3c_core PRIVATE LLVM_AVAILABLE=1)
+else()
+  message(STATUS "LLVM JIT support not available, using interpreter-only execution")
 endif()
 
 target_include_directories(pxs3c_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
