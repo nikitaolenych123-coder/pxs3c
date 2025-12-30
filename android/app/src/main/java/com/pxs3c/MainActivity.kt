@@ -57,21 +57,54 @@ class MainActivity : AppCompatActivity() {
 
         surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(holder: SurfaceHolder) {
-                nativeInit()
-                nativeAttachSurface(holder.surface)
-                nativeSetTargetFps(60)
-                nativeSetVsync(true)
-                
-                // Auto-start frame loop
-                startFrameLoop()
+                try {
+                    if (!nativeInit()) {
+                        runOnUiThread {
+                            statusText.text = "Failed to initialize emulator"
+                            Toast.makeText(this@MainActivity, "Emulator init failed", Toast.LENGTH_LONG).show()
+                        }
+                        return
+                    }
+                    
+                    if (!nativeAttachSurface(holder.surface)) {
+                        runOnUiThread {
+                            statusText.text = "Failed to attach surface"
+                            Toast.makeText(this@MainActivity, "Surface attach failed", Toast.LENGTH_LONG).show()
+                        }
+                        return
+                    }
+                    
+                    nativeSetTargetFps(60)
+                    nativeSetVsync(true)
+                    
+                    runOnUiThread {
+                        statusText.text = "Ready - Load a game to start"
+                    }
+                    
+                    // Don't auto-start frame loop - wait for game to load
+                } catch (e: Exception) {
+                    runOnUiThread {
+                        statusText.text = "Error: ${e.message}"
+                        Toast.makeText(this@MainActivity, "Init error: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
             
             override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-                nativeResize(width, height)
+                try {
+                    nativeResize(width, height)
+                } catch (e: Exception) {
+                    // Ignore resize errors
+                }
             }
             
             override fun surfaceDestroyed(holder: SurfaceHolder) {
-                nativeShutdown()
+                try {
+                    stopFrameLoop()
+                    nativeShutdown()
+                } catch (e: Exception) {
+                    // Ignore shutdown errors
+                }
             }
         })
 
@@ -106,10 +139,13 @@ class MainActivity : AppCompatActivity() {
                 runOnUiThread {
                     if (success) {
                         gameLoaded = true
-                        statusText.text = "Game loaded: $fileName"
-                        Toast.makeText(this, "Game loaded successfully", Toast.LENGTH_SHORT).show()
+                        statusText.text = "Game loaded: $fileName - Starting emulation..."
+                        Toast.makeText(this, "Game loaded! Check logcat for compilation details", Toast.LENGTH_LONG).show()
+                        
+                        // Start frame loop after successful game load
+                        startFrameLoop()
                     } else {
-                        statusText.text = "Failed to load game"
+                        statusText.text = "Failed to load game - Check logcat for details"
                         Toast.makeText(this, "Failed to load game", Toast.LENGTH_SHORT).show()
                         tempFile.delete() // Cleanup on failure
                     }
@@ -170,10 +206,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        stopFrameLoop()
-        nativeShutdown()
-        // Cleanup cache
-        cacheDir.listFiles()?.forEach { it.delete() }
+        try {
+            stopFrameLoop()
+            nativeShutdown()
+            // Cleanup cache
+            cacheDir.listFiles()?.forEach { 
+                try {
+                    it.delete()
+                } catch (e: Exception) {
+                    // Ignore delete errors
+                }
+            }
+        } catch (e: Exception) {
+            // Ignore cleanup errors
+        }
         super.onDestroy()
     }
     
