@@ -1,0 +1,45 @@
+# .gitignore
+
+# Build directories
+build/
+cmake-build-*/
+.cmake/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Android
+android/.gradle/
+android/.idea/
+android/local.properties
+android/app/build/
+android/build/
+*.iml
+*.apk
+*.ap_
+*.dex
+
+# Compiled files
+*.o
+*.obj
+*.so
+*.a
+*.lib
+*.dylib
+*.dll
+*.exe
+
+# Dependencies
+external/rpcs3/
+external/aps3e/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
