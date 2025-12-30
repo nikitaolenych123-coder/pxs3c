@@ -34,10 +34,10 @@ jobs:
         mkdir -p "$ANDROID_SDK_ROOT"
         cd "$ANDROID_SDK_ROOT"
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdtools.zip
-        unzip -q cmdtools.zip
+        unzip -q cmdtools.zip -d cmdline-tools-temp
         mkdir -p cmdline-tools/latest
-        mv cmdline-tools/* cmdline-tools/latest/
-        rm cmdtools.zip
+        mv cmdline-tools-temp/cmdline-tools/* cmdline-tools/latest/
+        rm -rf cmdtools.zip cmdline-tools-temp
         export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
         yes | sdkmanager --licenses > /dev/null
         sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653" "cmake;3.22.1"
