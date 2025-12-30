@@ -24,8 +24,8 @@ bool MemoryManager::init() {
         mainRam.base = MAIN_MEMORY_BASE;
         mainRam.size = MAIN_MEMORY_SIZE;
         mainRam.flags = MEM_PROT_READ | MEM_PROT_WRITE;
-        // Empty data vector - will be populated on-demand
-        mainRam.data.clear();
+        // Data is null - will be allocated on-demand
+        mainRam.data = nullptr;
         
         regions_[mainRam.base] = std::move(mainRam);
 
@@ -63,7 +63,8 @@ bool MemoryManager::mapRegion(uint64_t vaddr, uint64_t size, uint32_t flags) {
     region.base = vaddr;
     region.size = size;
     region.flags = flags;
-    region.data.resize(size, 0);
+    region.data = std::make_shared<std::vector<uint8_t>>();
+    region.data->resize(size, 0);
     
     regions_[vaddr] = std::move(region);
     
@@ -104,9 +105,10 @@ bool MemoryManager::read(uint64_t vaddr, void* dst, size_t size) {
     }
     
     // Ensure data is allocated for this region
-    if (region->data.empty()) {
+    if (!region->data) {
         try {
-            region->data.resize(std::min(region->size, (uint64_t)1024 * 1024), 0); // 1MB default
+            region->data = std::make_shared<std::vector<uint8_t>>();
+            region->data->resize(std::min(region->size, (uint64_t)1024 * 1024), 0); // 1MB default
         } catch (...) {
             return false;
         }
@@ -123,7 +125,7 @@ bool MemoryManager::read(uint64_t vaddr, void* dst, size_t size) {
         return false;
     }
 
-    std::memcpy(dst, region->data.data() + offset, size);
+    std::memcpy(dst, region->data->data() + offset, size);
     return true;
 }
 
@@ -145,7 +147,17 @@ bool MemoryManager::write(uint64_t vaddr, const void* src, size_t size) {
         return false;
     }
 
-    std::memcpy(region->data.data() + offset, src, size);
+    // Ensure data is allocated
+    if (!region->data) {
+        try {
+            region->data = std::make_shared<std::vector<uint8_t>>();
+            region->data->resize(std::min(region->size, (uint64_t)1024 * 1024), 0);
+        } catch (...) {
+            return false;
+        }
+    }
+
+    std::memcpy(region->data->data() + offset, src, size);
     return true;
 }
 
@@ -216,10 +228,10 @@ void MemoryManager::write64(uint64_t vaddr, uint64_t value) {
 
 uint8_t* MemoryManager::getPointer(uint64_t vaddr) {
     MemoryRegion* region = getRegion(vaddr);
-    if (!region) return nullptr;
+    if (!region || !region->data) return nullptr;
     
     uint64_t offset = vaddr - region->base;
-    return region->data.data() + offset;
+    return region->data->data() + offset;
 }
 
 bool MemoryManager::allocateOnDemand(uint64_t vaddr) {
@@ -237,7 +249,8 @@ bool MemoryManager::allocateOnDemand(uint64_t vaddr) {
     newRegion.flags = MEM_PROT_READ | MEM_PROT_WRITE;
     
     try {
-        newRegion.data.resize(newRegion.size, 0);
+        newRegion.data = std::make_shared<std::vector<uint8_t>>();
+        newRegion.data->resize(newRegion.size, 0);
         regions_[newRegion.base] = std::move(newRegion);
         return true;
     } catch (const std::exception& e) {

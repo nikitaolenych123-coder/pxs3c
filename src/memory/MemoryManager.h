@@ -29,7 +29,7 @@ struct MemoryRegion {
     uint64_t base;
     uint64_t size;
     uint32_t flags;
-    std::vector<uint8_t> data;
+    std::shared_ptr<std::vector<uint8_t>> data;  // Use shared_ptr for lazy allocation
 };
 
 class MemoryManager {
