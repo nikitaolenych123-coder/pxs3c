@@ -45,8 +45,8 @@ class MainActivity : BaseActivity() {
     private lateinit var surfaceView: SurfaceView
     private lateinit var statusText: TextView
     private lateinit var fpsText: TextView
-    private lateinit var btnStop: Button
-    private lateinit var btnBootGame: Button
+    private var btnStop: android.view.View? = null
+    private var btnBootGame: android.view.View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +58,8 @@ class MainActivity : BaseActivity() {
         fpsText = findViewByIdSafe(R.id.fpsText) ?: return
         val btnSettings: android.view.View? = findViewByIdSafe(R.id.btnSettings)
         val btnLoadGame: android.view.View? = findViewByIdSafe(R.id.btnLoadGame)
-        btnBootGame = findViewByIdSafe(R.id.btnBootGame) ?: return
-        btnStop = findViewByIdSafe(R.id.btnStop) ?: return
+        btnBootGame = findViewByIdSafe(R.id.btnBootGame)
+        btnStop = findViewByIdSafe(R.id.btnStop)
         val btnRefresh: android.view.View? = findViewByIdSafe(R.id.btnRefresh)
         
         statusText.text = "✓ UI Initialized"
@@ -134,26 +134,26 @@ class MainActivity : BaseActivity() {
             filePickerLauncher.launch("*/*")
         }
         
-        btnBootGame.setOnClickListener {
+        btnBootGame?.setOnClickListener {
             if (!gameLoaded) {
                 Toast.makeText(this, "Please load a game first", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (!isRunning) {
                 startFrameLoop()
-                btnStop.isEnabled = true
-                btnBootGame.text = "Pause"
+                btnStop?.isEnabled = true
+                (it as? android.widget.Button)?.text = "Pause"
             } else {
                 stopFrameLoop()
-                btnBootGame.text = "Resume"
+                (it as? android.widget.Button)?.text = "Resume"
             }
         }
         
-        btnStop.setOnClickListener {
+        btnStop?.setOnClickListener {
             stopFrameLoop()
             gameLoaded = false
-            btnStop.isEnabled = false
-            btnBootGame.text = "Boot Game"
+            btnStop?.isEnabled = false
+            (btnBootGame as? android.widget.Button)?.text = "Boot Game"
             statusText.text = "Stopped"
             fpsText.text = "FPS: 0"
         }
