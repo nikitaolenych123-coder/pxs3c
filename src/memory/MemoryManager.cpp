@@ -17,16 +17,29 @@ bool MemoryManager::init() {
     // Pre-allocate main memory regions
     std::cout << "Initializing PS3 memory map..." << std::endl;
 
-    // Main RAM (256MB)
-    MemoryRegion mainRam;
-    mainRam.base = MAIN_MEMORY_BASE;
-    mainRam.size = MAIN_MEMORY_SIZE;
-    mainRam.flags = MEM_PROT_READ | MEM_PROT_WRITE;
-    mainRam.data.resize(MAIN_MEMORY_SIZE, 0);
-    regions_[mainRam.base] = std::move(mainRam);
+    try {
+        // Main RAM (256MB) - use reserve+resize to avoid constructor overhead
+        MemoryRegion mainRam;
+        mainRam.base = MAIN_MEMORY_BASE;
+        mainRam.size = MAIN_MEMORY_SIZE;
+        mainRam.flags = MEM_PROT_READ | MEM_PROT_WRITE;
+        
+        // Android-safe allocation: reserve first, then resize in smaller chunks
+        mainRam.data.reserve(MAIN_MEMORY_SIZE);
+        const size_t chunkSize = 16 * 1024 * 1024; // 16MB chunks
+        for (size_t offset = 0; offset < MAIN_MEMORY_SIZE; offset += chunkSize) {
+            size_t currentChunk = std::min(chunkSize, MAIN_MEMORY_SIZE - offset);
+            mainRam.data.resize(offset + currentChunk, 0);
+        }
+        
+        regions_[mainRam.base] = std::move(mainRam);
 
-    std::cout << "Main RAM: 0x" << std::hex << MAIN_MEMORY_BASE 
-              << " - 0x" << (MAIN_MEMORY_BASE + MAIN_MEMORY_SIZE) << std::dec << std::endl;
+        std::cout << "Main RAM: 0x" << std::hex << MAIN_MEMORY_BASE 
+                  << " - 0x" << (MAIN_MEMORY_BASE + MAIN_MEMORY_SIZE) << std::dec << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Failed to allocate memory: " << e.what() << std::endl;
+        return false;
+    }
 
     initialized_ = true;
     return true;
