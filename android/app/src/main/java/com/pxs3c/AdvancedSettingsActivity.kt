@@ -110,7 +110,12 @@ class AdvancedSettingsActivity : AppCompatActivity() {
     }
     
     private fun applyNativeSettings() {
-        // Call native JNI methods to apply settings
+        // Apply settings to native layer when implemented
+        // For now, just save to SharedPreferences
+        val prefs = getSharedPreferences("pxs3c_advanced", MODE_PRIVATE)
+        Toast.makeText(this, "Settings saved! (Native integration pending)", Toast.LENGTH_SHORT).show()
+        
+        /* TODO: Implement native JNI methods
         try {
             nativeSetSVE2Enabled(sve2Switch.isChecked)
             nativeSetVulkanGPL(gplSwitch.isChecked)
@@ -129,6 +134,7 @@ class AdvancedSettingsActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Toast.makeText(this, "Failed to apply native settings: ${e.message}", Toast.LENGTH_SHORT).show()
         }
+        */
     }
     
     private fun resetToDefaults() {
@@ -147,6 +153,7 @@ class AdvancedSettingsActivity : AppCompatActivity() {
         return true
     }
     
+    /* TODO: Implement native methods in pxs3c_jni.cpp
     // Native methods
     private external fun nativeSetSVE2Enabled(enabled: Boolean)
     private external fun nativeSetVulkanGPL(enabled: Boolean)
@@ -154,4 +161,5 @@ class AdvancedSettingsActivity : AppCompatActivity() {
     private external fun nativeSetThermalBypass(enabled: Boolean)
     private external fun nativeSetAsyncCompute(enabled: Boolean)
     private external fun nativeSetTargetFPS(fps: Int)
+    */
 }
