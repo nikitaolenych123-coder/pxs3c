@@ -34,7 +34,9 @@ struct SPURegisters {
     uint32_t ctr;     // Count Register
     uint32_t status;  // SPU Status Register
     
-    SPURegisters() : regs(std::make_shared<std::array<SPUVector, 128>>()) {
+    SPURegisters() {
+        // Lazy init - allocate registers only when needed
+        regs = nullptr;
         pc = 0;
         sp = 0x3FFF0;  // Top of local store
         lr = 0;

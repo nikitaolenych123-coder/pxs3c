@@ -35,6 +35,15 @@ bool SPUInterpreter::init(std::shared_ptr<MemoryManager> mainMemory) {
         }
     }
 
+    // Allocate registers on first init
+    if (!regs_.regs) {
+        try {
+            regs_.regs = std::make_shared<std::array<SPUVector, 128>>();
+        } catch (const std::exception& e) {
+            std::cerr << "SPU" << id_ << " failed to allocate registers: " << e.what() << std::endl;
+            return false;
+        }
+    }
     reset();
     std::cout << "SPU" << id_ << " initialized (" << (localStorage_.size() / 1024) << "KB local store)" << std::endl;
     return true;
