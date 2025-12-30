@@ -73,225 +73,225 @@ CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o: CMakeFiles/pxs3c_core.dir/fla
 CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o: src/core/Emulator.cpp
 CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o -c /workspaces/pxs3c/src/core/Emulator.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o -c /workspaces/pxs3c/src/core/Emulator.cpp
 
 CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/core/Emulator.cpp > CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/core/Emulator.cpp > CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/core/Emulator.cpp -o CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/core/Emulator.cpp -o CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o: src/core/FramePacer.cpp
 CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o -c /workspaces/pxs3c/src/core/FramePacer.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o -c /workspaces/pxs3c/src/core/FramePacer.cpp
 
 CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/core/FramePacer.cpp > CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/core/FramePacer.cpp > CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/core/FramePacer.cpp -o CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/core/FramePacer.cpp -o CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o: src/core/Config.cpp
 CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o -c /workspaces/pxs3c/src/core/Config.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o -c /workspaces/pxs3c/src/core/Config.cpp
 
 CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/core/Config.cpp > CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/core/Config.cpp > CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/core/Config.cpp -o CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/core/Config.cpp -o CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o: src/core/SyscallHandler.cpp
 CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o -c /workspaces/pxs3c/src/core/SyscallHandler.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o -c /workspaces/pxs3c/src/core/SyscallHandler.cpp
 
 CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/core/SyscallHandler.cpp > CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/core/SyscallHandler.cpp > CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/core/SyscallHandler.cpp -o CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/core/SyscallHandler.cpp -o CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o: src/cpu/engines/Rpcs3Bridge.cpp
 CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o -c /workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o -c /workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.cpp
 
 CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o: src/cpu/PPUInterpreter.cpp
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o -c /workspaces/pxs3c/src/cpu/PPUInterpreter.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o -c /workspaces/pxs3c/src/cpu/PPUInterpreter.cpp
 
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/PPUInterpreter.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/PPUInterpreter.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/PPUInterpreter.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/PPUInterpreter.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o: src/cpu/PPUJIT.cpp
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o -c /workspaces/pxs3c/src/cpu/PPUJIT.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o -c /workspaces/pxs3c/src/cpu/PPUJIT.cpp
 
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/PPUJIT.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/PPUJIT.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/PPUJIT.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/PPUJIT.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o: src/cpu/SPUInterpreter.cpp
 CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o -c /workspaces/pxs3c/src/cpu/SPUInterpreter.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o -c /workspaces/pxs3c/src/cpu/SPUInterpreter.cpp
 
 CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/SPUInterpreter.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/SPUInterpreter.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/SPUInterpreter.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/SPUInterpreter.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o: src/cpu/SPUManager.cpp
 CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o -c /workspaces/pxs3c/src/cpu/SPUManager.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o -c /workspaces/pxs3c/src/cpu/SPUManager.cpp
 
 CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/SPUManager.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/SPUManager.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/SPUManager.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/SPUManager.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o: src/rsx/VulkanRenderer.cpp
 CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o -c /workspaces/pxs3c/src/rsx/VulkanRenderer.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o -c /workspaces/pxs3c/src/rsx/VulkanRenderer.cpp
 
 CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/rsx/VulkanRenderer.cpp > CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/rsx/VulkanRenderer.cpp > CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/rsx/VulkanRenderer.cpp -o CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/rsx/VulkanRenderer.cpp -o CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o: src/rsx/RSXCommands.cpp
 CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o -c /workspaces/pxs3c/src/rsx/RSXCommands.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o -c /workspaces/pxs3c/src/rsx/RSXCommands.cpp
 
 CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/rsx/RSXCommands.cpp > CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/rsx/RSXCommands.cpp > CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/rsx/RSXCommands.cpp -o CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/rsx/RSXCommands.cpp -o CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o: src/rsx/RSXProcessor.cpp
 CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o -c /workspaces/pxs3c/src/rsx/RSXProcessor.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o -c /workspaces/pxs3c/src/rsx/RSXProcessor.cpp
 
 CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/rsx/RSXProcessor.cpp > CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/rsx/RSXProcessor.cpp > CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/rsx/RSXProcessor.cpp -o CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/rsx/RSXProcessor.cpp -o CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o: src/loader/ElfLoader.cpp
 CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o -c /workspaces/pxs3c/src/loader/ElfLoader.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o -c /workspaces/pxs3c/src/loader/ElfLoader.cpp
 
 CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/loader/ElfLoader.cpp > CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/loader/ElfLoader.cpp > CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/loader/ElfLoader.cpp -o CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/loader/ElfLoader.cpp -o CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o: src/loader/SELFLoader.cpp
 CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o -c /workspaces/pxs3c/src/loader/SELFLoader.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o -c /workspaces/pxs3c/src/loader/SELFLoader.cpp
 
 CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/loader/SELFLoader.cpp > CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/loader/SELFLoader.cpp > CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/loader/SELFLoader.cpp -o CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/loader/SELFLoader.cpp -o CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o: src/memory/MemoryManager.cpp
 CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o -c /workspaces/pxs3c/src/memory/MemoryManager.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o -c /workspaces/pxs3c/src/memory/MemoryManager.cpp
 
 CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/memory/MemoryManager.cpp > CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/memory/MemoryManager.cpp > CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/memory/MemoryManager.cpp -o CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/memory/MemoryManager.cpp -o CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.s
 
 CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.o: CMakeFiles/pxs3c_core.dir/flags.make
 CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.o: src/cpu/LLVMJITCompiler.cpp
 CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.o: CMakeFiles/pxs3c_core.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.o -c /workspaces/pxs3c/src/cpu/LLVMJITCompiler.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.o -MF CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.o.d -o CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.o -c /workspaces/pxs3c/src/cpu/LLVMJITCompiler.cpp
 
 CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/LLVMJITCompiler.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/src/cpu/LLVMJITCompiler.cpp > CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.i
 
 CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/LLVMJITCompiler.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/src/cpu/LLVMJITCompiler.cpp -o CMakeFiles/pxs3c_core.dir/src/cpu/LLVMJITCompiler.cpp.s
 
 # Object files for target pxs3c_core
 pxs3c_core_OBJECTS = \

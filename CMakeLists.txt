@@ -5,50 +5,56 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Find LLVM for JIT compilation
-execute_process(
-  COMMAND llvm-config --version
-  OUTPUT_VARIABLE LLVM_VERSION
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-  ERROR_QUIET
-)
-
-if(LLVM_VERSION)
-  message(STATUS "LLVM found: ${LLVM_VERSION}")
-  
-  # Get LLVM include directories
+# Find LLVM for JIT compilation (unless explicitly disabled)
+if(NOT DEFINED LLVM_FOUND)
   execute_process(
-    COMMAND llvm-config --includedir
-    OUTPUT_VARIABLE LLVM_INCLUDE_DIR
+    COMMAND llvm-config --version
+    OUTPUT_VARIABLE LLVM_VERSION
     OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
   )
   
-  # Get LLVM libraries using llvm-config
-  execute_process(
-    COMMAND llvm-config --libs all
-    OUTPUT_VARIABLE LLVM_LIBS
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  
-  # Get LLVM system libs
-  execute_process(
-    COMMAND llvm-config --system-libs
-    OUTPUT_VARIABLE LLVM_SYSTEM_LIBS
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  
-  # Get LLVM flags
-  execute_process(
-    COMMAND llvm-config --cxxflags
-    OUTPUT_VARIABLE LLVM_CXXFLAGS
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  
-  set(LLVM_FOUND TRUE)
-  include_directories(${LLVM_INCLUDE_DIR})
+  if(LLVM_VERSION)
+    message(STATUS "LLVM found: ${LLVM_VERSION}")
+    
+    # Get LLVM include directories
+    execute_process(
+      COMMAND llvm-config --includedir
+      OUTPUT_VARIABLE LLVM_INCLUDE_DIR
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    
+    # Get LLVM libraries using llvm-config
+    execute_process(
+      COMMAND llvm-config --libs all
+      OUTPUT_VARIABLE LLVM_LIBS
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    
+    # Get LLVM system libs
+    execute_process(
+      COMMAND llvm-config --system-libs
+      OUTPUT_VARIABLE LLVM_SYSTEM_LIBS
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    
+    # Get LLVM flags
+    execute_process(
+      COMMAND llvm-config --cxxflags
+      OUTPUT_VARIABLE LLVM_CXXFLAGS
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    
+    set(LLVM_FOUND TRUE)
+    include_directories(${LLVM_INCLUDE_DIR})
+  else()
+    message(STATUS "LLVM not found, building without JIT optimization")
+    set(LLVM_FOUND FALSE)
+  endif()
 else()
-  message(STATUS "LLVM not found, building without JIT optimization")
-  set(LLVM_FOUND FALSE)
+  if(LLVM_FOUND)
+    message(STATUS "LLVM disabled by parent project")
+  endif()
 endif()
 
 add_library(pxs3c_core

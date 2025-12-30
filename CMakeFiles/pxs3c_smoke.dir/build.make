@@ -73,15 +73,15 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: CMakeFiles/pxs3c_smoke.dir/flags.m
 CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: tests/smoke.cpp
 CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: CMakeFiles/pxs3c_smoke.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/pxs3c/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o -MF CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o.d -o CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o -c /workspaces/pxs3c/tests/smoke.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o -MF CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o.d -o CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o -c /workspaces/pxs3c/tests/smoke.cpp
 
 CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/tests/smoke.cpp > CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/pxs3c/tests/smoke.cpp > CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.i
 
 CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/tests/smoke.cpp -o CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/pxs3c/tests/smoke.cpp -o CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.s
 
 # Object files for target pxs3c_smoke
 pxs3c_smoke_OBJECTS = \
