@@ -20,16 +20,35 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v2
-      with:
-        api-levels: 34
-        ndk-version: 25.2.9519653
-        build-tools-version: 34.0.0
-        cmake-version: 3.22.1
+    - name: Install Gradle 8.7
+      run: |
+        wget -q https://services.gradle.org/distributions/gradle-8.7-bin.zip -O /tmp/gradle.zip
+        unzip -q /tmp/gradle.zip -d /opt/gradle
+        echo "GRADLE_HOME=/opt/gradle/gradle-8.7" >> $GITHUB_ENV
+        echo "/opt/gradle/gradle-8.7/bin" >> $GITHUB_PATH
+
+    - name: Install Android SDK + NDK
+      env:
+        ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
+      run: |
+        mkdir -p "$ANDROID_SDK_ROOT"
+        cd "$ANDROID_SDK_ROOT"
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdtools.zip
+        unzip -q cmdtools.zip
+        mkdir -p cmdline-tools/latest
+        mv cmdline-tools/* cmdline-tools/latest/
+        rm cmdtools.zip
+        export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
+        yes | sdkmanager --licenses > /dev/null
+        sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653" "cmake;3.22.1"
+        echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+        echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
+        echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
 
     - name: Build APK
       working-directory: ./android
+      env:
+        ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
       run: |
         gradle assembleDebug --stacktrace
         gradle assembleRelease --stacktrace
