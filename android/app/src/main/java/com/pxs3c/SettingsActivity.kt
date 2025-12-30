@@ -7,13 +7,12 @@ import android.os.Bundle
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import java.io.File
 import java.io.FileOutputStream
 import java.util.zip.ZipInputStream
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseActivity() {
     companion object {
         init {
             try {

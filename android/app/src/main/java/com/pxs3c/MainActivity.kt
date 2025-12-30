@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
-import androidx.appcompat.app.AppCompatActivity
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Button
@@ -15,7 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import java.io.File
 import java.io.FileOutputStream
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     companion object {
         init {
             try {
@@ -50,22 +49,22 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnBootGame: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        try {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_main)
-            
-            surfaceView = findViewById(R.id.surfaceView)
-            statusText = findViewById(R.id.statusText)
-            fpsText = findViewById(R.id.fpsText)
-            val btnSettings = findViewById<android.widget.ImageButton>(R.id.btnSettings)
-            val btnLoadGame = findViewById<Button>(R.id.btnLoadGame)
-            btnBootGame = findViewById(R.id.btnBootGame)
-            btnStop = findViewById(R.id.btnStop)
-            val btnRefresh = findViewById<android.widget.ImageButton>(R.id.btnRefresh)
-            
-            statusText.text = "✓ UI Initialized"
-            android.util.Log.i("PXS3C-Main", "✓ onCreate started successfully")
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         
+        // Use safe findViewById with automatic type handling
+        surfaceView = findViewByIdSafe(R.id.surfaceView) ?: return
+        statusText = findViewByIdSafe(R.id.statusText) ?: return
+        fpsText = findViewByIdSafe(R.id.fpsText) ?: return
+        val btnSettings: android.widget.ImageButton? = findViewByIdSafe(R.id.btnSettings)
+        val btnLoadGame: Button? = findViewByIdSafe(R.id.btnLoadGame)
+        btnBootGame = findViewByIdSafe(R.id.btnBootGame) ?: return
+        btnStop = findViewByIdSafe(R.id.btnStop) ?: return
+        val btnRefresh: android.widget.ImageButton? = findViewByIdSafe(R.id.btnRefresh)
+        
+        statusText.text = "✓ UI Initialized"
+        android.util.Log.i("PXS3C-Main", "✓ onCreate started successfully")
+    
         // Use SAF (Storage Access Framework) for file picking
         filePickerLauncher = registerForActivityResult(
             ActivityResultContracts.GetContent()
@@ -159,14 +158,9 @@ class MainActivity : AppCompatActivity() {
             fpsText.text = "FPS: 0"
         }
         
-        btnRefresh.setOnClickListener {
+        btnRefresh?.setOnClickListener {
             // Refresh game list (placeholder)
             Toast.makeText(this, "Game list refresh (not implemented)", Toast.LENGTH_SHORT).show()
-        }
-        } catch (e: Exception) {
-            android.util.Log.e("PXS3C-Main", "✗ Fatal error in onCreate: ${e.message}", e)
-            statusText.text = "✗ Initialization Failed!"
-            Toast.makeText(this, "Initialization failed: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
     
