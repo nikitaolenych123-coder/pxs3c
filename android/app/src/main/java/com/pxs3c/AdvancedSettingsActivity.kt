@@ -163,7 +163,14 @@ class AdvancedSettingsActivity : AppCompatActivity() {
     
     companion object {
         init {
-            System.loadLibrary("pxs3c_jni")
+            try {
+                System.loadLibrary("pxs3c_jni")
+                android.util.Log.i("PXS3C-JNI", "✓ Native library loaded in AdvancedSettings")
+            } catch (e: UnsatisfiedLinkError) {
+                android.util.Log.e("PXS3C-JNI", "✗ Failed to load pxs3c_jni in Advanced: ${e.message}", e)
+            } catch (e: Exception) {
+                android.util.Log.e("PXS3C-JNI", "✗ Unexpected error in Advanced: ${e.message}", e)
+            }
         }
     }
 }

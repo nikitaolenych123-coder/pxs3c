@@ -18,7 +18,14 @@ import java.io.FileOutputStream
 class MainActivity : AppCompatActivity() {
     companion object {
         init {
-            System.loadLibrary("pxs3c_jni")
+            try {
+                System.loadLibrary("pxs3c_jni")
+                android.util.Log.i("PXS3C-JNI", "✓ Native library loaded successfully")
+            } catch (e: UnsatisfiedLinkError) {
+                android.util.Log.e("PXS3C-JNI", "✗ Failed to load pxs3c_jni: ${e.message}", e)
+            } catch (e: Exception) {
+                android.util.Log.e("PXS3C-JNI", "✗ Unexpected error loading native library: ${e.message}", e)
+            }
         }
     }
 

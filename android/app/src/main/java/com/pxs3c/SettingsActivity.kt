@@ -15,7 +15,16 @@ import java.util.zip.ZipInputStream
 
 class SettingsActivity : AppCompatActivity() {
     companion object {
-        init { System.loadLibrary("pxs3c_jni") }
+        init {
+            try {
+                System.loadLibrary("pxs3c_jni")
+                android.util.Log.i("PXS3C-JNI", "✓ Native library loaded in SettingsActivity")
+            } catch (e: UnsatisfiedLinkError) {
+                android.util.Log.e("PXS3C-JNI", "✗ Failed to load pxs3c_jni in Settings: ${e.message}", e)
+            } catch (e: Exception) {
+                android.util.Log.e("PXS3C-JNI", "✗ Unexpected error in Settings: ${e.message}", e)
+            }
+        }
     }
 
     external fun nativeSetTargetFps(fps: Int)
