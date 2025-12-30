@@ -71,6 +71,9 @@ public:
 private:
     std::map<uint64_t, MemoryRegion> regions_;
     bool initialized_;
+    
+    // Lazy allocation helper
+    bool allocateOnDemand(uint64_t vaddr);
 
     uint16_t swapEndian16(uint16_t val);
     uint32_t swapEndian32(uint32_t val);

@@ -14,30 +14,26 @@ MemoryManager::~MemoryManager() {
 bool MemoryManager::init() {
     if (initialized_) return true;
 
-    // Pre-allocate main memory regions
-    std::cout << "Initializing PS3 memory map..." << std::endl;
+    // PS3 memory map initialization - NO PRE-ALLOCATION
+    // Memory will be allocated on-demand when accessed
+    std::cout << "Initializing PS3 memory map (lazy allocation)..." << std::endl;
 
     try {
-        // Main RAM (256MB) - use reserve+resize to avoid constructor overhead
+        // Only create the region metadata, don't allocate actual memory yet
         MemoryRegion mainRam;
         mainRam.base = MAIN_MEMORY_BASE;
         mainRam.size = MAIN_MEMORY_SIZE;
         mainRam.flags = MEM_PROT_READ | MEM_PROT_WRITE;
-        
-        // Android-safe allocation: reserve first, then resize in smaller chunks
-        mainRam.data.reserve(MAIN_MEMORY_SIZE);
-        const size_t chunkSize = 16 * 1024 * 1024; // 16MB chunks
-        for (size_t offset = 0; offset < MAIN_MEMORY_SIZE; offset += chunkSize) {
-            size_t currentChunk = std::min(chunkSize, MAIN_MEMORY_SIZE - offset);
-            mainRam.data.resize(offset + currentChunk, 0);
-        }
+        // Empty data vector - will be populated on-demand
+        mainRam.data.clear();
         
         regions_[mainRam.base] = std::move(mainRam);
 
-        std::cout << "Main RAM: 0x" << std::hex << MAIN_MEMORY_BASE 
+        std::cout << "Main RAM metadata created: 0x" << std::hex << MAIN_MEMORY_BASE 
                   << " - 0x" << (MAIN_MEMORY_BASE + MAIN_MEMORY_SIZE) << std::dec << std::endl;
+        std::cout << "Memory allocation: lazy (on-demand)" << std::endl;
     } catch (const std::exception& e) {
-        std::cerr << "Failed to allocate memory: " << e.what() << std::endl;
+        std::cerr << "Failed to initialize memory metadata: " << e.what() << std::endl;
         return false;
     }
 
@@ -98,8 +94,22 @@ MemoryRegion* MemoryManager::getRegion(uint64_t vaddr) {
 bool MemoryManager::read(uint64_t vaddr, void* dst, size_t size) {
     MemoryRegion* region = getRegion(vaddr);
     if (!region) {
-        std::cerr << "Read from unmapped memory: 0x" << std::hex << vaddr << std::dec << std::endl;
-        return false;
+        // Lazy allocation: allocate region on first access
+        if (!allocateOnDemand(vaddr)) {
+            std::cerr << "Read from unmapped memory: 0x" << std::hex << vaddr << std::dec << std::endl;
+            return false;
+        }
+        region = getRegion(vaddr);
+        if (!region) return false;
+    }
+    
+    // Ensure data is allocated for this region
+    if (region->data.empty()) {
+        try {
+            region->data.resize(std::min(region->size, (uint64_t)1024 * 1024), 0); // 1MB default
+        } catch (...) {
+            return false;
+        }
     }
 
     if (!(region->flags & MEM_PROT_READ)) {
@@ -210,6 +220,30 @@ uint8_t* MemoryManager::getPointer(uint64_t vaddr) {
     
     uint64_t offset = vaddr - region->base;
     return region->data.data() + offset;
+}
+
+bool MemoryManager::allocateOnDemand(uint64_t vaddr) {
+    // Check if already in a region
+    for (auto& [base, region] : regions_) {
+        if (vaddr >= base && vaddr < base + region.size) {
+            return true;
+        }
+    }
+    
+    // Allocate new 1MB region starting from vaddr
+    MemoryRegion newRegion;
+    newRegion.base = vaddr & ~0xFFFFF; // 1MB aligned
+    newRegion.size = 1024 * 1024;
+    newRegion.flags = MEM_PROT_READ | MEM_PROT_WRITE;
+    
+    try {
+        newRegion.data.resize(newRegion.size, 0);
+        regions_[newRegion.base] = std::move(newRegion);
+        return true;
+    } catch (const std::exception& e) {
+        std::cerr << "Failed to allocate on-demand region: " << e.what() << std::endl;
+        return false;
+    }
 }
 
 size_t MemoryManager::getTotalMapped() const {
