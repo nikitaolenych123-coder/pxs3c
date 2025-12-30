@@ -1,0 +1,47 @@
+name: Linux Build & Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          cmake \
+          build-essential \
+          llvm-18 \
+          llvm-18-dev
+
+    - name: Create Build Directory
+      run: mkdir build && cd build
+
+    - name: Configure CMake
+      working-directory: ./build
+      run: |
+        cmake .. -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_CXX_COMPILER=g++ \
+          -DLLVM_DIR=/usr/lib/llvm-18/lib/cmake/llvm
+
+    - name: Build
+      working-directory: ./build
+      run: make -j$(nproc)
+
+    - name: Run Tests
+      working-directory: ./build
+      run: ./pxs3c_smoke
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-binaries
+        path: build/pxs3c_smoke

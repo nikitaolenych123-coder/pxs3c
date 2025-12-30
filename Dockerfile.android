@@ -1,0 +1,38 @@
+FROM ubuntu:24.04
+
+# Install base dependencies
+RUN apt-get update && apt-get install -y \
+    openjdk-11-jdk-headless \
+    gradle \
+    cmake \
+    git \
+    wget \
+    unzip \
+    curl \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Android SDK/NDK
+RUN mkdir -p /opt/android-sdk && cd /opt/android-sdk && \
+    wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip && \
+    unzip commandlinetools-linux-10406996_latest.zip && \
+    rm commandlinetools-linux-10406996_latest.zip
+
+# Set Android SDK env
+ENV ANDROID_HOME=/opt/android-sdk
+ENV PATH=${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${PATH}
+
+# Install SDK components
+RUN yes | sdkmanager --sdk_root=${ANDROID_HOME} "platforms;android-34" \
+    "build-tools;34.0.0" \
+    "ndk;25.2.9519653" \
+    "cmake;3.22.1"
+
+# Create app directory
+WORKDIR /workspace
+
+# Copy project
+COPY . /workspace
+
+# Build
+CMD ["./build-android.sh"]
