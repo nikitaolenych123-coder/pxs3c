@@ -50,17 +50,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnBootGame: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        
-        surfaceView = findViewById(R.id.surfaceView)
-        statusText = findViewById(R.id.statusText)
-        fpsText = findViewById(R.id.fpsText)
-        val btnSettings = findViewById<Button>(R.id.btnSettings)
-        val btnLoadGame = findViewById<Button>(R.id.btnLoadGame)
-        btnBootGame = findViewById(R.id.btnBootGame)
-        btnStop = findViewById(R.id.btnStop)
-        val btnRefresh = findViewById<Button>(R.id.btnRefresh)
+        try {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            
+            surfaceView = findViewById(R.id.surfaceView)
+            statusText = findViewById(R.id.statusText)
+            fpsText = findViewById(R.id.fpsText)
+            val btnSettings = findViewById<Button>(R.id.btnSettings)
+            val btnLoadGame = findViewById<Button>(R.id.btnLoadGame)
+            btnBootGame = findViewById(R.id.btnBootGame)
+            btnStop = findViewById(R.id.btnStop)
+            val btnRefresh = findViewById<Button>(R.id.btnRefresh)
+            
+            statusText.text = "✓ UI Initialized"
+            android.util.Log.i("PXS3C-Main", "✓ onCreate started successfully")
         
         // Use SAF (Storage Access Framework) for file picking
         filePickerLauncher = registerForActivityResult(
@@ -158,6 +162,11 @@ class MainActivity : AppCompatActivity() {
         btnRefresh.setOnClickListener {
             // Refresh game list (placeholder)
             Toast.makeText(this, "Game list refresh (not implemented)", Toast.LENGTH_SHORT).show()
+        }
+        } catch (e: Exception) {
+            android.util.Log.e("PXS3C-Main", "✗ Fatal error in onCreate: ${e.message}", e)
+            statusText.text = "✗ Initialization Failed!"
+            Toast.makeText(this, "Initialization failed: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
     
