@@ -43,3 +43,4 @@ external/aps3e/
 # OS
 .DS_Store
 Thumbs.db
+CMakeCache.txt
