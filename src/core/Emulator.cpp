@@ -8,6 +8,7 @@
 #include "loader/ElfLoader.h"
 #include "cpu/PPUInterpreter.h"
 #include "cpu/SPUManager.h"
+#include <cstring>
 #include <iostream>
 
 namespace pxs3c {

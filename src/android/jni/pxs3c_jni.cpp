@@ -1,5 +1,7 @@
 #include <jni.h>
 #include <memory>
+#include <string>
+#include <cstring>
 #include "core/Emulator.h"
 #include <android/native_window_jni.h>
 #include <android/log.h>
