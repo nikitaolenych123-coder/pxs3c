@@ -13,3 +13,13 @@ plugins {
     id 'com.android.application' version '8.5.0' apply false
 }
 
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            // Force use of newer Kotlin stdlib to avoid conflicts
+            force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+            force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+        }
+    }
+}
+
