@@ -1,6 +1,10 @@
 #pragma once
 #include <memory>
 
+#ifdef __ANDROID__
+#include <android/native_window.h>
+#endif
+
 namespace pxs3c {
 
 class VulkanRenderer;
@@ -24,7 +28,7 @@ public:
     void shutdown();
 
 #ifdef __ANDROID__
-    bool attachAndroidWindow(struct ANativeWindow* window);
+    bool attachAndroidWindow(ANativeWindow* window);
 #endif
 
     void setTargetFps(int fps);

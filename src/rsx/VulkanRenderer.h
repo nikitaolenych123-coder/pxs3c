@@ -2,8 +2,9 @@
 #include <cstdint>
 #include <vector>
 
-// Forward declare Android native window to avoid including Android headers on non-Android builds
-struct ANativeWindow;
+#ifdef __ANDROID__
+#include <android/native_window.h>
+#endif
 
 namespace pxs3c {
 
