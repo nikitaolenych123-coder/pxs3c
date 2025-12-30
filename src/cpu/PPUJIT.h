@@ -53,7 +53,11 @@ public:
 private:
     PPUInterpreter* ppu_;
     MemoryManager* memory_;
+#ifdef LLVM_AVAILABLE
     std::unique_ptr<LLVMJITCompiler> llvmJit_;
+#else
+    void* llvmJit_;  // Placeholder when LLVM not available
+#endif
     std::map<uint64_t, std::unique_ptr<JITBlockHeader>> cache_;
     uint64_t totalCompilations_;
     uint64_t cacheHits_;
