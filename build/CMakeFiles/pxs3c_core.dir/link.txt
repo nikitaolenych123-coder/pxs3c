@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpxs3c_core.a CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o CMakeFiles/pxs3c_core.dir/src/core/Config.cpp.o CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o CMakeFiles/pxs3c_core.dir/src/rsx/VulkanRenderer.cpp.o CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o
+/usr/bin/ranlib libpxs3c_core.a
