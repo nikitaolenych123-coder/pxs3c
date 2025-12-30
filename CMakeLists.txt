@@ -116,7 +116,10 @@ else()
   message(STATUS "LLVM JIT support not available, using interpreter-only execution")
 endif()
 
-target_include_directories(pxs3c_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(pxs3c_core PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
 add_executable(pxs3c_smoke tests/smoke.cpp)
 target_link_libraries(pxs3c_smoke pxs3c_core)
