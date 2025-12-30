@@ -73,16 +73,16 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     protected inline fun <reified T : android.view.View> findViewByIdSafe(id: Int): T? {
         return try {
-            findViewById<T>(id).apply {
+            val view = findViewById<android.view.View>(id)
+            if (view is T) {
                 Log.d(TAG, "✓ Found view ${T::class.simpleName} with id $id")
+                view
+            } else {
+                Log.e(TAG, "✗ Type mismatch for view id $id: expected ${T::class.simpleName}, got ${view?.javaClass?.simpleName}")
+                null
             }
-        } catch (e: ClassCastException) {
-            Log.e(TAG, "✗ ClassCastException finding view ${T::class.simpleName}: ${e.message}", e)
-            showError("UI Error", "View type mismatch: ${e.message}")
-            null
         } catch (e: Exception) {
-            Log.e(TAG, "✗ Error finding view: ${e.message}", e)
-            showError("UI Error", "Could not find view: ${e.message}")
+            Log.e(TAG, "✗ Error finding view id $id: ${e.message}", e)
             null
         }
     }
@@ -119,13 +119,19 @@ abstract class BaseActivity : AppCompatActivity() {
         Log.e(TAG, "⚠️  $title: $message")
         
         try {
-            Toast.makeText(
-                this,
-                "$title: $message",
-                Toast.LENGTH_LONG
-            ).show()
+            runOnUiThread {
+                try {
+                    Toast.makeText(
+                        this,
+                        "$title: $message",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } catch (e: Exception) {
+                    Log.e(TAG, "Could not show toast: ${e.message}")
+                }
+            }
         } catch (e: Exception) {
-            Log.e(TAG, "Could not show toast: ${e.message}")
+            Log.e(TAG, "Could not runOnUiThread for toast: ${e.message}")
         }
     }
     
