@@ -106,11 +106,16 @@ class FilePickerActivity : AppCompatActivity() {
             }
         }
         
-        // Then list PS3 game files (.self, .elf)
+        // Then list game images/packages
         currentDir.listFiles()?.forEach { file ->
             if (file.isFile) {
                 val name = file.name.lowercase()
-                if (name.endsWith(".self") || name.endsWith(".elf")) {
+                if (name.endsWith(".self") ||
+                    name.endsWith(".elf") ||
+                    name.endsWith(".pkg") ||
+                    name.endsWith(".iso") ||
+                    name.endsWith(".bin")
+                ) {
                     files.add(file.name)
                 }
             }
