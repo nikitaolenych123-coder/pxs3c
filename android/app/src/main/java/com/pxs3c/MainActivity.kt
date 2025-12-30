@@ -49,118 +49,122 @@ class MainActivity : BaseActivity() {
     private var btnBootGame: android.view.View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        try {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            
+            // Use safe findViewById with automatic type handling
+            surfaceView = findViewByIdSafe(R.id.surfaceView) ?: return
+            statusText = findViewByIdSafe(R.id.statusText) ?: return
+            fpsText = findViewByIdSafe(R.id.fpsText) ?: return
+            val btnSettings: android.view.View? = findViewByIdSafe(R.id.btnSettings)
+            val btnLoadGame: android.view.View? = findViewByIdSafe(R.id.btnLoadGame)
+            btnBootGame = findViewByIdSafe(R.id.btnBootGame)
+            btnStop = findViewByIdSafe(R.id.btnStop)
+            val btnRefresh: android.view.View? = findViewByIdSafe(R.id.btnRefresh)
+            
+            statusText.text = "✓ UI Initialized"
+            android.util.Log.i("PXS3C-Main", "✓ onCreate started successfully")
         
-        // Use safe findViewById with automatic type handling
-        surfaceView = findViewByIdSafe(R.id.surfaceView) ?: return
-        statusText = findViewByIdSafe(R.id.statusText) ?: return
-        fpsText = findViewByIdSafe(R.id.fpsText) ?: return
-        val btnSettings: android.view.View? = findViewByIdSafe(R.id.btnSettings)
-        val btnLoadGame: android.view.View? = findViewByIdSafe(R.id.btnLoadGame)
-        btnBootGame = findViewByIdSafe(R.id.btnBootGame)
-        btnStop = findViewByIdSafe(R.id.btnStop)
-        val btnRefresh: android.view.View? = findViewByIdSafe(R.id.btnRefresh)
-        
-        statusText.text = "✓ UI Initialized"
-        android.util.Log.i("PXS3C-Main", "✓ onCreate started successfully")
-    
-        // Use SAF (Storage Access Framework) for file picking
-        filePickerLauncher = registerForActivityResult(
-            ActivityResultContracts.GetContent()
-        ) { uri: Uri? ->
-            uri?.let { loadGameFromUri(it) }
-        }
+            // Use SAF (Storage Access Framework) for file picking
+            filePickerLauncher = registerForActivityResult(
+                ActivityResultContracts.GetContent()
+            ) { uri: Uri? ->
+                uri?.let { loadGameFromUri(it) }
+            }
 
-        surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
-            override fun surfaceCreated(holder: SurfaceHolder) {
-                try {
-                    if (!nativeInit()) {
-                        runOnUiThread {
-                            statusText.text = "Failed to initialize emulator"
-                            Toast.makeText(this@MainActivity, "Emulator init failed", Toast.LENGTH_LONG).show()
+            surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
+                override fun surfaceCreated(holder: SurfaceHolder) {
+                    try {
+                        if (!nativeInit()) {
+                            runOnUiThread {
+                                statusText.text = "Failed to initialize emulator"
+                                Toast.makeText(this@MainActivity, "Emulator init failed", Toast.LENGTH_LONG).show()
+                            }
+                            return
                         }
-                        return
-                    }
-                    
-                    if (!nativeAttachSurface(holder.surface)) {
-                        runOnUiThread {
-                            statusText.text = "Failed to attach surface"
-                            Toast.makeText(this@MainActivity, "Surface attach failed", Toast.LENGTH_LONG).show()
+                        
+                        if (!nativeAttachSurface(holder.surface)) {
+                            runOnUiThread {
+                                statusText.text = "Failed to attach surface"
+                                Toast.makeText(this@MainActivity, "Surface attach failed", Toast.LENGTH_LONG).show()
+                            }
+                            return
                         }
-                        return
-                    }
-                    
-                    nativeSetTargetFps(60)
-                    nativeSetVsync(true)
-                    
-                    runOnUiThread {
-                        statusText.text = "Ready - Load a game to start"
-                    }
-                    
-                    // Don't auto-start frame loop - wait for game to load
-                } catch (e: Exception) {
-                    runOnUiThread {
-                        statusText.text = "Error: ${e.message}"
-                        Toast.makeText(this@MainActivity, "Init error: ${e.message}", Toast.LENGTH_LONG).show()
+                        
+                        nativeSetTargetFps(60)
+                        nativeSetVsync(true)
+                        
+                        runOnUiThread {
+                            statusText.text = "Ready - Load a game to start"
+                        }
+                        
+                        // Don't auto-start frame loop - wait for game to load
+                    } catch (e: Exception) {
+                        runOnUiThread {
+                            statusText.text = "Error: ${e.message}"
+                            Toast.makeText(this@MainActivity, "Init error: ${e.message}", Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
-            }
-            
-            override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-                try {
-                    nativeResize(width, height)
-                } catch (e: Exception) {
-                    // Ignore resize errors
+                
+                override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+                    try {
+                        nativeResize(width, height)
+                    } catch (e: Exception) {
+                        // Ignore resize errors
+                    }
                 }
+                
+                override fun surfaceDestroyed(holder: SurfaceHolder) {
+                    try {
+                        stopFrameLoop()
+                        nativeShutdown()
+                    } catch (e: Exception) {
+                        // Ignore shutdown errors
+                    }
+                }
+            })
+
+            btnSettings?.setOnClickListener {
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
             
-            override fun surfaceDestroyed(holder: SurfaceHolder) {
-                try {
+            btnLoadGame?.setOnClickListener {
+                statusText.text = "Select PKG/ISO/ELF file..."
+                filePickerLauncher.launch("*/*")
+            }
+            
+            btnBootGame?.setOnClickListener {
+                if (!gameLoaded) {
+                    Toast.makeText(this, "Please load a game first", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (!isRunning) {
+                    startFrameLoop()
+                    btnStop?.isEnabled = true
+                    (it as? android.widget.Button)?.text = "Pause"
+                } else {
                     stopFrameLoop()
-                    nativeShutdown()
-                } catch (e: Exception) {
-                    // Ignore shutdown errors
+                    (it as? android.widget.Button)?.text = "Resume"
                 }
             }
-        })
-
-        btnSettings?.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
-        }
-        
-        btnLoadGame?.setOnClickListener {
-            statusText.text = "Select PKG/ISO/ELF file..."
-            filePickerLauncher.launch("*/*")
-        }
-        
-        btnBootGame?.setOnClickListener {
-            if (!gameLoaded) {
-                Toast.makeText(this, "Please load a game first", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            if (!isRunning) {
-                startFrameLoop()
-                btnStop?.isEnabled = true
-                (it as? android.widget.Button)?.text = "Pause"
-            } else {
+            
+            btnStop?.setOnClickListener {
                 stopFrameLoop()
-                (it as? android.widget.Button)?.text = "Resume"
+                gameLoaded = false
+                btnStop?.isEnabled = false
+                (btnBootGame as? android.widget.Button)?.text = "Boot Game"
+                statusText.text = "Stopped"
+                fpsText.text = "FPS: 0"
             }
-        }
-        
-        btnStop?.setOnClickListener {
-            stopFrameLoop()
-            gameLoaded = false
-            btnStop?.isEnabled = false
-            (btnBootGame as? android.widget.Button)?.text = "Boot Game"
-            statusText.text = "Stopped"
-            fpsText.text = "FPS: 0"
-        }
-        
-        btnRefresh?.setOnClickListener {
-            // Refresh game list (placeholder)
-            Toast.makeText(this, "Game list refresh (not implemented)", Toast.LENGTH_SHORT).show()
+            
+            btnRefresh?.setOnClickListener {
+                // Refresh game list (placeholder)
+                Toast.makeText(this, "Game list refresh (not implemented)", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            handleException(e, "MainActivity.onCreate")
         }
     }
     
