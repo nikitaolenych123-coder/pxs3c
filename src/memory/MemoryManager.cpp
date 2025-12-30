@@ -27,7 +27,13 @@ bool MemoryManager::init() {
         // Data is null - will be allocated on-demand
         mainRam.data = nullptr;
         
-        regions_[mainRam.base] = std::move(mainRam);
+        // Insert safely with exception handling
+        try {
+            regions_[mainRam.base] = mainRam;  // Copy instead of move for stability
+        } catch (const std::exception& e) {
+            std::cerr << "Map insert failed: " << e.what() << std::endl;
+            return false;
+        }
 
         std::cout << "Main RAM metadata created: 0x" << std::hex << MAIN_MEMORY_BASE 
                   << " - 0x" << (MAIN_MEMORY_BASE + MAIN_MEMORY_SIZE) << std::dec << std::endl;
