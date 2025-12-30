@@ -382,6 +382,54 @@ src/memory/MemoryManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.s
 .PHONY : src/memory/MemoryManager.cpp.s
 
+src/rsx/RSXCommands.o: src/rsx/RSXCommands.cpp.o
+.PHONY : src/rsx/RSXCommands.o
+
+# target to build an object file
+src/rsx/RSXCommands.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o
+.PHONY : src/rsx/RSXCommands.cpp.o
+
+src/rsx/RSXCommands.i: src/rsx/RSXCommands.cpp.i
+.PHONY : src/rsx/RSXCommands.i
+
+# target to preprocess a source file
+src/rsx/RSXCommands.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.i
+.PHONY : src/rsx/RSXCommands.cpp.i
+
+src/rsx/RSXCommands.s: src/rsx/RSXCommands.cpp.s
+.PHONY : src/rsx/RSXCommands.s
+
+# target to generate assembly for a file
+src/rsx/RSXCommands.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.s
+.PHONY : src/rsx/RSXCommands.cpp.s
+
+src/rsx/RSXProcessor.o: src/rsx/RSXProcessor.cpp.o
+.PHONY : src/rsx/RSXProcessor.o
+
+# target to build an object file
+src/rsx/RSXProcessor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o
+.PHONY : src/rsx/RSXProcessor.cpp.o
+
+src/rsx/RSXProcessor.i: src/rsx/RSXProcessor.cpp.i
+.PHONY : src/rsx/RSXProcessor.i
+
+# target to preprocess a source file
+src/rsx/RSXProcessor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.i
+.PHONY : src/rsx/RSXProcessor.cpp.i
+
+src/rsx/RSXProcessor.s: src/rsx/RSXProcessor.cpp.s
+.PHONY : src/rsx/RSXProcessor.s
+
+# target to generate assembly for a file
+src/rsx/RSXProcessor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.s
+.PHONY : src/rsx/RSXProcessor.cpp.s
+
 src/rsx/VulkanRenderer.o: src/rsx/VulkanRenderer.cpp.o
 .PHONY : src/rsx/VulkanRenderer.o
 
@@ -470,6 +518,12 @@ help:
 	@echo "... src/memory/MemoryManager.o"
 	@echo "... src/memory/MemoryManager.i"
 	@echo "... src/memory/MemoryManager.s"
+	@echo "... src/rsx/RSXCommands.o"
+	@echo "... src/rsx/RSXCommands.i"
+	@echo "... src/rsx/RSXCommands.s"
+	@echo "... src/rsx/RSXProcessor.o"
+	@echo "... src/rsx/RSXProcessor.i"
+	@echo "... src/rsx/RSXProcessor.s"
 	@echo "... src/rsx/VulkanRenderer.o"
 	@echo "... src/rsx/VulkanRenderer.i"
 	@echo "... src/rsx/VulkanRenderer.s"

@@ -1,6 +1,7 @@
 #include "core/Emulator.h"
 #include "core/SyscallHandler.h"
 #include "rsx/VulkanRenderer.h"
+#include "rsx/RSXProcessor.h"
 #include "core/FramePacer.h"
 #include "cpu/engines/Rpcs3Bridge.h"
 #include "memory/MemoryManager.h"
@@ -50,6 +51,13 @@ bool Emulator::init() {
     renderer_ = std::make_unique<VulkanRenderer>();
     if (!renderer_->init()) {
         std::cerr << "Renderer init failed" << std::endl;
+        return false;
+    }
+    
+    // Initialize RSX processor (GPU command processor)
+    rsx_ = std::make_unique<RSXProcessor>();
+    if (!rsx_->init(renderer_.get())) {
+        std::cerr << "RSX processor init failed" << std::endl;
         return false;
     }
     

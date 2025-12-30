@@ -11,6 +11,7 @@ class ElfLoader;
 class PPUInterpreter;
 class SPUManager;
 class SyscallHandler;
+class RSXProcessor;
 
 class Emulator {
 public:
@@ -37,6 +38,7 @@ public:
     MemoryManager* getMemory() { return memory_.get(); }
     PPUInterpreter* getPPU() { return ppu_.get(); }
     SPUManager* getSPUs() { return spuManager_.get(); }
+    RSXProcessor* getRSX() { return rsx_.get(); }
     
 private:
     std::unique_ptr<VulkanRenderer> renderer_;
@@ -46,6 +48,7 @@ private:
     std::unique_ptr<PPUInterpreter> ppu_;
     std::unique_ptr<SPUManager> spuManager_;
     std::unique_ptr<SyscallHandler> syscallHandler_;
+    std::unique_ptr<RSXProcessor> rsx_;
     std::unique_ptr<class FramePacer> pacer_;
     std::unique_ptr<Engine> engine_;
     bool initializeEngine();

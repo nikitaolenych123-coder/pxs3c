@@ -1,5 +1,7 @@
 #include "core/Emulator.h"
 #include "core/SyscallHandler.h"
+#include "rsx/RSXProcessor.h"
+#include "rsx/RSXCommands.h"
 #include "memory/MemoryManager.h"
 #include "cpu/PPUInterpreter.h"
 #include "cpu/SPUInterpreter.h"
@@ -118,6 +120,31 @@ int main(int argc, char** argv) {
             
             std::cout << "✓ Syscall handler test PASSED" << std::endl;
             delete syscalls;
+        }
+    }
+    
+    std::cout << "\n=== Testing RSX Processor ===" << std::endl;
+    {
+        auto* rsx = emu.getRSX();
+        if (rsx) {
+            // Test clear color
+            rsx->drawClearScreen(0xFF0000FF);  // Red
+            
+            // Test draw commands
+            rsx->drawRectangle(100.0f, 100.0f, 200.0f, 150.0f, 0x00FF00FF);  // Green
+            rsx->drawTriangle(300.0f, 300.0f, 400.0f, 400.0f, 350.0f, 500.0f, 0x0000FFFF);  // Blue
+            
+            // Test command buffer
+            pxs3c::RSXCommandBuffer cmdBuf(1024);
+            cmdBuf.writeCommand(0x0A0C, 0xFF0000FF);  // Clear color red
+            cmdBuf.writeCommand(0x0ABC, std::vector<uint32_t>{0x4});  // Begin triangles
+            
+            std::cout << "  Buffer size: " << cmdBuf.getSize() << " bytes" << std::endl;
+            
+            // Process commands
+            rsx->processCommands(cmdBuf);
+            
+            std::cout << "✓ RSX processor test PASSED" << std::endl;
         }
     }
     

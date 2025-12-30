@@ -169,6 +169,11 @@ CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o: \
  /usr/include/c++/13/bits/stl_vector.h \
  /usr/include/c++/13/bits/stl_bvector.h \
  /usr/include/c++/13/bits/vector.tcc \
+ /workspaces/pxs3c/src/rsx/RSXProcessor.h \
+ /workspaces/pxs3c/src/rsx/RSXCommands.h /usr/include/c++/13/cstring \
+ /usr/include/string.h /usr/include/strings.h \
+ /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
  /workspaces/pxs3c/src/core/FramePacer.h \
  /workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.h \
  /workspaces/pxs3c/src/cpu/Engine.h \

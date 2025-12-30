@@ -165,10 +165,15 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: \
  /usr/include/c++/13/bits/stl_map.h \
  /usr/include/c++/13/bits/stl_multimap.h \
  /usr/include/c++/13/bits/erase_if.h \
- /workspaces/pxs3c/src/memory/MemoryManager.h /usr/include/c++/13/vector \
+ /workspaces/pxs3c/src/rsx/RSXProcessor.h \
+ /workspaces/pxs3c/src/rsx/RSXCommands.h /usr/include/c++/13/vector \
  /usr/include/c++/13/bits/stl_vector.h \
  /usr/include/c++/13/bits/stl_bvector.h \
- /usr/include/c++/13/bits/vector.tcc \
+ /usr/include/c++/13/bits/vector.tcc /usr/include/c++/13/cstring \
+ /usr/include/string.h /usr/include/strings.h \
+ /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+ /workspaces/pxs3c/src/memory/MemoryManager.h \
  /workspaces/pxs3c/src/cpu/PPUInterpreter.h /usr/include/c++/13/array \
  /usr/include/c++/13/compare /workspaces/pxs3c/src/cpu/SPUInterpreter.h \
  /workspaces/pxs3c/src/cpu/SPUManager.h /usr/include/c++/13/iostream \

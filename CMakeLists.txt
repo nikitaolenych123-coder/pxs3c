@@ -15,6 +15,8 @@ add_library(pxs3c_core
     src/cpu/SPUInterpreter.cpp
     src/cpu/SPUManager.cpp
     src/rsx/VulkanRenderer.cpp
+    src/rsx/RSXCommands.cpp
+    src/rsx/RSXProcessor.cpp
     src/loader/ElfLoader.cpp
     src/memory/MemoryManager.cpp
 )
