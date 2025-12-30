@@ -13,6 +13,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/workspaces/pxs3c/src/core/FramePacer.cpp" "CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o.d"
   "/workspaces/pxs3c/src/core/SyscallHandler.cpp" "CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o.d"
   "/workspaces/pxs3c/src/cpu/PPUInterpreter.cpp" "CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o.d"
+  "/workspaces/pxs3c/src/cpu/PPUJIT.cpp" "CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o.d"
   "/workspaces/pxs3c/src/cpu/SPUInterpreter.cpp" "CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o.d"
   "/workspaces/pxs3c/src/cpu/SPUManager.cpp" "CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o.d"
   "/workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.cpp" "CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o.d"

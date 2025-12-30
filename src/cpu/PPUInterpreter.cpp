@@ -67,8 +67,22 @@ void PPUInterpreter::decodeAndExecute(uint32_t instr) {
     
     // Decode primary opcode
     switch (opcode) {
+        case 3:  // twi (trap word immediate)
+            break;
+            
         case 4:  // Vector/Altivec
             executeVector(instr);
+            break;
+            
+        case 6:  // subfic (subtract from immediate with carry)
+            {
+                uint32_t rD = getBits(instr, 6, 10);
+                uint32_t rA = getBits(instr, 11, 15);
+                int32_t simm = (int16_t)getBits(instr, 16, 31);
+                uint64_t result = simm - regs_.gpr[rA];
+                regs_.gpr[rD] = result;
+                regs_.xer = (regs_.xer & ~1) | ((simm >= regs_.gpr[rA]) ? 1 : 0);
+            }
             break;
             
         case 7:  // mulli
@@ -87,6 +101,58 @@ void PPUInterpreter::decodeAndExecute(uint32_t instr) {
         case 18: // b (branch)
         case 19: // bclr, bcctr
             executeBranch(instr);
+            break;
+            
+        case 20: // rlwimi (rotate left word immediate then mask insert)
+            {
+                uint32_t rS = getBits(instr, 6, 10);
+                uint32_t rA = getBits(instr, 11, 15);
+                uint32_t sh = getBits(instr, 16, 20);
+                uint32_t mb = getBits(instr, 21, 25);
+                uint32_t me = getBits(instr, 26, 31);
+                uint32_t rotated = ((regs_.gpr[rS] << sh) | (regs_.gpr[rS] >> (32-sh))) & 0xFFFFFFFF;
+                uint32_t mask = 0;
+                for (int i = mb; i <= me; ++i) mask |= (1U << (31-i));
+                regs_.gpr[rA] = (regs_.gpr[rA] & ~mask) | (rotated & mask);
+            }
+            break;
+            
+        case 21: // rlwinm (rotate left word immediate then AND with mask)
+            {
+                uint32_t rS = getBits(instr, 6, 10);
+                uint32_t rA = getBits(instr, 11, 15);
+                uint32_t sh = getBits(instr, 16, 20);
+                uint32_t mb = getBits(instr, 21, 25);
+                uint32_t me = getBits(instr, 26, 31);
+                uint32_t rotated = ((regs_.gpr[rS] << sh) | (regs_.gpr[rS] >> (32-sh))) & 0xFFFFFFFF;
+                uint32_t mask = 0;
+                for (int i = mb; i <= me; ++i) mask |= (1U << (31-i));
+                regs_.gpr[rA] = rotated & mask;
+            }
+            break;
+            
+        case 22: // rlwnm (rotate left word then AND with mask)
+            {
+                uint32_t rS = getBits(instr, 6, 10);
+                uint32_t rA = getBits(instr, 11, 15);
+                uint32_t rB = getBits(instr, 16, 20);
+                uint32_t sh = regs_.gpr[rB] & 0x1F;
+                uint32_t mb = getBits(instr, 21, 25);
+                uint32_t me = getBits(instr, 26, 31);
+                uint32_t rotated = ((regs_.gpr[rS] << sh) | (regs_.gpr[rS] >> (32-sh))) & 0xFFFFFFFF;
+                uint32_t mask = 0;
+                for (int i = mb; i <= me; ++i) mask |= (1U << (31-i));
+                regs_.gpr[rA] = rotated & mask;
+            }
+            break;
+            
+        case 24: // ori
+        case 25: // oris
+        case 26: // xori
+        case 27: // xoris
+        case 28: // andi.
+        case 29: // andis.
+            executeArithmetic(instr);
             break;
             
         case 32: // lwz
@@ -154,30 +220,138 @@ void PPUInterpreter::executeArithmetic(uint32_t instr) {
         case 31: { // Extended
             uint32_t xop = getBits(instr, 21, 30);
             switch (xop) {
+                case 0:   // cmp
+                    {
+                        int64_t a = regs_.gpr[rA];
+                        int64_t b = regs_.gpr[rB];
+                        uint32_t cr = 0;
+                        if (a < b) cr = 8;
+                        else if (a > b) cr = 4;
+                        else cr = 2;
+                        int bf = getBits(instr, 6, 8);
+                        regs_.cr = (regs_.cr & ~(0xF << (28 - bf*4))) | (cr << (28 - bf*4));
+                    }
+                    break;
+                    
+                case 8:   // subfc (subtract from with carry)
+                    {
+                        uint64_t result = regs_.gpr[rB] - regs_.gpr[rA];
+                        regs_.gpr[rD] = result;
+                        regs_.xer = (regs_.xer & ~1) | ((regs_.gpr[rB] >= regs_.gpr[rA]) ? 1 : 0);
+                    }
+                    break;
+                    
+                case 10:  // addc (add with carry)
+                    {
+                        uint64_t a = regs_.gpr[rA];
+                        uint64_t b = regs_.gpr[rB];
+                        uint64_t result = a + b;
+                        regs_.gpr[rD] = result;
+                        regs_.xer = (regs_.xer & ~1) | ((result < a) ? 1 : 0);
+                    }
+                    break;
+                    
+                case 11:  // mulhwu (multiply high word unsigned)
+                    {
+                        uint64_t a = regs_.gpr[rA] & 0xFFFFFFFF;
+                        uint64_t b = regs_.gpr[rB] & 0xFFFFFFFF;
+                        uint64_t result = (a * b) >> 32;
+                        regs_.gpr[rD] = result & 0xFFFFFFFF;
+                    }
+                    break;
+                    
+                case 28:  // and
+                    regs_.gpr[rA] = regs_.gpr[rD] & regs_.gpr[rB];
+                    break;
+                    
+                case 40:  // subf
+                    regs_.gpr[rD] = regs_.gpr[rB] - regs_.gpr[rA];
+                    if (getBits(instr, 31, 31)) updateCR0(regs_.gpr[rD]);
+                    break;
+                    
+                case 104: // nand
+                    regs_.gpr[rA] = ~(regs_.gpr[rD] & regs_.gpr[rB]);
+                    break;
+                    
+                case 107: // nor
+                    regs_.gpr[rA] = ~(regs_.gpr[rD] | regs_.gpr[rB]);
+                    break;
+                    
+                case 124: // nor (alt)
+                    regs_.gpr[rA] = ~(regs_.gpr[rD] | regs_.gpr[rB]);
+                    break;
+                    
                 case 266: // add
                     regs_.gpr[rD] = regs_.gpr[rA] + regs_.gpr[rB];
                     if (getBits(instr, 31, 31)) updateCR0(regs_.gpr[rD]);
                     break;
                     
-                case 40: // subf
-                    regs_.gpr[rD] = regs_.gpr[rB] - regs_.gpr[rA];
-                    if (getBits(instr, 31, 31)) updateCR0(regs_.gpr[rD]);
-                    break;
-                    
-                case 444: // or
-                    regs_.gpr[rA] = regs_.gpr[rD] | regs_.gpr[rB];
-                    break;
-                    
-                case 28: // and
-                    regs_.gpr[rA] = regs_.gpr[rD] & regs_.gpr[rB];
+                case 284: // eqv (equivalent)
+                    regs_.gpr[rA] = ~(regs_.gpr[rD] ^ regs_.gpr[rB]);
                     break;
                     
                 case 316: // xor
                     regs_.gpr[rA] = regs_.gpr[rD] ^ regs_.gpr[rB];
                     break;
                     
+                case 339: // mfspr (move from special purpose register)
+                    {
+                        uint32_t spr = (getBits(instr, 16, 20) << 5) | getBits(instr, 11, 15);
+                        switch (spr) {
+                            case 1: regs_.gpr[rD] = regs_.xer; break;
+                            case 8: regs_.gpr[rD] = regs_.lr; break;
+                            case 9: regs_.gpr[rD] = regs_.ctr; break;
+                            default: regs_.gpr[rD] = 0; break;
+                        }
+                    }
+                    break;
+                    
+                case 371: // mtspr (move to special purpose register)
+                    {
+                        uint32_t spr = (getBits(instr, 16, 20) << 5) | getBits(instr, 11, 15);
+                        switch (spr) {
+                            case 1: regs_.xer = regs_.gpr[rD]; break;
+                            case 8: regs_.lr = regs_.gpr[rD]; break;
+                            case 9: regs_.ctr = regs_.gpr[rD]; break;
+                        }
+                    }
+                    break;
+                    
+                case 413: // mflr (move from link register)
+                    regs_.gpr[rD] = regs_.lr;
+                    break;
+                    
+                case 444: // or
+                    regs_.gpr[rA] = regs_.gpr[rD] | regs_.gpr[rB];
+                    break;
+                    
+                case 476: // nop (or r0,r0,r0)
+                    break;
+                    
+                case 535: // srw (shift right word)
+                    {
+                        uint32_t sh = regs_.gpr[rB] & 0x1F;
+                        regs_.gpr[rA] = (regs_.gpr[rD] >> sh) & 0xFFFFFFFF;
+                    }
+                    break;
+                    
+                case 539: // sraw (shift right arithmetic word)
+                    {
+                        uint32_t sh = regs_.gpr[rB] & 0x1F;
+                        int32_t val = (int32_t)regs_.gpr[rD];
+                        regs_.gpr[rA] = (uint64_t)((uint32_t)(val >> sh));
+                    }
+                    break;
+                    
+                case 824: // slw (shift left word)
+                    {
+                        uint32_t sh = regs_.gpr[rB] & 0x1F;
+                        regs_.gpr[rA] = (regs_.gpr[rD] << sh) & 0xFFFFFFFF;
+                    }
+                    break;
+                    
                 default:
-                    std::cerr << "Unknown extended arithmetic: xop=" << xop << std::endl;
+                    // Stub for unimplemented xops
                     break;
             }
             break;

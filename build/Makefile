@@ -262,6 +262,30 @@ src/cpu/PPUInterpreter.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.s
 .PHONY : src/cpu/PPUInterpreter.cpp.s
 
+src/cpu/PPUJIT.o: src/cpu/PPUJIT.cpp.o
+.PHONY : src/cpu/PPUJIT.o
+
+# target to build an object file
+src/cpu/PPUJIT.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o
+.PHONY : src/cpu/PPUJIT.cpp.o
+
+src/cpu/PPUJIT.i: src/cpu/PPUJIT.cpp.i
+.PHONY : src/cpu/PPUJIT.i
+
+# target to preprocess a source file
+src/cpu/PPUJIT.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.i
+.PHONY : src/cpu/PPUJIT.cpp.i
+
+src/cpu/PPUJIT.s: src/cpu/PPUJIT.cpp.s
+.PHONY : src/cpu/PPUJIT.s
+
+# target to generate assembly for a file
+src/cpu/PPUJIT.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.s
+.PHONY : src/cpu/PPUJIT.cpp.s
+
 src/cpu/SPUInterpreter.o: src/cpu/SPUInterpreter.cpp.o
 .PHONY : src/cpu/SPUInterpreter.o
 
@@ -527,6 +551,9 @@ help:
 	@echo "... src/cpu/PPUInterpreter.o"
 	@echo "... src/cpu/PPUInterpreter.i"
 	@echo "... src/cpu/PPUInterpreter.s"
+	@echo "... src/cpu/PPUJIT.o"
+	@echo "... src/cpu/PPUJIT.i"
+	@echo "... src/cpu/PPUJIT.s"
 	@echo "... src/cpu/SPUInterpreter.o"
 	@echo "... src/cpu/SPUInterpreter.i"
 	@echo "... src/cpu/SPUInterpreter.s"

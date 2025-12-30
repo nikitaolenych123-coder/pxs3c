@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o.d"
   "CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o"
   "CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o.d"
+  "CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o"
+  "CMakeFiles/pxs3c_core.dir/src/cpu/PPUJIT.cpp.o.d"
   "CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o"
   "CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o.d"
   "CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o"

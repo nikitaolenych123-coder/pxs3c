@@ -21,6 +21,7 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
   /usr/include/c++/13/bits/basic_string.tcc \
   /usr/include/c++/13/bits/char_traits.h \
   /usr/include/c++/13/bits/charconv.h \
+  /usr/include/c++/13/bits/codecvt.h \
   /usr/include/c++/13/bits/concept_check.h \
   /usr/include/c++/13/bits/cpp_type_traits.h \
   /usr/include/c++/13/bits/cxxabi_forced.h \
@@ -29,6 +30,7 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
   /usr/include/c++/13/bits/exception.h \
   /usr/include/c++/13/bits/exception_defines.h \
   /usr/include/c++/13/bits/exception_ptr.h \
+  /usr/include/c++/13/bits/fstream.tcc \
   /usr/include/c++/13/bits/functexcept.h \
   /usr/include/c++/13/bits/functional_hash.h \
   /usr/include/c++/13/bits/hash_bytes.h \
@@ -103,6 +105,7 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
   /usr/include/c++/13/ext/numeric_traits.h \
   /usr/include/c++/13/ext/string_conversions.h \
   /usr/include/c++/13/ext/type_traits.h \
+  /usr/include/c++/13/fstream \
   /usr/include/c++/13/initializer_list \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
@@ -216,8 +219,10 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/ctype_base.h \
@@ -240,6 +245,7 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
   /workspaces/pxs3c/src/cpu/PPUInterpreter.h \
   /workspaces/pxs3c/src/cpu/SPUInterpreter.h \
   /workspaces/pxs3c/src/cpu/SPUManager.h \
+  /workspaces/pxs3c/src/loader/SELFLoader.h \
   /workspaces/pxs3c/src/memory/MemoryManager.h \
   /workspaces/pxs3c/src/rsx/RSXCommands.h \
   /workspaces/pxs3c/src/rsx/RSXProcessor.h
@@ -248,6 +254,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /workspaces/pxs3c/src/rsx/RSXProcessor.h:
 
 /workspaces/pxs3c/src/rsx/RSXCommands.h:
+
+/workspaces/pxs3c/src/loader/SELFLoader.h:
 
 /workspaces/pxs3c/src/cpu/SPUManager.h:
 
@@ -321,6 +329,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
 
+/usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h:
+
 /usr/include/x86_64-linux-gnu/bits/stdio2.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h:
@@ -357,6 +367,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 
 /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
 
+/usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h:
+
 /usr/include/x86_64-linux-gnu/bits/stdio.h:
 
 /usr/include/string.h:
@@ -379,15 +391,13 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 
 /usr/include/features.h:
 
+/usr/include/c++/13/bits/fstream.tcc:
+
 /usr/include/c++/13/debug/debug.h:
 
 /usr/include/c++/13/stdexcept:
 
 /usr/include/c++/13/bits/ostream_insert.h:
-
-/workspaces/pxs3c/src/core/SyscallHandler.h:
-
-/usr/include/c++/13/bits/stl_algobase.h:
 
 /usr/include/c++/13/bits/node_handle.h:
 
@@ -431,6 +441,26 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 
 /usr/include/asm-generic/errno-base.h:
 
+/usr/include/features-time64.h:
+
+/usr/include/c++/13/string_view:
+
+/usr/include/errno.h:
+
+/usr/include/c++/13/bits/functional_hash.h:
+
+/usr/include/c++/13/bits/codecvt.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
+
+/usr/include/c++/13/bits/stl_tempbuf.h:
+
+/usr/include/c++/13/bits/stl_vector.h:
+
+/usr/include/c++/13/bits/concept_check.h:
+
+/usr/include/c++/13/bits/alloc_traits.h:
+
 /usr/include/c++/13/bits/locale_facets.tcc:
 
 /usr/include/c++/13/bits/requires_hosted.h:
@@ -440,10 +470,6 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/include/c++/13/backward/binders.h:
 
 /usr/include/c++/13/bits/stringfwd.h:
-
-/usr/include/c++/13/bits/allocator.h:
-
-/usr/include/c++/13/bits/stl_bvector.h:
 
 /usr/include/c++/13/backward/auto_ptr.h:
 
@@ -539,9 +565,13 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 
 /usr/include/c++/13/bits/exception.h:
 
-/usr/include/c++/13/bits/concept_check.h:
+/workspaces/pxs3c/src/core/SyscallHandler.h:
 
-/usr/include/c++/13/bits/alloc_traits.h:
+/usr/include/c++/13/bits/stl_algobase.h:
+
+/usr/include/c++/13/bits/allocator.h:
+
+/usr/include/c++/13/bits/stl_bvector.h:
 
 /usr/include/c++/13/bits/stl_construct.h:
 
@@ -567,12 +597,6 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 
 /usr/include/c++/13/bits/stl_raw_storage_iter.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
-
-/usr/include/c++/13/bits/stl_tempbuf.h:
-
-/usr/include/c++/13/bits/stl_vector.h:
-
 /usr/include/c++/13/bits/stl_tree.h:
 
 /usr/include/c++/13/bits/stl_map.h:
@@ -588,6 +612,10 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /workspaces/pxs3c/tests/smoke.cpp:
 
 /usr/include/c++/13/memory:
+
+/usr/include/endian.h:
+
+/usr/include/c++/13/bits/streambuf.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
 
@@ -637,6 +665,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
 
+/usr/include/c++/13/fstream:
+
 /usr/include/c++/13/bits/charconv.h:
 
 /usr/include/c++/13/bits/stl_pair.h:
@@ -654,10 +684,6 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
 
 /usr/include/c++/13/tuple:
-
-/usr/include/c++/13/bits/functional_hash.h:
-
-/usr/include/errno.h:
 
 /usr/include/c++/13/cctype:
 
@@ -686,10 +712,6 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/include/strings.h:
 
 /usr/include/c++/13/pstl/glue_memory_defs.h:
-
-/usr/include/c++/13/string_view:
-
-/usr/include/features-time64.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
 
@@ -724,7 +746,3 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/include/c++/13/bits/cxxabi_init_exception.h:
 
 /usr/include/c++/13/typeinfo:
-
-/usr/include/c++/13/bits/streambuf.tcc:
-
-/usr/include/endian.h:
