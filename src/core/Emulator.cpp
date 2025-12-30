@@ -1,4 +1,5 @@
 #include "core/Emulator.h"
+#include "core/SyscallHandler.h"
 #include "rsx/VulkanRenderer.h"
 #include "core/FramePacer.h"
 #include "cpu/engines/Rpcs3Bridge.h"
@@ -23,7 +24,15 @@ bool Emulator::init() {
     
     // Initialize PPU interpreter
     ppu_ = std::make_unique<PPUInterpreter>();
-    if (!ppu_->init(memory_.get())) {
+    
+    // Initialize syscall handler first (before PPU init)
+    syscallHandler_ = std::make_unique<SyscallHandler>();
+    if (!syscallHandler_->init(ppu_.get(), memory_.get())) {
+        std::cerr << "Syscall handler init failed" << std::endl;
+        return false;
+    }
+    
+    if (!ppu_->init(memory_.get(), syscallHandler_.get())) {
         std::cerr << "PPU interpreter init failed" << std::endl;
         return false;
     }

@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o.d"
   "CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o"
   "CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.o.d"
+  "CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o"
+  "CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o.d"
   "CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o"
   "CMakeFiles/pxs3c_core.dir/src/cpu/PPUInterpreter.cpp.o.d"
   "CMakeFiles/pxs3c_core.dir/src/cpu/SPUInterpreter.cpp.o"

@@ -10,6 +10,7 @@ class MemoryManager;
 class ElfLoader;
 class PPUInterpreter;
 class SPUManager;
+class SyscallHandler;
 
 class Emulator {
 public:
@@ -44,6 +45,7 @@ private:
     std::unique_ptr<ElfLoader> elfLoader_;
     std::unique_ptr<PPUInterpreter> ppu_;
     std::unique_ptr<SPUManager> spuManager_;
+    std::unique_ptr<SyscallHandler> syscallHandler_;
     std::unique_ptr<class FramePacer> pacer_;
     std::unique_ptr<Engine> engine_;
     bool initializeEngine();

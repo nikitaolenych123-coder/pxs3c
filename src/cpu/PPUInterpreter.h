@@ -6,6 +6,7 @@
 namespace pxs3c {
 
 class MemoryManager;
+class SyscallHandler;
 
 // Helper union for 128-bit vectors (defined first)
 union uint128_t {
@@ -52,7 +53,7 @@ public:
     PPUInterpreter();
     ~PPUInterpreter();
 
-    bool init(MemoryManager* memory);
+    bool init(MemoryManager* memory, SyscallHandler* syscalls = nullptr);
     void reset();
     
     // Set entry point
@@ -73,6 +74,7 @@ public:
 private:
     PPURegisters regs_;
     MemoryManager* memory_;
+    SyscallHandler* syscalls_;
     bool halted_;
     
     // Instruction decoding
@@ -85,6 +87,8 @@ private:
     void executeBranch(uint32_t instr);
     void executeSystem(uint32_t instr);
     void executeFloatingPoint(uint32_t instr);
+    void executeVector(uint32_t instr);
+    void executeSyscall(uint32_t instr);
     
     // Common helpers
     uint32_t getBits(uint32_t value, int start, int end) const;

@@ -214,6 +214,30 @@ src/core/FramePacer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/core/FramePacer.cpp.s
 .PHONY : src/core/FramePacer.cpp.s
 
+src/core/SyscallHandler.o: src/core/SyscallHandler.cpp.o
+.PHONY : src/core/SyscallHandler.o
+
+# target to build an object file
+src/core/SyscallHandler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.o
+.PHONY : src/core/SyscallHandler.cpp.o
+
+src/core/SyscallHandler.i: src/core/SyscallHandler.cpp.i
+.PHONY : src/core/SyscallHandler.i
+
+# target to preprocess a source file
+src/core/SyscallHandler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.i
+.PHONY : src/core/SyscallHandler.cpp.i
+
+src/core/SyscallHandler.s: src/core/SyscallHandler.cpp.s
+.PHONY : src/core/SyscallHandler.s
+
+# target to generate assembly for a file
+src/core/SyscallHandler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/core/SyscallHandler.cpp.s
+.PHONY : src/core/SyscallHandler.cpp.s
+
 src/cpu/PPUInterpreter.o: src/cpu/PPUInterpreter.cpp.o
 .PHONY : src/cpu/PPUInterpreter.o
 
@@ -425,6 +449,9 @@ help:
 	@echo "... src/core/FramePacer.o"
 	@echo "... src/core/FramePacer.i"
 	@echo "... src/core/FramePacer.s"
+	@echo "... src/core/SyscallHandler.o"
+	@echo "... src/core/SyscallHandler.i"
+	@echo "... src/core/SyscallHandler.s"
 	@echo "... src/cpu/PPUInterpreter.o"
 	@echo "... src/cpu/PPUInterpreter.i"
 	@echo "... src/cpu/PPUInterpreter.s"

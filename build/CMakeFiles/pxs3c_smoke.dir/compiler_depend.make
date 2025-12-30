@@ -231,6 +231,7 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h \
   /workspaces/pxs3c/src/core/Emulator.h \
+  /workspaces/pxs3c/src/core/SyscallHandler.h \
   /workspaces/pxs3c/src/cpu/PPUInterpreter.h \
   /workspaces/pxs3c/src/cpu/SPUInterpreter.h \
   /workspaces/pxs3c/src/cpu/SPUManager.h \
@@ -366,6 +367,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/include/c++/13/stdexcept:
 
 /usr/include/c++/13/bits/ostream_insert.h:
+
+/workspaces/pxs3c/src/core/SyscallHandler.h:
 
 /usr/include/c++/13/bits/stl_algobase.h:
 

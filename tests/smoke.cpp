@@ -1,4 +1,5 @@
 #include "core/Emulator.h"
+#include "core/SyscallHandler.h"
 #include "memory/MemoryManager.h"
 #include "cpu/PPUInterpreter.h"
 #include "cpu/SPUInterpreter.h"
@@ -81,6 +82,43 @@ int main(int argc, char** argv) {
             }
         }
         std::cout << "✓ SPU test PASSED" << std::endl;
+    }
+    
+    std::cout << "\n=== Testing Syscall Handler ===" << std::endl;
+    {
+        pxs3c::SyscallContext ctx;
+        ctx.r3 = 0x1000;
+        ctx.r4 = 0x2000;
+        ctx.r5 = 0x3000;
+        ctx.returnValue = 0;
+        ctx.handled = false;
+        
+        auto* syscalls = emu.getMemory() ? 
+            new pxs3c::SyscallHandler() : nullptr;
+        
+        if (syscalls && emu.getPPU() && emu.getMemory()) {
+            syscalls->init(emu.getPPU(), emu.getMemory());
+            
+            // Test LV2 memory allocate (syscall 202)
+            std::cout << "Calling syscall 202 (sys_memory_allocate)..." << std::endl;
+            syscalls->handleSyscall(202, ctx);
+            std::cout << "  Return value: 0x" << std::hex << ctx.returnValue << std::dec << std::endl;
+            
+            // Test LV2 get memory size (syscall 205)
+            ctx.returnValue = 0;
+            std::cout << "Calling syscall 205 (sys_memory_get_user_memory_size)..." << std::endl;
+            syscalls->handleSyscall(205, ctx);
+            std::cout << "  Return value: 0x" << std::hex << ctx.returnValue << std::dec << std::endl;
+            
+            // Test LV1 get version (syscall 512 + 1)
+            ctx.returnValue = 0;
+            std::cout << "Calling syscall 513 (lv1_get_version)..." << std::endl;
+            syscalls->handleSyscall(513, ctx);
+            std::cout << "  Return value: 0x" << std::hex << ctx.returnValue << std::dec << std::endl;
+            
+            std::cout << "✓ Syscall handler test PASSED" << std::endl;
+            delete syscalls;
+        }
     }
     
     for (int i = 0; i < 3; ++i) {

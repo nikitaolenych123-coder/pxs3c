@@ -9,6 +9,7 @@ add_library(pxs3c_core
     src/core/Emulator.cpp
     src/core/FramePacer.cpp
     src/core/Config.cpp
+    src/core/SyscallHandler.cpp
     src/cpu/engines/Rpcs3Bridge.cpp
     src/cpu/PPUInterpreter.cpp
     src/cpu/SPUInterpreter.cpp

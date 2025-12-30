@@ -117,16 +117,7 @@ CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o: \
  /usr/include/c++/13/backward/auto_ptr.h \
  /usr/include/c++/13/pstl/glue_memory_defs.h \
  /usr/include/c++/13/pstl/execution_defs.h \
- /workspaces/pxs3c/src/rsx/VulkanRenderer.h /usr/include/c++/13/cstdint \
- /usr/include/c++/13/vector /usr/include/c++/13/bits/stl_vector.h \
- /usr/include/c++/13/initializer_list \
- /usr/include/c++/13/bits/stl_bvector.h \
- /usr/include/c++/13/bits/range_access.h \
- /usr/include/c++/13/bits/vector.tcc \
- /usr/include/c++/13/bits/memory_resource.h /usr/include/c++/13/cstddef \
- /usr/include/c++/13/bits/uses_allocator_args.h \
- /workspaces/pxs3c/src/core/FramePacer.h \
- /workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.h \
+ /workspaces/pxs3c/src/core/SyscallHandler.h /usr/include/c++/13/cstdint \
  /usr/include/c++/13/string /usr/include/c++/13/bits/char_traits.h \
  /usr/include/c++/13/bits/localefwd.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h \
@@ -134,6 +125,8 @@ CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/locale.h /usr/include/c++/13/cctype \
  /usr/include/ctype.h /usr/include/c++/13/bits/ostream_insert.h \
  /usr/include/c++/13/bits/cxxabi_forced.h \
+ /usr/include/c++/13/bits/range_access.h \
+ /usr/include/c++/13/initializer_list \
  /usr/include/c++/13/bits/basic_string.h /usr/include/c++/13/string_view \
  /usr/include/c++/13/bits/string_view.tcc \
  /usr/include/c++/13/ext/string_conversions.h /usr/include/c++/13/cstdlib \
@@ -165,13 +158,21 @@ CMakeFiles/pxs3c_core.dir/src/core/Emulator.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
  /usr/include/c++/13/bits/charconv.h \
  /usr/include/c++/13/bits/basic_string.tcc \
- /workspaces/pxs3c/src/cpu/Engine.h \
- /workspaces/pxs3c/src/memory/MemoryManager.h /usr/include/c++/13/map \
+ /usr/include/c++/13/bits/memory_resource.h /usr/include/c++/13/cstddef \
+ /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/map \
  /usr/include/c++/13/bits/stl_tree.h \
  /usr/include/c++/13/bits/node_handle.h \
  /usr/include/c++/13/bits/stl_map.h \
  /usr/include/c++/13/bits/stl_multimap.h \
  /usr/include/c++/13/bits/erase_if.h \
+ /workspaces/pxs3c/src/rsx/VulkanRenderer.h /usr/include/c++/13/vector \
+ /usr/include/c++/13/bits/stl_vector.h \
+ /usr/include/c++/13/bits/stl_bvector.h \
+ /usr/include/c++/13/bits/vector.tcc \
+ /workspaces/pxs3c/src/core/FramePacer.h \
+ /workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.h \
+ /workspaces/pxs3c/src/cpu/Engine.h \
+ /workspaces/pxs3c/src/memory/MemoryManager.h \
  /workspaces/pxs3c/src/loader/ElfLoader.h \
  /workspaces/pxs3c/src/cpu/PPUInterpreter.h /usr/include/c++/13/array \
  /usr/include/c++/13/compare /workspaces/pxs3c/src/cpu/SPUManager.h \

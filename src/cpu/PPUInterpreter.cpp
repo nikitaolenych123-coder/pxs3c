@@ -1,17 +1,19 @@
 #include "cpu/PPUInterpreter.h"
+#include "core/SyscallHandler.h"
 #include "memory/MemoryManager.h"
 #include <iostream>
 #include <iomanip>
 
 namespace pxs3c {
 
-PPUInterpreter::PPUInterpreter() : memory_(nullptr), halted_(false) {}
+PPUInterpreter::PPUInterpreter() : memory_(nullptr), syscalls_(nullptr), halted_(false) {}
 
 PPUInterpreter::~PPUInterpreter() {}
 
-bool PPUInterpreter::init(MemoryManager* memory) {
+bool PPUInterpreter::init(MemoryManager* memory, SyscallHandler* syscalls) {
     if (!memory) return false;
     memory_ = memory;
+    syscalls_ = syscalls;
     reset();
     return true;
 }
@@ -65,6 +67,10 @@ void PPUInterpreter::decodeAndExecute(uint32_t instr) {
     
     // Decode primary opcode
     switch (opcode) {
+        case 4:  // Vector/Altivec
+            executeVector(instr);
+            break;
+            
         case 7:  // mulli
         case 8:  // subfic
         case 10: // cmpli
@@ -200,24 +206,69 @@ void PPUInterpreter::executeLoadStore(uint32_t instr) {
             regs_.gpr[rD] = memory_->read32(ea);
             break;
             
+        case 33: // lwzu (load with update)
+            regs_.gpr[rD] = memory_->read32(ea);
+            regs_.gpr[rA] = ea;
+            break;
+            
         case 34: // lbz
             regs_.gpr[rD] = memory_->read8(ea);
+            break;
+            
+        case 35: // lbzu (load byte with update)
+            regs_.gpr[rD] = memory_->read8(ea);
+            regs_.gpr[rA] = ea;
             break;
             
         case 40: // lhz
             regs_.gpr[rD] = memory_->read16(ea);
             break;
             
+        case 41: // lhzu (load half-word with update)
+            regs_.gpr[rD] = memory_->read16(ea);
+            regs_.gpr[rA] = ea;
+            break;
+            
+        case 42: // lha (load half-word arithmetic - sign extended)
+            {
+                int16_t val = (int16_t)memory_->read16(ea);
+                regs_.gpr[rD] = (int64_t)val;
+            }
+            break;
+            
+        case 43: // lhau (load half-word arithmetic with update)
+            {
+                int16_t val = (int16_t)memory_->read16(ea);
+                regs_.gpr[rD] = (int64_t)val;
+                regs_.gpr[rA] = ea;
+            }
+            break;
+            
         case 36: // stw
             memory_->write32(ea, regs_.gpr[rD]);
+            break;
+            
+        case 37: // stwu (store with update)
+            memory_->write32(ea, regs_.gpr[rD]);
+            regs_.gpr[rA] = ea;
             break;
             
         case 38: // stb
             memory_->write8(ea, regs_.gpr[rD] & 0xFF);
             break;
             
+        case 39: // stbu (store byte with update)
+            memory_->write8(ea, regs_.gpr[rD] & 0xFF);
+            regs_.gpr[rA] = ea;
+            break;
+            
         case 44: // sth
             memory_->write16(ea, regs_.gpr[rD] & 0xFFFF);
+            break;
+            
+        case 45: // sthu (store half-word with update)
+            memory_->write16(ea, regs_.gpr[rD] & 0xFFFF);
+            regs_.gpr[rA] = ea;
             break;
             
         case 58: { // ld
@@ -226,6 +277,9 @@ void PPUInterpreter::executeLoadStore(uint32_t instr) {
             ea = (rA == 0 ? 0 : regs_.gpr[rA]) + (ds << 2);
             if (xop == 0) { // ld
                 regs_.gpr[rD] = memory_->read64(ea);
+            } else if (xop == 1) { // ldu
+                regs_.gpr[rD] = memory_->read64(ea);
+                regs_.gpr[rA] = ea;
             }
             break;
         }
@@ -236,6 +290,9 @@ void PPUInterpreter::executeLoadStore(uint32_t instr) {
             ea = (rA == 0 ? 0 : regs_.gpr[rA]) + (ds << 2);
             if (xop == 0) { // std
                 memory_->write64(ea, regs_.gpr[rD]);
+            } else if (xop == 1) { // stdu
+                memory_->write64(ea, regs_.gpr[rD]);
+                regs_.gpr[rA] = ea;
             }
             break;
         }
@@ -307,20 +364,147 @@ void PPUInterpreter::executeBranch(uint32_t instr) {
 void PPUInterpreter::executeSystem(uint32_t instr) {
     uint32_t opcode = getBits(instr, 0, 5);
     
-    if (opcode == 17) { // sc
-        uint32_t lev = getBits(instr, 20, 26);
-        std::cout << "System call: lev=" << lev << " at PC=0x" << std::hex 
-                  << (regs_.pc - 4) << std::dec << std::endl;
-        
-        // TODO: Handle LV1/LV2 syscalls
-        // For now, just log and continue
+    if (opcode == 17) { // sc (system call)
+        executeSyscall(instr);
+    }
+}
+
+void PPUInterpreter::executeSyscall(uint32_t instr) {
+    if (!syscalls_) {
+        std::cout << "Syscall attempted but handler not initialized" << std::endl;
+        return;
+    }
+    
+    uint32_t lev = getBits(instr, 20, 26);
+    uint64_t callNumber = regs_.gpr[0];
+    
+    SyscallContext ctx;
+    ctx.r3 = regs_.gpr[3];
+    ctx.r4 = regs_.gpr[4];
+    ctx.r5 = regs_.gpr[5];
+    ctx.r6 = regs_.gpr[6];
+    ctx.r7 = regs_.gpr[7];
+    ctx.r8 = regs_.gpr[8];
+    ctx.r9 = regs_.gpr[9];
+    ctx.r10 = regs_.gpr[10];
+    ctx.r11 = regs_.gpr[11];
+    ctx.returnValue = 0;
+    ctx.handled = false;
+    
+    std::cout << "Syscall: call#=" << std::dec << callNumber 
+              << " lev=" << lev << " r3=0x" << std::hex << ctx.r3 << std::dec << std::endl;
+    
+    // Call syscall handler
+    bool success = syscalls_->handleSyscall(callNumber, ctx);
+    
+    // Set return value in r3
+    regs_.gpr[3] = ctx.returnValue;
+    
+    if (!success) {
+        std::cout << "Syscall failed or unhandled" << std::endl;
     }
 }
 
 void PPUInterpreter::executeFloatingPoint(uint32_t instr) {
     // Stub: floating point instructions
-    std::cerr << "Floating point instruction not implemented: 0x" << std::hex 
-              << instr << std::dec << std::endl;
+    uint32_t opcode = getBits(instr, 0, 5);
+    uint32_t frt = getBits(instr, 6, 10);
+    uint32_t fra = getBits(instr, 11, 15);
+    uint32_t frb = getBits(instr, 16, 20);
+    uint32_t xop = getBits(instr, 21, 30);
+    
+    if (opcode == 63) { // Floating point double
+        switch (xop) {
+            case 18: { // fdiv
+                if (regs_.fpr[frb] != 0.0) {
+                    regs_.fpr[frt] = regs_.fpr[fra] / regs_.fpr[frb];
+                }
+                break;
+            }
+            case 20: { // fsub
+                regs_.fpr[frt] = regs_.fpr[fra] - regs_.fpr[frb];
+                break;
+            }
+            case 21: { // fadd
+                regs_.fpr[frt] = regs_.fpr[fra] + regs_.fpr[frb];
+                break;
+            }
+            case 25: { // fmul
+                regs_.fpr[frt] = regs_.fpr[fra] * regs_.fpr[frb];
+                break;
+            }
+            case 72: { // fmr (move)
+                regs_.fpr[frt] = regs_.fpr[frb];
+                break;
+            }
+            default:
+                std::cerr << "Unimplemented FP double opcode: xop=" << xop << std::endl;
+                break;
+        }
+    }
+}
+
+void PPUInterpreter::executeVector(uint32_t instr) {
+    // Vector/Altivec instructions (4x 32-bit floats)
+    uint32_t opcode = getBits(instr, 0, 5);
+    uint32_t vrt = getBits(instr, 6, 10);
+    uint32_t vra = getBits(instr, 11, 15);
+    uint32_t vrb = getBits(instr, 16, 20);
+    uint32_t xop = getBits(instr, 21, 30);
+    
+    if (opcode == 4) { // Altivec ops
+        switch (xop) {
+            case 10: { // vaddfp (vector add float)
+                for (int i = 0; i < 4; ++i) {
+                    // Treat as float
+                    float a = *(float*)&regs_.vr[vra].u32[i];
+                    float b = *(float*)&regs_.vr[vrb].u32[i];
+                    float result = a + b;
+                    regs_.vr[vrt].u32[i] = *(uint32_t*)&result;
+                }
+                break;
+            }
+            case 74: { // vsubfp (vector subtract float)
+                for (int i = 0; i < 4; ++i) {
+                    float a = *(float*)&regs_.vr[vra].u32[i];
+                    float b = *(float*)&regs_.vr[vrb].u32[i];
+                    float result = a - b;
+                    regs_.vr[vrt].u32[i] = *(uint32_t*)&result;
+                }
+                break;
+            }
+            case 34: { // vmulfp (vector multiply float) - placeholder
+                for (int i = 0; i < 4; ++i) {
+                    float a = *(float*)&regs_.vr[vra].u32[i];
+                    float b = *(float*)&regs_.vr[vrb].u32[i];
+                    float result = a * b;
+                    regs_.vr[vrt].u32[i] = *(uint32_t*)&result;
+                }
+                break;
+            }
+            case 1028: { // vand
+                for (int i = 0; i < 4; ++i) {
+                    regs_.vr[vrt].u32[i] = regs_.vr[vra].u32[i] & regs_.vr[vrb].u32[i];
+                }
+                break;
+            }
+            case 1156: { // vor
+                for (int i = 0; i < 4; ++i) {
+                    regs_.vr[vrt].u32[i] = regs_.vr[vra].u32[i] | regs_.vr[vrb].u32[i];
+                }
+                break;
+            }
+            case 1220: { // vxor
+                for (int i = 0; i < 4; ++i) {
+                    regs_.vr[vrt].u32[i] = regs_.vr[vra].u32[i] ^ regs_.vr[vrb].u32[i];
+                }
+                break;
+            }
+            default:
+                std::cerr << "Unimplemented vector opcode: xop=" << xop << std::endl;
+                break;
+        }
+    }
 }
 
 void PPUInterpreter::dumpRegisters() const {
