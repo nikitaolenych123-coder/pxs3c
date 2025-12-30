@@ -535,6 +535,8 @@ bool VulkanRenderer::resize(uint32_t width, uint32_t height) {
 #endif
 }
 
+#endif // __ANDROID__
+
 void VulkanRenderer::setClearColor(float r, float g, float b) {
 #ifdef __ANDROID__
     clearR_ = r; clearG_ = g; clearB_ = b;
