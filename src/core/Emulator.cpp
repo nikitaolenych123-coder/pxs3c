@@ -76,6 +76,21 @@ bool Emulator::init() {
 bool Emulator::loadGame(const char* path) {
     std::cout << "Loading game: " << path << std::endl;
     
+    // Check file extension
+    std::string pathStr(path);
+    bool isSelf = pathStr.size() > 5 && 
+                  pathStr.substr(pathStr.size() - 5) == ".self";
+    
+    if (isSelf) {
+        // Try to load SELF file
+        if (elfLoader_ && elfLoader_->loadSelf(path, memory_.get())) {
+            std::cout << "SELF file loaded" << std::endl;
+            return true;
+        }
+        std::cerr << "Failed to load SELF file" << std::endl;
+        return false;
+    }
+    
     // Try to load ELF file
     if (elfLoader_ && elfLoader_->load(path, memory_.get())) {
         uint64_t entry = elfLoader_->getEntryPoint();

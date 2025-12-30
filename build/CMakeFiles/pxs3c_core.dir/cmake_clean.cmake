@@ -17,6 +17,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o.d"
   "CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o"
   "CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o.d"
+  "CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o"
+  "CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o.d"
   "CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o"
   "CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o.d"
   "CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o"

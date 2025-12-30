@@ -90,6 +90,7 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
   /usr/include/c++/13/cstdint \
   /usr/include/c++/13/cstdio \
   /usr/include/c++/13/cstdlib \
+  /usr/include/c++/13/cstring \
   /usr/include/c++/13/cwchar \
   /usr/include/c++/13/cwctype \
   /usr/include/c++/13/debug/assertions.h \
@@ -136,6 +137,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
   /usr/include/stdint.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/time.h \
   /usr/include/wchar.h \
   /usr/include/wctype.h \
@@ -169,6 +172,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
   /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -235,8 +240,14 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
   /workspaces/pxs3c/src/cpu/PPUInterpreter.h \
   /workspaces/pxs3c/src/cpu/SPUInterpreter.h \
   /workspaces/pxs3c/src/cpu/SPUManager.h \
-  /workspaces/pxs3c/src/memory/MemoryManager.h
+  /workspaces/pxs3c/src/memory/MemoryManager.h \
+  /workspaces/pxs3c/src/rsx/RSXCommands.h \
+  /workspaces/pxs3c/src/rsx/RSXProcessor.h
 
+
+/workspaces/pxs3c/src/rsx/RSXProcessor.h:
+
+/workspaces/pxs3c/src/rsx/RSXCommands.h:
 
 /workspaces/pxs3c/src/cpu/SPUManager.h:
 
@@ -257,8 +268,6 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/error_constants.h:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/ctype_base.h:
 
@@ -302,6 +311,10 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 
 /usr/include/x86_64-linux-gnu/bits/time.h:
 
+/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
+
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
+
 /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
@@ -311,8 +324,6 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/include/x86_64-linux-gnu/bits/stdio2.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdio.h:
 
 /usr/include/x86_64-linux-gnu/sys/select.h:
 
@@ -346,6 +357,10 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 
 /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
 
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
+
+/usr/include/string.h:
+
 /usr/include/stdlib.h:
 
 /usr/include/stdio.h:
@@ -361,6 +376,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
 
 /usr/include/linux/errno.h:
+
+/usr/include/features.h:
 
 /usr/include/c++/13/debug/debug.h:
 
@@ -419,8 +436,6 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/include/c++/13/bits/requires_hosted.h:
 
 /usr/include/c++/13/bits/string_view.tcc:
-
-/usr/include/features.h:
 
 /usr/include/c++/13/backward/binders.h:
 
@@ -580,6 +595,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 
 /usr/include/c++/13/bits/unique_ptr.h:
 
+/usr/include/c++/13/cstring:
+
 /usr/include/c++/13/bits/std_abs.h:
 
 /usr/include/c++/13/bits/postypes.h:
@@ -607,6 +624,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/include/c++/13/bits/vector.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdint-least.h:
 
@@ -663,6 +682,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: /workspaces/pxs3c/tests/smoke.cpp 
 /usr/include/c++/13/istream:
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
+
+/usr/include/strings.h:
 
 /usr/include/c++/13/pstl/glue_memory_defs.h:
 

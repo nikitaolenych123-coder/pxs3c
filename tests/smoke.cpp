@@ -2,11 +2,13 @@
 #include "core/SyscallHandler.h"
 #include "rsx/RSXProcessor.h"
 #include "rsx/RSXCommands.h"
+#include "loader/SELFLoader.h"
 #include "memory/MemoryManager.h"
 #include "cpu/PPUInterpreter.h"
 #include "cpu/SPUInterpreter.h"
 #include "cpu/SPUManager.h"
 #include <iostream>
+#include <fstream>
 
 int main(int argc, char** argv) {
     pxs3c::Emulator emu;
@@ -145,6 +147,68 @@ int main(int argc, char** argv) {
             rsx->processCommands(cmdBuf);
             
             std::cout << "✓ RSX processor test PASSED" << std::endl;
+        }
+    }
+    
+    std::cout << "\n=== Testing SELF Loader ===" << std::endl;
+    {
+        // Create a mock SELF file for testing
+        std::string testSelfPath = "/tmp/test_mock.self";
+        
+        // Write minimal SELF header
+        std::ofstream selfFile(testSelfPath, std::ios::binary);
+        if (selfFile.is_open()) {
+            // SELF header (40 bytes minimum)
+            uint32_t selfMagic = 0x53454C46;  // "SELF"
+            uint32_t selfVersion = 3;
+            uint32_t selfFlags = 0;
+            uint32_t headerSize = 40;
+            uint32_t secHeaderSize = 32;
+            uint16_t secHeaderCount = 1;
+            uint16_t keyRevision = 4;
+            uint64_t contentSize = 512;
+            uint64_t selfOffset = 0;
+            
+            selfFile.write(reinterpret_cast<char*>(&selfMagic), 4);
+            selfFile.write(reinterpret_cast<char*>(&selfVersion), 4);
+            selfFile.write(reinterpret_cast<char*>(&selfFlags), 4);
+            selfFile.write(reinterpret_cast<char*>(&headerSize), 4);
+            selfFile.write(reinterpret_cast<char*>(&secHeaderSize), 4);
+            selfFile.write(reinterpret_cast<char*>(&secHeaderCount), 2);
+            selfFile.write(reinterpret_cast<char*>(&keyRevision), 2);
+            selfFile.write(reinterpret_cast<char*>(&contentSize), 8);
+            selfFile.write(reinterpret_cast<char*>(&selfOffset), 8);
+            
+            // Add section header
+            uint64_t sectOffset = 80;
+            uint64_t sectSize = 256;
+            uint32_t sectFlags = 0;  // Not encrypted, not compressed
+            uint32_t sectIndex = 0;
+            
+            selfFile.write(reinterpret_cast<char*>(&sectOffset), 8);
+            selfFile.write(reinterpret_cast<char*>(&sectSize), 8);
+            selfFile.write(reinterpret_cast<char*>(&sectFlags), 4);
+            selfFile.write(reinterpret_cast<char*>(&sectIndex), 4);
+            
+            // Pad rest of file
+            std::vector<uint8_t> padding(256, 0xAB);
+            selfFile.write(reinterpret_cast<char*>(padding.data()), 256);
+            selfFile.close();
+            
+            std::cout << "Created mock SELF file: " << testSelfPath << std::endl;
+            
+            // Try to load it
+            pxs3c::SELFLoader selfLoader;
+            if (selfLoader.loadSelf(testSelfPath.c_str())) {
+                std::cout << "✓ SELF file parsed successfully" << std::endl;
+                selfLoader.dumpSelfInfo();
+                std::cout << "✓ SELF loader test PASSED" << std::endl;
+            } else {
+                std::cout << "✗ SELF loader test FAILED" << std::endl;
+            }
+            
+            // Cleanup
+            std::remove(testSelfPath.c_str());
         }
     }
     

@@ -74,6 +74,7 @@ constexpr uint32_t SHT_RELA = 4;
 constexpr uint32_t SHT_NOBITS = 8;
 
 class MemoryManager;
+class SELFLoader;
 
 struct LoadedSegment {
     uint64_t vaddr;
@@ -88,6 +89,7 @@ public:
     ~ElfLoader();
 
     bool load(const std::string& path, MemoryManager* memory);
+    bool loadSelf(const std::string& path, MemoryManager* memory);
     uint64_t getEntryPoint() const { return entryPoint_; }
     const std::vector<LoadedSegment>& getSegments() const { return segments_; }
 

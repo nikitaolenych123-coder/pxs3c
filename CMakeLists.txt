@@ -18,6 +18,7 @@ add_library(pxs3c_core
     src/rsx/RSXCommands.cpp
     src/rsx/RSXProcessor.cpp
     src/loader/ElfLoader.cpp
+    src/loader/SELFLoader.cpp
     src/memory/MemoryManager.cpp
 )
 

@@ -17,6 +17,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/workspaces/pxs3c/src/cpu/SPUManager.cpp" "CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/cpu/SPUManager.cpp.o.d"
   "/workspaces/pxs3c/src/cpu/engines/Rpcs3Bridge.cpp" "CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/cpu/engines/Rpcs3Bridge.cpp.o.d"
   "/workspaces/pxs3c/src/loader/ElfLoader.cpp" "CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.o.d"
+  "/workspaces/pxs3c/src/loader/SELFLoader.cpp" "CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o.d"
   "/workspaces/pxs3c/src/memory/MemoryManager.cpp" "CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/memory/MemoryManager.cpp.o.d"
   "/workspaces/pxs3c/src/rsx/RSXCommands.cpp" "CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/rsx/RSXCommands.cpp.o.d"
   "/workspaces/pxs3c/src/rsx/RSXProcessor.cpp" "CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o" "gcc" "CMakeFiles/pxs3c_core.dir/src/rsx/RSXProcessor.cpp.o.d"

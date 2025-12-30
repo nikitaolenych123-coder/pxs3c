@@ -358,6 +358,30 @@ src/loader/ElfLoader.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/loader/ElfLoader.cpp.s
 .PHONY : src/loader/ElfLoader.cpp.s
 
+src/loader/SELFLoader.o: src/loader/SELFLoader.cpp.o
+.PHONY : src/loader/SELFLoader.o
+
+# target to build an object file
+src/loader/SELFLoader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.o
+.PHONY : src/loader/SELFLoader.cpp.o
+
+src/loader/SELFLoader.i: src/loader/SELFLoader.cpp.i
+.PHONY : src/loader/SELFLoader.i
+
+# target to preprocess a source file
+src/loader/SELFLoader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.i
+.PHONY : src/loader/SELFLoader.cpp.i
+
+src/loader/SELFLoader.s: src/loader/SELFLoader.cpp.s
+.PHONY : src/loader/SELFLoader.s
+
+# target to generate assembly for a file
+src/loader/SELFLoader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pxs3c_core.dir/build.make CMakeFiles/pxs3c_core.dir/src/loader/SELFLoader.cpp.s
+.PHONY : src/loader/SELFLoader.cpp.s
+
 src/memory/MemoryManager.o: src/memory/MemoryManager.cpp.o
 .PHONY : src/memory/MemoryManager.o
 
@@ -515,6 +539,9 @@ help:
 	@echo "... src/loader/ElfLoader.o"
 	@echo "... src/loader/ElfLoader.i"
 	@echo "... src/loader/ElfLoader.s"
+	@echo "... src/loader/SELFLoader.o"
+	@echo "... src/loader/SELFLoader.i"
+	@echo "... src/loader/SELFLoader.s"
 	@echo "... src/memory/MemoryManager.o"
 	@echo "... src/memory/MemoryManager.i"
 	@echo "... src/memory/MemoryManager.s"

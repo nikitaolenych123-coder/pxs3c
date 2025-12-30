@@ -173,6 +173,7 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: \
  /usr/include/string.h /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+ /workspaces/pxs3c/src/loader/SELFLoader.h \
  /workspaces/pxs3c/src/memory/MemoryManager.h \
  /workspaces/pxs3c/src/cpu/PPUInterpreter.h /usr/include/c++/13/array \
  /usr/include/c++/13/compare /workspaces/pxs3c/src/cpu/SPUInterpreter.h \
@@ -194,4 +195,8 @@ CMakeFiles/pxs3c_smoke.dir/tests/smoke.cpp.o: \
  /usr/include/c++/13/bits/locale_facets.tcc \
  /usr/include/c++/13/bits/basic_ios.tcc \
  /usr/include/c++/13/bits/ostream.tcc /usr/include/c++/13/istream \
- /usr/include/c++/13/bits/istream.tcc
+ /usr/include/c++/13/bits/istream.tcc /usr/include/c++/13/fstream \
+ /usr/include/c++/13/bits/codecvt.h \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
+ /usr/include/c++/13/bits/fstream.tcc

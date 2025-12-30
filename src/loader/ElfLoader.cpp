@@ -1,4 +1,5 @@
 #include "loader/ElfLoader.h"
+#include "loader/SELFLoader.h"
 #include "memory/MemoryManager.h"
 #include <fstream>
 #include <iostream>
@@ -156,6 +157,31 @@ bool ElfLoader::load(const std::string& path, MemoryManager* memory) {
     }
 
     std::cout << "ELF loaded successfully (" << segments_.size() << " segments)" << std::endl;
+    return true;
+}
+
+bool ElfLoader::loadSelf(const std::string& path, MemoryManager* memory) {
+    std::cout << "Loading SELF file: " << path << std::endl;
+    
+    // First, parse SELF file
+    SELFLoader selfLoader;
+    if (!selfLoader.loadSelf(path.c_str())) {
+        std::cerr << "Failed to load SELF file" << std::endl;
+        return false;
+    }
+    
+    // Get embedded ELF data from SELF
+    std::vector<uint8_t> elfData;
+    if (!selfLoader.extractELF(elfData)) {
+        std::cerr << "Failed to extract ELF from SELF" << std::endl;
+        return false;
+    }
+    
+    // For now, SELF extraction is stubbed
+    // In production, would load the decrypted ELF data
+    std::cout << "SELF extraction stub - ELF decryption not yet implemented" << std::endl;
+    std::cout << "Would load " << elfData.size() << " bytes of ELF data" << std::endl;
+    
     return true;
 }
 
