@@ -47,11 +47,11 @@ void VulkanRenderer::drawFrame() {
     VkSemaphore imageAvail = (VkSemaphore)imageAvailableSemaphore_;
     VkSemaphore renderFin = (VkSemaphore)renderFinishedSemaphore_;
     VkFence inFlight = (VkFence)inFlightFence_;
-    vkWaitForFences(device, 1, &inFlight, VK_TRUE, UINT64_C(1e9));
+    vkWaitForFences(device, 1, &inFlight, VK_TRUE, 1000000000ULL);
     vkResetFences(device, 1, &inFlight);
 
     uint32_t imageIndex = 0;
-    VkResult acq = vkAcquireNextImageKHR(device, (VkSwapchainKHR)swapchain_, UINT64_C(1e9), imageAvail, VK_NULL_HANDLE, &imageIndex);
+    VkResult acq = vkAcquireNextImageKHR(device, (VkSwapchainKHR)swapchain_, 1000000000ULL, imageAvail, VK_NULL_HANDLE, &imageIndex);
     if (acq != VK_SUCCESS) return;
 
     VkCommandBuffer cmd = (VkCommandBuffer)commandBuffers_[imageIndex];
@@ -533,24 +533,7 @@ bool VulkanRenderer::resize(uint32_t width, uint32_t height) {
     (void)width; (void)height;
     return false;
 #endif
-bool VulkanRenderer::resize(uint32_t width, uint32_t height) {
-#ifdef __ANDROID__
-    if (!device_ || !surface_) return false;
-    extentWidth_ = width;
-    extentHeight_ = height;
-    vkDeviceWaitIdle((VkDevice)device_);
-    cleanupSwapchain();
-    if (!createSwapchain()) return false;
-    if (!createFramebuffers()) return false;
-    if (!createCommandPoolAndBuffers()) return false;
-    return true;
-#else
-    (void)width; (void)height;
-    return false;
-#endif
 }
-
-#endif
 
 void VulkanRenderer::setClearColor(float r, float g, float b) {
 #ifdef __ANDROID__
