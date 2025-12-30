@@ -20,6 +20,12 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Set up JDK 11 (for gradle build)
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+
     - name: Export JAVA_HOME for subsequent steps
       run: |
         echo "JAVA_HOME=${JAVA_HOME_17_X64}" >> $GITHUB_ENV
@@ -27,7 +33,11 @@ jobs:
         java -version
 
     - name: Install Gradle 8.7
+      env:
+        JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
       run: |
+        export JAVA_HOME="${JAVA_HOME_11_X64:-$JAVA_HOME}"
+        export PATH="$JAVA_HOME/bin:$PATH"
         wget -q https://services.gradle.org/distributions/gradle-8.7-bin.zip -O /tmp/gradle.zip
         unzip -q /tmp/gradle.zip -d /opt/gradle
         echo "GRADLE_HOME=/opt/gradle/gradle-8.7" >> $GITHUB_ENV
@@ -57,11 +67,9 @@ jobs:
       working-directory: ./android
       env:
         ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
-        GRADLE_JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
       run: |
-        export JAVA_HOME="${JAVA_HOME_17_X64:-$JAVA_HOME}"
+        export JAVA_HOME="${JAVA_HOME_11_X64:-$JAVA_HOME}"
         export PATH="$JAVA_HOME/bin:$PATH"
-        echo "org.gradle.java.home=${JAVA_HOME_17_X64}" >> gradle.properties
         gradle assembleDebug --stacktrace
         gradle assembleRelease --stacktrace
 
