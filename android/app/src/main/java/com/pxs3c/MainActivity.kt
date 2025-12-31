@@ -36,7 +36,6 @@ class MainActivity : BaseActivity() {
     external fun nativeRunFrame()
     external fun nativeShutdown()
     external fun nativeAttachSurface(surface: android.view.Surface): Boolean
-    external fun nativeSetTargetFps(fps: Int)
     external fun nativeTickFrame(): Int
     external fun nativeGetStatus(): String
     external fun nativeResize(width: Int, height: Int): Boolean
@@ -75,6 +74,15 @@ class MainActivity : BaseActivity() {
             
             statusText.text = "✓ UI Initialized"
             android.util.Log.i("PXS3C-Main", "✓ onCreate started successfully")
+
+            // Apply overlay visibility early (before surface callbacks)
+            try {
+                val prefs = getSharedPreferences("pxs3c_settings", MODE_PRIVATE)
+                val showFps = prefs.getBoolean("show_fps", true)
+                fpsText.visibility = if (showFps) android.view.View.VISIBLE else android.view.View.GONE
+            } catch (_: Exception) {
+                // Ignore
+            }
         
             // Use SAF (Storage Access Framework) for picking executables
             filePickerLauncher = registerForActivityResult(
@@ -107,15 +115,18 @@ class MainActivity : BaseActivity() {
                         
                         try {
                             val prefs = getSharedPreferences("pxs3c_settings", MODE_PRIVATE)
-                            val fps = prefs.getInt("target_fps", 60)
                             val vsync = prefs.getBoolean("vsync", true)
+                            val showFps = prefs.getBoolean("show_fps", true)
                             val r = prefs.getFloat("clear_r", 0.03f)
                             val g = prefs.getFloat("clear_g", 0.03f)
                             val b = prefs.getFloat("clear_b", 0.08f)
 
-                            nativeSetTargetFps(fps)
                             nativeSetClearColor(r, g, b)
                             nativeSetVsync(vsync)
+
+                            runOnUiThread {
+                                fpsText.visibility = if (showFps) android.view.View.VISIBLE else android.view.View.GONE
+                            }
                         } catch (e: Exception) {
                             android.util.Log.w("PXS3C-Main", "Failed to apply saved settings: ${e.message}")
                         }
@@ -232,11 +243,27 @@ class MainActivity : BaseActivity() {
             val fileName = getFileName(uri) ?: "game"
             val lowerName = fileName.lowercase()
 
-            // We currently support ELF/SELF only (EBOOT.BIN is typically a SELF).
+            val isSupportedExecutable = lowerName.endsWith(".elf") ||
+                lowerName.endsWith(".self") ||
+                lowerName == "eboot.bin" ||
+                lowerName == "boot.bin"
+
             if (lowerName.endsWith(".pkg") || lowerName.endsWith(".iso")) {
                 runOnUiThread {
                     statusText.text = "Not supported yet: $fileName"
                     Toast.makeText(this, "PKG/ISO not supported yet. Add ELF/SELF (EBOOT.BIN).", Toast.LENGTH_LONG).show()
+                }
+                return
+            }
+
+            if (!isSupportedExecutable) {
+                runOnUiThread {
+                    statusText.text = "Unsupported file: $fileName"
+                    Toast.makeText(
+                        this,
+                        "Unsupported file. Select a PS3 executable: EBOOT.BIN (or .self/.elf).",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 return
             }
@@ -291,6 +318,11 @@ class MainActivity : BaseActivity() {
                 val fileName = getFileName(uri) ?: "game.tmp"
                 val lowerName = fileName.lowercase()
 
+                val isSupportedExecutable = lowerName.endsWith(".elf") ||
+                    lowerName.endsWith(".self") ||
+                    lowerName == "eboot.bin" ||
+                    lowerName == "boot.bin"
+
                 // Current core loader supports ELF/SELF only.
                 // PKG/ISO require additional install/mount + decryption pipeline.
                 if (lowerName.endsWith(".pkg") || lowerName.endsWith(".iso")) {
@@ -299,6 +331,18 @@ class MainActivity : BaseActivity() {
                         Toast.makeText(
                             this,
                             "PKG/ISO not supported yet. Select an ELF/SELF executable (commonly EBOOT.BIN).",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    return@Thread
+                }
+
+                if (!isSupportedExecutable) {
+                    runOnUiThread {
+                        statusText.text = "Unsupported file: $fileName"
+                        Toast.makeText(
+                            this,
+                            "Unsupported file. Select EBOOT.BIN (or .self/.elf).",
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -367,11 +411,18 @@ class MainActivity : BaseActivity() {
     
     private var frameHandler: android.os.Handler? = null
     private var frameRunnable: Runnable? = null
+    private var fpsFrames: Int = 0
+    private var fpsWindowStartNs: Long = 0L
+    private var lastFpsValue: Int = 0
     
     private fun startFrameLoop() {
         if (isRunning) return
         isRunning = true
         statusText.text = "Emulator running"
+
+        fpsFrames = 0
+        fpsWindowStartNs = System.nanoTime()
+        lastFpsValue = 0
         
         frameHandler = android.os.Handler(android.os.Looper.getMainLooper())
         frameRunnable = object : Runnable {
@@ -385,6 +436,21 @@ class MainActivity : BaseActivity() {
                     } catch (_: Exception) {
                         // Ignore status errors
                     }
+
+                    // Simple FPS counter based on UI loop cadence (good enough for an overlay).
+                    fpsFrames += 1
+                    val nowNs = System.nanoTime()
+                    val elapsedNs = nowNs - fpsWindowStartNs
+                    if (elapsedNs >= 1_000_000_000L) {
+                        val fps = (fpsFrames * 1_000_000_000L / elapsedNs).toInt().coerceAtLeast(0)
+                        fpsFrames = 0
+                        fpsWindowStartNs = nowNs
+                        if (fps != lastFpsValue) {
+                            lastFpsValue = fps
+                            fpsText.text = "FPS: $fps"
+                        }
+                    }
+
                     val delay = nativeTickFrame().toLong().coerceIn(1L, 100L)
                     frameHandler?.postDelayed(this, delay)
                 } catch (e: Exception) {

@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PXS3C Configuration"
+            android:text="PXS3C Settings"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#ffffff"
@@ -227,31 +227,24 @@
             android:layout_height="wrap_content"
             android:paddingTop="8dp" />
 
-        <!-- Performance Section -->
+        <!-- Overlay Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Performance"
+            android:text="Overlay"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#268bd2"
             android:paddingTop="16dp"
             android:paddingBottom="8dp" />
 
-        <TextView
-            android:id="@+id/fpsLabel"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/showFpsSwitch"
+            android:text="Show FPS"
+            android:textColor="#ffffff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Target FPS: 60"
-            android:textColor="#b0b0b0"
-            android:paddingBottom="4dp" />
-
-        <SeekBar
-            android:id="@+id/fpsSeek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="3"
-            android:progress="2" />
+            android:paddingTop="8dp" />
 
         <!-- Audio Section -->
         <TextView

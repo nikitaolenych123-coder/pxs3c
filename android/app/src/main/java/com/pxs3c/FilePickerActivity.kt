@@ -110,12 +110,14 @@ class FilePickerActivity : AppCompatActivity() {
         currentDir.listFiles()?.forEach { file ->
             if (file.isFile) {
                 val name = file.name.lowercase()
-                if (name.endsWith(".self") ||
+                // PS3 executables are typically .self/.elf or EBOOT.BIN (a SELF).
+                // Do not list arbitrary .bin files; that causes misleading UX.
+                val isPs3Executable = name.endsWith(".self") ||
                     name.endsWith(".elf") ||
-                    name.endsWith(".pkg") ||
-                    name.endsWith(".iso") ||
-                    name.endsWith(".bin")
-                ) {
+                    name == "eboot.bin" ||
+                    name == "boot.bin"
+
+                if (isPs3Executable) {
                     files.add(file.name)
                 }
             }

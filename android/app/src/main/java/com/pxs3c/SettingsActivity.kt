@@ -26,7 +26,6 @@ class SettingsActivity : BaseActivity() {
         }
     }
 
-    external fun nativeSetTargetFps(fps: Int)
     external fun nativeSetClearColor(r: Float, g: Float, b: Float)
     external fun nativeSetVsync(enabled: Boolean)
 
@@ -76,8 +75,10 @@ class SettingsActivity : BaseActivity() {
         val threadCountSeek = findViewById<SeekBar>(R.id.threadCountSeek)
         val threadCountLabel = findViewById<TextView>(R.id.threadCountLabel)
         
-        val ppuOptions = arrayOf("Interpreter (Precise)", "LLVM Recompiler (Fast)")
-        val spuOptions = arrayOf("Interpreter (Precise)", "ASMJIT Recompiler (Fast)")
+        // Current Android build is interpreter-first.
+        // Keep the UI truthful: recompilers are not exposed as working options here.
+        val ppuOptions = arrayOf("Interpreter")
+        val spuOptions = arrayOf("Interpreter")
         
         ArrayAdapter(this, android.R.layout.simple_spinner_item, ppuOptions).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -88,6 +89,9 @@ class SettingsActivity : BaseActivity() {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spuDecoderSpinner.adapter = it
         }
+
+        ppuDecoderSpinner.isEnabled = false
+        spuDecoderSpinner.isEnabled = false
         
         threadCountSeek.max = 5 // 1-6 threads
         threadCountSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -100,8 +104,6 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun setupGpuSection() {
-        val fpsSeek = findViewById<SeekBar>(R.id.fpsSeek)
-        val fpsLabel = findViewById<TextView>(R.id.fpsLabel)
         val vsyncSwitch = findViewById<SwitchCompat>(R.id.vsyncSwitch)
         val resolutionSpinner = findViewById<Spinner>(R.id.resolutionSpinner)
         val anisotropicSpinner = findViewById<Spinner>(R.id.anisotropicSpinner)
@@ -120,21 +122,6 @@ class SettingsActivity : BaseActivity() {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             anisotropicSpinner.adapter = it
         }
-        
-        fpsSeek.max = 3
-        fpsSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val fps = when (progress) {
-                    0 -> 30
-                    1 -> 45
-                    2 -> 60
-                    else -> 120
-                }
-                fpsLabel.text = "Target FPS: $fps"
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
         
         driverBtn.setOnClickListener {
             driverPicker.launch("application/zip")
@@ -205,14 +192,10 @@ class SettingsActivity : BaseActivity() {
     private fun saveSettings() {
         val editor = prefs.edit()
         
+        // Overlay
+        editor.putBoolean("show_fps", findViewById<SwitchCompat>(R.id.showFpsSwitch).isChecked)
+
         // GPU
-        val fps = when (findViewById<SeekBar>(R.id.fpsSeek).progress) {
-            0 -> 30
-            1 -> 45
-            2 -> 60
-            else -> 120
-        }
-        editor.putInt("target_fps", fps)
         editor.putBoolean("vsync", findViewById<SwitchCompat>(R.id.vsyncSwitch).isChecked)
         editor.putInt("resolution", findViewById<Spinner>(R.id.resolutionSpinner).selectedItemPosition)
         editor.putInt("anisotropic", findViewById<Spinner>(R.id.anisotropicSpinner).selectedItemPosition)
@@ -241,21 +224,15 @@ class SettingsActivity : BaseActivity() {
         editor.apply()
         
         // Apply to native
-        nativeSetTargetFps(fps)
         nativeSetClearColor(r, g, b)
         nativeSetVsync(findViewById<SwitchCompat>(R.id.vsyncSwitch).isChecked)
     }
 
     private fun loadSettings() {
+        // Overlay
+        findViewById<SwitchCompat>(R.id.showFpsSwitch).isChecked = prefs.getBoolean("show_fps", true)
+
         // GPU
-        val fps = prefs.getInt("target_fps", 60)
-        val fpsProgress = when (fps) {
-            30 -> 0
-            45 -> 1
-            60 -> 2
-            else -> 3
-        }
-        findViewById<SeekBar>(R.id.fpsSeek).progress = fpsProgress
         findViewById<SwitchCompat>(R.id.vsyncSwitch).isChecked = prefs.getBoolean("vsync", true)
         findViewById<Spinner>(R.id.resolutionSpinner).setSelection(prefs.getInt("resolution", 0))
         findViewById<Spinner>(R.id.anisotropicSpinner).setSelection(prefs.getInt("anisotropic", 0))
