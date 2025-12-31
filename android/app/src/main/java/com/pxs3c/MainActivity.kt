@@ -414,6 +414,8 @@ class MainActivity : BaseActivity() {
     private var fpsFrames: Int = 0
     private var fpsWindowStartNs: Long = 0L
     private var lastFpsValue: Int = 0
+    private var lastStatusText: String = ""
+    private var lastStatusUpdateMs: Long = 0L
     
     private fun startFrameLoop() {
         if (isRunning) return
@@ -423,16 +425,27 @@ class MainActivity : BaseActivity() {
         fpsFrames = 0
         fpsWindowStartNs = System.nanoTime()
         lastFpsValue = 0
+        lastStatusText = ""
+        lastStatusUpdateMs = 0L
         
         frameHandler = android.os.Handler(android.os.Looper.getMainLooper())
         frameRunnable = object : Runnable {
             override fun run() {
                 if (!isRunning) return
                 try {
-                    // Pull a short status string from native core
+                    // Pull a short status string from native core.
+                    // Avoid updating TextView every tick (can cause jank).
                     try {
-                        val s = nativeGetStatus()
-                        if (s.isNotBlank()) statusText.text = s
+                        val nowMs = android.os.SystemClock.uptimeMillis()
+                        if (nowMs - lastStatusUpdateMs >= 250L) {
+                            val s = nativeGetStatus()
+                            val trimmed = s.trim()
+                            if (trimmed.isNotEmpty() && trimmed != lastStatusText) {
+                                lastStatusText = trimmed
+                                statusText.text = trimmed
+                            }
+                            lastStatusUpdateMs = nowMs
+                        }
                     } catch (_: Exception) {
                         // Ignore status errors
                     }
