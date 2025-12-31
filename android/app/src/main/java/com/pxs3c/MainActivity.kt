@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.widget.ListView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 
@@ -39,14 +42,19 @@ class MainActivity : BaseActivity() {
     external fun nativeSetClearColor(r: Float, g: Float, b: Float)
     external fun nativeSetVsync(enabled: Boolean)
     
-    private lateinit var filePickerLauncher: ActivityResultLauncher<String>
+    private lateinit var filePickerLauncher: ActivityResultLauncher<Array<String>>
     private var gameLoaded = false
     private var isRunning = false
     private lateinit var surfaceView: SurfaceView
     private lateinit var statusText: TextView
     private lateinit var fpsText: TextView
+    private lateinit var gameListView: ListView
+    private var gameAdapter: android.widget.ArrayAdapter<String>? = null
+    private var gameUris: MutableList<String> = mutableListOf()
     private var btnStop: android.view.View? = null
     private var btnBootGame: android.view.View? = null
+
+    private val libraryPrefs by lazy { getSharedPreferences("pxs3c_library", MODE_PRIVATE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
@@ -57,6 +65,7 @@ class MainActivity : BaseActivity() {
             surfaceView = findViewByIdSafe(R.id.surfaceView) ?: return
             statusText = findViewByIdSafe(R.id.statusText) ?: return
             fpsText = findViewByIdSafe(R.id.fpsText) ?: return
+            gameListView = findViewByIdSafe(R.id.gameListView) ?: return
             val btnSettings: android.view.View? = findViewByIdSafe(R.id.btnSettings)
             val btnLoadGame: android.view.View? = findViewByIdSafe(R.id.btnLoadGame)
             btnBootGame = findViewByIdSafe(R.id.btnBootGame)
@@ -66,12 +75,22 @@ class MainActivity : BaseActivity() {
             statusText.text = "✓ UI Initialized"
             android.util.Log.i("PXS3C-Main", "✓ onCreate started successfully")
         
-            // Use SAF (Storage Access Framework) for file picking
+            // Use SAF (Storage Access Framework) for picking executables
             filePickerLauncher = registerForActivityResult(
-                ActivityResultContracts.GetContent()
+                ActivityResultContracts.OpenDocument()
             ) { uri: Uri? ->
-                uri?.let { loadGameFromUri(it) }
+                uri?.let { addGameToLibrary(it) }
             }
+
+            gameAdapter = android.widget.ArrayAdapter(this, R.layout.item_game, R.id.gameTitle, mutableListOf<String>())
+            gameListView.adapter = gameAdapter
+            gameListView.setOnItemClickListener { _, _, position, _ ->
+                val uriString = gameUris.getOrNull(position) ?: return@setOnItemClickListener
+                val uri = Uri.parse(uriString)
+                bootGameFromLibrary(uri)
+            }
+
+            refreshGameLibrary()
 
             surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
                 override fun surfaceCreated(holder: SurfaceHolder) {
@@ -134,8 +153,8 @@ class MainActivity : BaseActivity() {
             }
             
             btnLoadGame?.setOnClickListener {
-                statusText.text = "Select ELF/SELF executable (e.g. EBOOT.BIN)..."
-                filePickerLauncher.launch("*/*")
+                statusText.text = "Add game: select ELF/SELF (often EBOOT.BIN)"
+                filePickerLauncher.launch(arrayOf("*/*"))
             }
             
             btnBootGame?.setOnClickListener {
@@ -163,12 +182,106 @@ class MainActivity : BaseActivity() {
             }
             
             btnRefresh?.setOnClickListener {
-                // Refresh game list (placeholder)
-                Toast.makeText(this, "Game list refresh (not implemented)", Toast.LENGTH_SHORT).show()
+                refreshGameLibrary()
+                Toast.makeText(this, "Game library refreshed", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             handleException(e, "MainActivity.onCreate")
         }
+    }
+
+    private fun refreshGameLibrary() {
+        val raw = libraryPrefs.getString("games", "[]") ?: "[]"
+        val titles = mutableListOf<String>()
+        val uris = mutableListOf<String>()
+
+        try {
+            val arr = JSONArray(raw)
+            for (i in 0 until arr.length()) {
+                val obj = arr.optJSONObject(i) ?: continue
+                val title = obj.optString("title")
+                val uri = obj.optString("uri")
+                if (title.isNotBlank() && uri.isNotBlank()) {
+                    titles.add(title)
+                    uris.add(uri)
+                }
+            }
+        } catch (_: Exception) {
+            // If corrupted, reset
+        }
+
+        gameUris = uris
+        gameAdapter?.clear()
+        gameAdapter?.addAll(titles)
+        gameAdapter?.notifyDataSetChanged()
+    }
+
+    private fun addGameToLibrary(uri: Uri) {
+        try {
+            // Persist permission so we can open the file later
+            try {
+                contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            } catch (_: Exception) {
+                // Some providers don’t support persistable perms; we still try to copy when booting.
+            }
+
+            val fileName = getFileName(uri) ?: "game"
+            val lowerName = fileName.lowercase()
+
+            // We currently support ELF/SELF only (EBOOT.BIN is typically a SELF).
+            if (lowerName.endsWith(".pkg") || lowerName.endsWith(".iso")) {
+                runOnUiThread {
+                    statusText.text = "Not supported yet: $fileName"
+                    Toast.makeText(this, "PKG/ISO not supported yet. Add ELF/SELF (EBOOT.BIN).", Toast.LENGTH_LONG).show()
+                }
+                return
+            }
+
+            val entry = JSONObject().apply {
+                put("title", fileName)
+                put("uri", uri.toString())
+            }
+
+            val raw = libraryPrefs.getString("games", "[]") ?: "[]"
+            val arr = try { JSONArray(raw) } catch (_: Exception) { JSONArray() }
+
+            // De-dupe by uri
+            for (i in 0 until arr.length()) {
+                val obj = arr.optJSONObject(i) ?: continue
+                if (obj.optString("uri") == uri.toString()) {
+                    runOnUiThread {
+                        statusText.text = "Already added: $fileName"
+                        Toast.makeText(this, "Game already in library", Toast.LENGTH_SHORT).show()
+                    }
+                    return
+                }
+            }
+
+            arr.put(entry)
+            libraryPrefs.edit().putString("games", arr.toString()).apply()
+
+            runOnUiThread {
+                statusText.text = "Added: $fileName"
+                refreshGameLibrary()
+            }
+        } catch (e: Exception) {
+            runOnUiThread {
+                statusText.text = "Add failed: ${e.message}"
+                Toast.makeText(this, "Add failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun bootGameFromLibrary(uri: Uri) {
+        if (isRunning) {
+            Toast.makeText(this, "Stop emulation first", Toast.LENGTH_SHORT).show()
+            return
+        }
+        statusText.text = "Booting selected game..."
+        loadGameFromUri(uri)
     }
     
     private fun loadGameFromUri(uri: Uri) {
@@ -198,7 +311,16 @@ class MainActivity : BaseActivity() {
                 }
                 
                 // Buffered copy for performance
-                contentResolver.openInputStream(uri)?.use { input ->
+                val inputStream = contentResolver.openInputStream(uri)
+                if (inputStream == null) {
+                    runOnUiThread {
+                        statusText.text = "Can’t open file (permission/provider issue)"
+                        Toast.makeText(this, "Can’t open the selected file. Try re-adding it.", Toast.LENGTH_LONG).show()
+                    }
+                    return@Thread
+                }
+
+                inputStream.use { input ->
                     FileOutputStream(tempFile).buffered(16384).use { output ->
                         input.copyTo(output, 16384)
                     }
@@ -209,8 +331,8 @@ class MainActivity : BaseActivity() {
                 runOnUiThread {
                     if (success) {
                         gameLoaded = true
-                        statusText.text = "Game loaded: $fileName - Starting emulation..."
-                        Toast.makeText(this, "Game loaded! Check logcat for compilation details", Toast.LENGTH_LONG).show()
+                        statusText.text = "Game loaded: $fileName"
+                        Toast.makeText(this, "First boot may compile PPU/SPU caches. Watch logcat.", Toast.LENGTH_LONG).show()
                         
                         // Start frame loop after successful game load
                         startFrameLoop()

@@ -10,6 +10,18 @@
         android:layout_height="match_parent"
         android:keepScreenOn="true" />
 
+    <ListView
+        android:id="@+id/gameListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="104dp"
+        android:divider="#2a2a2a"
+        android:dividerHeight="1dp"
+        android:background="#121212"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
+
     <!-- Top bar like aPS3e -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -105,7 +117,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Install PKG"
+                android:text="Add Game"
                 android:textColor="#ffffff"
                 android:backgroundTint="#2196F3"
                 android:textAllCaps="false"
