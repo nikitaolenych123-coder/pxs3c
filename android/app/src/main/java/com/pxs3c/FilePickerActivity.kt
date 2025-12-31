@@ -111,13 +111,15 @@ class FilePickerActivity : AppCompatActivity() {
             if (file.isFile) {
                 val name = file.name.lowercase()
                 // PS3 executables are typically .self/.elf or EBOOT.BIN (a SELF).
-                // Do not list arbitrary .bin files; that causes misleading UX.
+                // ISO can be added to library, but booting ISO is not supported yet.
                 val isPs3Executable = name.endsWith(".self") ||
                     name.endsWith(".elf") ||
                     name == "eboot.bin" ||
                     name == "boot.bin"
 
-                if (isPs3Executable) {
+                val isIso = name.endsWith(".iso")
+
+                if (isPs3Executable || isIso) {
                     files.add(file.name)
                 }
             }

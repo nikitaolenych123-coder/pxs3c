@@ -51,6 +51,7 @@ class MainActivity : BaseActivity() {
     private lateinit var gameListView: ListView
     private var gameAdapter: android.widget.ArrayAdapter<String>? = null
     private var gameUris: MutableList<String> = mutableListOf()
+    private var gameTypes: MutableList<String> = mutableListOf()
     private var btnStop: android.view.View? = null
     private var btnBootGame: android.view.View? = null
 
@@ -95,7 +96,12 @@ class MainActivity : BaseActivity() {
             gameListView.adapter = gameAdapter
             gameListView.setOnItemClickListener { _, _, position, _ ->
                 val uriString = gameUris.getOrNull(position) ?: return@setOnItemClickListener
+                val type = gameTypes.getOrNull(position) ?: "exec"
                 val uri = Uri.parse(uriString)
+                if (type == "iso") {
+                    Toast.makeText(this, "ISO added. Booting ISO is not supported yet.", Toast.LENGTH_LONG).show()
+                    return@setOnItemClickListener
+                }
                 bootGameFromLibrary(uri)
             }
 
@@ -165,7 +171,7 @@ class MainActivity : BaseActivity() {
             }
             
             btnLoadGame?.setOnClickListener {
-                statusText.text = "Add game: select ELF/SELF (often EBOOT.BIN)"
+                statusText.text = "Add game: select EBOOT.BIN/.self/.elf (ISO can be added, boot later)"
                 filePickerLauncher.launch(arrayOf("*/*"))
             }
             
@@ -206,6 +212,7 @@ class MainActivity : BaseActivity() {
         val raw = libraryPrefs.getString("games", "[]") ?: "[]"
         val titles = mutableListOf<String>()
         val uris = mutableListOf<String>()
+        val types = mutableListOf<String>()
 
         try {
             val arr = JSONArray(raw)
@@ -213,9 +220,22 @@ class MainActivity : BaseActivity() {
                 val obj = arr.optJSONObject(i) ?: continue
                 val title = obj.optString("title")
                 val uri = obj.optString("uri")
+                val type = obj.optString("type")
                 if (title.isNotBlank() && uri.isNotBlank()) {
-                    titles.add(title)
+                    val inferredType = when {
+                        type.isNotBlank() -> type
+                        title.lowercase().endsWith(".iso") -> "iso"
+                        else -> "exec"
+                    }
+
+                    titles.add(
+                        when (inferredType) {
+                            "iso" -> "$title (ISO)"
+                            else -> title
+                        }
+                    )
                     uris.add(uri)
+                    types.add(inferredType)
                 }
             }
         } catch (_: Exception) {
@@ -223,6 +243,7 @@ class MainActivity : BaseActivity() {
         }
 
         gameUris = uris
+        gameTypes = types
         gameAdapter?.clear()
         gameAdapter?.addAll(titles)
         gameAdapter?.notifyDataSetChanged()
@@ -248,29 +269,34 @@ class MainActivity : BaseActivity() {
                 lowerName == "eboot.bin" ||
                 lowerName == "boot.bin"
 
-            if (lowerName.endsWith(".pkg") || lowerName.endsWith(".iso")) {
+            val isIso = lowerName.endsWith(".iso")
+
+            if (lowerName.endsWith(".pkg")) {
                 runOnUiThread {
                     statusText.text = "Not supported yet: $fileName"
-                    Toast.makeText(this, "PKG/ISO not supported yet. Add ELF/SELF (EBOOT.BIN).", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "PKG not supported yet. Add EBOOT.BIN/.self/.elf or ISO.", Toast.LENGTH_LONG).show()
                 }
                 return
             }
 
-            if (!isSupportedExecutable) {
+            if (!isSupportedExecutable && !isIso) {
                 runOnUiThread {
                     statusText.text = "Unsupported file: $fileName"
                     Toast.makeText(
                         this,
-                        "Unsupported file. Select a PS3 executable: EBOOT.BIN (or .self/.elf).",
+                        "Unsupported file. Select EBOOT.BIN/.self/.elf or an .iso image.",
                         Toast.LENGTH_LONG
                     ).show()
                 }
                 return
             }
 
+            val type = if (isIso) "iso" else "exec"
+
             val entry = JSONObject().apply {
                 put("title", fileName)
                 put("uri", uri.toString())
+                put("type", type)
             }
 
             val raw = libraryPrefs.getString("games", "[]") ?: "[]"
@@ -322,15 +348,28 @@ class MainActivity : BaseActivity() {
                     lowerName.endsWith(".self") ||
                     lowerName == "eboot.bin" ||
                     lowerName == "boot.bin"
+                val isIso = lowerName.endsWith(".iso")
 
                 // Current core loader supports ELF/SELF only.
                 // PKG/ISO require additional install/mount + decryption pipeline.
-                if (lowerName.endsWith(".pkg") || lowerName.endsWith(".iso")) {
+                if (lowerName.endsWith(".pkg")) {
                     runOnUiThread {
                         statusText.text = "Format not supported yet: $fileName"
                         Toast.makeText(
                             this,
-                            "PKG/ISO not supported yet. Select an ELF/SELF executable (commonly EBOOT.BIN).",
+                            "PKG not supported yet. Select EBOOT.BIN/.self/.elf.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    return@Thread
+                }
+
+                if (isIso) {
+                    runOnUiThread {
+                        statusText.text = "ISO added (boot not supported yet): $fileName"
+                        Toast.makeText(
+                            this,
+                            "ISO is added to library, but booting ISO is not supported yet.",
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -342,7 +381,7 @@ class MainActivity : BaseActivity() {
                         statusText.text = "Unsupported file: $fileName"
                         Toast.makeText(
                             this,
-                            "Unsupported file. Select EBOOT.BIN (or .self/.elf).",
+                            "Unsupported file. Select EBOOT.BIN/.self/.elf.",
                             Toast.LENGTH_LONG
                         ).show()
                     }
