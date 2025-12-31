@@ -13,7 +13,8 @@ if(ANDROID)
 
   if(CMAKE_BUILD_TYPE MATCHES "^Release$|^RelWithDebInfo$|^MinSizeRel$")
     add_compile_options(-O3 -DNDEBUG -fomit-frame-pointer)
-    add_link_options(-Wl,--gc-sections -Wl,-O3)
+    # Use lld on Android. Using gold can fail with LTO because LLVMgold plugin isn't available.
+    add_link_options(-fuse-ld=lld -Wl,--gc-sections -Wl,-O3)
 
     # Enable LTO if supported by the toolchain.
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
