@@ -24,8 +24,9 @@ if(ANDROID)
     # Use lld on Android. Using gold can fail with LTO because LLVMgold plugin isn't available.
     add_link_options(-fuse-ld=lld -Wl,--gc-sections -Wl,-O3)
 
-    # Enable LTO if supported by the toolchain.
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+    # NOTE: Do not enable CMake IPO/LTO on Android.
+    # CMake's IPO support may inject `-fuse-ld=gold`, which fails in the NDK environment
+    # (missing LLVMgold plugin and incompatible host linker).
   endif()
 endif()
 
