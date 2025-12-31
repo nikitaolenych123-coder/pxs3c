@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <mutex>
+#include <string>
 
 #ifdef __ANDROID__
 #include <android/native_window.h>
@@ -37,6 +39,9 @@ public:
     // Config updates
     void setClearColor(float r, float g, float b);
     void setVsync(bool enabled); // maps to present mode on Android
+
+    // Status/progress reporting (for Android UI)
+    std::string getStatusText() const;
     
     // Component access
     MemoryManager* getMemory() { return memory_.get(); }
@@ -45,6 +50,11 @@ public:
     RSXProcessor* getRSX() { return rsx_.get(); }
     
 private:
+    void setStatusText(const std::string& text);
+
+    mutable std::mutex statusMutex_;
+    std::string statusText_;
+
     std::unique_ptr<VulkanRenderer> renderer_;
     std::unique_ptr<FramePacer> framePacer_;
     std::unique_ptr<MemoryManager> memory_;

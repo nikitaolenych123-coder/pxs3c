@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.15)
 project(pxs3c LANGUAGES C CXX)
 
+# LLVM/JIT is a future optimisation path.
+# Default: OFF on Android (NDK), ON elsewhere.
+if(ANDROID)
+  option(PXS3C_ENABLE_LLVM "Enable LLVM JIT" OFF)
+else()
+  option(PXS3C_ENABLE_LLVM "Enable LLVM JIT" ON)
+endif()
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -24,7 +32,7 @@ endif()
 # Find LLVM for JIT compilation (unless explicitly disabled or cross-compiling for Android)
 if(NOT DEFINED LLVM_FOUND)
   # Disable LLVM for Android NDK builds since LLVM is not available
-  if(ANDROID)
+  if(ANDROID OR NOT PXS3C_ENABLE_LLVM)
     message(STATUS "Building for Android NDK - LLVM JIT disabled")
     set(LLVM_FOUND FALSE)
   else()

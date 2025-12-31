@@ -10,17 +10,22 @@
 #include "cpu/SPUManager.h"
 #include <cstring>
 #include <iostream>
+#include <utility>
 
 namespace pxs3c {
 
-Emulator::Emulator() = default;
+Emulator::Emulator() {
+    statusText_ = "Idle";
+}
 Emulator::~Emulator() = default;
 
 bool Emulator::init() {
+    setStatusText("Initialising core...");
     // Initialize memory manager
     memory_ = std::make_unique<MemoryManager>();
     if (!memory_->init()) {
         std::cerr << "Memory manager init failed" << std::endl;
+        setStatusText("Init failed: memory");
         return false;
     }
     
@@ -31,11 +36,13 @@ bool Emulator::init() {
     syscallHandler_ = std::make_unique<SyscallHandler>();
     if (!syscallHandler_->init(ppu_.get(), memory_.get())) {
         std::cerr << "Syscall handler init failed" << std::endl;
+        setStatusText("Init failed: syscalls");
         return false;
     }
     
     if (!ppu_->init(memory_.get(), syscallHandler_.get())) {
         std::cerr << "PPU interpreter init failed" << std::endl;
+        setStatusText("Init failed: PPU");
         return false;
     }
     
@@ -45,6 +52,7 @@ bool Emulator::init() {
     std::shared_ptr<MemoryManager> memShared(memory_.get(), [](void*) {});
     if (!spuManager_->init(memShared)) {
         std::cerr << "SPU manager init failed" << std::endl;
+        setStatusText("Init failed: SPU");
         return false;
     }
     
@@ -52,6 +60,7 @@ bool Emulator::init() {
     renderer_ = std::make_unique<VulkanRenderer>();
     if (!renderer_->init()) {
         std::cerr << "Renderer init failed" << std::endl;
+        setStatusText("Init failed: renderer");
         return false;
     }
     
@@ -59,6 +68,7 @@ bool Emulator::init() {
     rsx_ = std::make_unique<RSXProcessor>();
     if (!rsx_->init(renderer_.get())) {
         std::cerr << "RSX processor init failed" << std::endl;
+        setStatusText("Init failed: RSX");
         return false;
     }
     
@@ -71,11 +81,13 @@ bool Emulator::init() {
     
     std::cout << "Emulator initialized" << std::endl;
     memory_->dumpRegions();
+    setStatusText("Ready (interpreter mode)");
     return true;
 }
 
 bool Emulator::loadGame(const char* path) {
     std::cout << "Loading game: " << path << std::endl;
+    setStatusText(std::string("Loading: ") + path);
     
     // Check file extension
     std::string pathStr(path);
@@ -86,6 +98,7 @@ bool Emulator::loadGame(const char* path) {
 
     if (endsWith(".pkg") || endsWith(".PKG") || endsWith(".iso") || endsWith(".ISO")) {
         std::cerr << "Unsupported game format (PKG/ISO not implemented yet): " << pathStr << std::endl;
+        setStatusText("Unsupported format: PKG/ISO");
         return false;
     }
 
@@ -96,9 +109,11 @@ bool Emulator::loadGame(const char* path) {
         // Try to load SELF file
         if (elfLoader_ && elfLoader_->loadSelf(path, memory_.get())) {
             std::cout << "SELF file loaded" << std::endl;
+            setStatusText("Loaded SELF. Ready to boot.");
             return true;
         }
         std::cerr << "Failed to load SELF file" << std::endl;
+        setStatusText("Load failed: SELF");
         return false;
     }
     
@@ -112,17 +127,19 @@ bool Emulator::loadGame(const char* path) {
             ppu_->setPC(entry);
             std::cout << "PPU ready to execute from 0x" << std::hex << entry << std::dec << std::endl;
         }
-        
+        setStatusText("Loaded ELF. Ready to boot.");
         return true;
     }
     
     // Fallback to RPCS3 bridge if available
     if (!initializeEngine()) {
         std::cerr << "No engine available (RPCS3 bridge not found)" << std::endl;
+        setStatusText("Load failed: no engine");
         return false;
     }
     bool ok = engine_->loadElf(path);
     if (!ok) std::cerr << "Engine failed to load ELF: " << path << std::endl;
+    setStatusText(ok ? "Game loaded. Ready to boot." : "Game load failed (engine)");
     return ok;
 }
 
@@ -144,6 +161,16 @@ void Emulator::runFrame() {
     
     // Render frame
     renderer_->drawFrame();
+}
+
+std::string Emulator::getStatusText() const {
+    std::lock_guard<std::mutex> lock(statusMutex_);
+    return statusText_;
+}
+
+void Emulator::setStatusText(const std::string& text) {
+    std::lock_guard<std::mutex> lock(statusMutex_);
+    statusText_ = text;
 }
 
 void Emulator::shutdown() {

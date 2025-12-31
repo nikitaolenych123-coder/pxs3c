@@ -52,129 +52,14 @@ Java_com_pxs3c_MainActivity_nativeLoadGame(JNIEnv* env, jobject thiz, jstring jp
             return JNI_FALSE;
         }
 
-        LOGI("╔════════════════════════════════════════╗");
-        LOGI("║   PXS3C - RPCS3 ARM64 Port            ║");
-        LOGI("║   Based on RPCS3 by Nekotekina       ║");
-        LOGI("╚════════════════════════════════════════╝");
-        LOGI("");
         LOGI("Loading: %s", path);
-        LOGI("");
-        
-        // ELF/SELF Analysis (RPCS3 style)
-        LOGI("┌─ [ELF Loader] ────────────────────────┐");
-        LOGI("│ Analyzing executable format...        │");
-        LOGI("│ • Magic: 0x7F454C46 (ELF)            │");
-        LOGI("│ • Type: ET_EXEC (Executable)          │");
-        LOGI("│ • Machine: EM_PPC64 (PowerPC 64-bit)  │");
-        LOGI("│ • Entry: 0x010000                     │");
-        LOGI("│ • Segments: 3 (LOAD, DYNAMIC, NOTE)   │");
-        LOGI("└───────────────────────────────────────┘");
-        LOGI("");
-        
-        // Memory Layout (RPCS3 PS3 memory map)
-        LOGI("┌─ [Memory Manager] ────────────────────┐");
-        LOGI("│ PS3 Memory Layout:                    │");
-        LOGI("│ • Main RAM (XDR):  0x00000000 (256MB) │");
-        LOGI("│ • Video RAM (GDDR3): 256 MB           │");
-        LOGI("│ • RSX IOIF: 0xD0000000                │");
-        LOGI("│ • Stack: 0x80000000                   │");
-        LOGI("└───────────────────────────────────────┘");
-        LOGI("");
-        
-        // PPU Compilation (RPCS3 recompiler)
-        LOGI("┌─ [PPU Recompiler] ────────────────────┐");
-        LOGI("│ PowerPC 64-bit Processor Unit         │");
-        LOGI("│ • Mode: LLVM JIT → ARM64              │");
-        LOGI("│ • Analyzing PPU modules...            │");
-        LOGI("│ • Found 3 executable sections         │");
-        LOGI("│                                       │");
-        LOGI("│ Compiling PPU functions:              │");
-        LOGI("│ ├─ 0x010000: _start (45 inst)         │");
-        LOGI("│ ├─ 0x010200: main (78 inst)           │");
-        LOGI("│ ├─ 0x010500: render_loop (120 inst)   │");
-        LOGI("│ └─ 0x010800: audio_thread (56 inst)   │");
-        LOGI("│                                       │");
-        LOGI("│ PPU → ARM64 Translation:              │");
-        LOGI("│ • 299 PPU instructions                │");
-        LOGI("│ • 1,789 ARM64 instructions            │");
-        LOGI("│ • Optimization: -O3 + SVE2            │");
-        LOGI("│ • Registers: 32 GPRs, 32 FPRs, 32 VRs │");
-        LOGI("└───────────────────────────────────────┘");
-        LOGI("");
-        
-        // SPU Compilation (RPCS3 ASMJIT)
-        LOGI("┌─ [SPU Recompiler] ────────────────────┐");
-        LOGI("│ Synergistic Processing Units          │");
-        LOGI("│ • Active SPUs: 6 threads              │");
-        LOGI("│ • Recompiler: ASMJIT → ARM64          │");
-        LOGI("│ • SIMD: ARMv9 SVE2 (256-bit)          │");
-        LOGI("│                                       │");
-        LOGI("│ Compiling SPU programs:               │");
-        LOGI("│ ├─ SPU0: 0x00000 (256 inst) [Audio]   │");
-        LOGI("│ ├─ SPU1: 0x00400 (128 inst) [Physics] │");
-        LOGI("│ ├─ SPU2: 0x00800 (192 inst) [Render]  │");
-        LOGI("│ ├─ SPU3: 0x00C00 (64 inst)  [Decode]  │");
-        LOGI("│ └─ SPU4-5: Idle                       │");
-        LOGI("│                                       │");
-        LOGI("│ SPU → ARM64 Translation:              │");
-        LOGI("│ • 640 SPU instructions                │");
-        LOGI("│ • 2,560 ARM64 instructions            │");
-        LOGI("│ • SVE2 vectorization: 4x speedup      │");
-        LOGI("│ • Local Store: 256KB per SPU          │");
-        LOGI("└───────────────────────────────────────┘");
-        LOGI("");
-        
-        // RSX Graphics (RPCS3 Vulkan backend)
-        LOGI("┌─ [RSX Graphics] ──────────────────────┐");
-        LOGI("│ Reality Synthesizer (NVIDIA G70)      │");
-        LOGI("│ • Backend: Vulkan 1.3                 │");
-        LOGI("│ • GPU: Adreno 735 (Snapdragon 8s Gen3)│");
-        LOGI("│ • Features: Dynamic Rendering, GPL    │");
-        LOGI("│                                       │");
-        LOGI("│ Compiling RSX shaders:                │");
-        LOGI("│ ├─ Vertex shaders:   12 (GLSL→SPIR-V) │");
-        LOGI("│ ├─ Fragment shaders: 18 (GLSL→SPIR-V) │");
-        LOGI("│ └─ Compute shaders:  4                │");
-        LOGI("│                                       │");
-        LOGI("│ Pipeline state:                       │");
-        LOGI("│ • Graphics pipelines: 30 cached       │");
-        LOGI("│ • Descriptor sets: 64                 │");
-        LOGI("│ • Command buffers: 3 (triple buffer)  │");
-        LOGI("│ • Resolution: Native (720p/1080p)     │");
-        LOGI("└───────────────────────────────────────┘");
-        LOGI("");
-        
-        // LV2 Syscalls (RPCS3 kernel)
-        LOGI("┌─ [LV2 Kernel] ────────────────────────┐");
-        LOGI("│ PS3 System Call Handler               │");
-        LOGI("│ • Implemented syscalls: 89 / 300      │");
-        LOGI("│ • Process management: ✓               │");
-        LOGI("│ • Thread management: ✓                │");
-        LOGI("│ • Memory management: ✓                │");
-        LOGI("│ • File system (VFS): ✓                │");
-        LOGI("│ • Synchronization: ✓                  │");
-        LOGI("└───────────────────────────────────────┘");
-        LOGI("");
         
         bool ok = g_emu && g_emu->loadGame(path);
         
         if (ok) {
-            LOGI("╔════════════════════════════════════════╗");
-            LOGI("║   ✓ GAME LOADED - RPCS3 MODE!        ║");
-            LOGI("╚════════════════════════════════════════╝");
-            LOGI("");
-            LOGI("Emulation Status:");
-            LOGI("• PPU Threads: 2 active");
-            LOGI("• SPU Threads: 6 active");
-            LOGI("• Target FPS: 60");
-            LOGI("• Recompiler: ARM64 (SVE2 optimized)");
-            LOGI("• Memory: 512 MB (256+256)");
-            LOGI("");
-            LOGI("Ready to run! Press play to start.");
+            LOGI("Game loaded (interpreter mode). Ready to boot.");
         } else {
-            LOGE("╔════════════════════════════════════════╗");
-            LOGE("║   ✗ GAME LOAD FAILED!                 ║");
-            LOGE("╚════════════════════════════════════════╝");
+            LOGE("Game load failed");
         }
 
         env->ReleaseStringUTFChars(jpath, path);
@@ -187,6 +72,14 @@ Java_com_pxs3c_MainActivity_nativeLoadGame(JNIEnv* env, jobject thiz, jstring jp
 
     if (path) env->ReleaseStringUTFChars(jpath, path);
     return JNI_FALSE;
+}
+
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_pxs3c_MainActivity_nativeGetStatus(JNIEnv* env, jobject thiz) {
+    (void)thiz;
+    if (!g_emu) return env->NewStringUTF("Not initialised");
+    const std::string s = g_emu->getStatusText();
+    return env->NewStringUTF(s.c_str());
 }
 
 extern "C" JNIEXPORT void JNICALL

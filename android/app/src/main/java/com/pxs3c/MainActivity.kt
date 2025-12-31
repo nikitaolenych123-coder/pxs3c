@@ -38,6 +38,7 @@ class MainActivity : BaseActivity() {
     external fun nativeAttachSurface(surface: android.view.Surface): Boolean
     external fun nativeSetTargetFps(fps: Int)
     external fun nativeTickFrame(): Int
+    external fun nativeGetStatus(): String
     external fun nativeResize(width: Int, height: Int): Boolean
     external fun nativeSetClearColor(r: Float, g: Float, b: Float)
     external fun nativeSetVsync(enabled: Boolean)
@@ -377,6 +378,13 @@ class MainActivity : BaseActivity() {
             override fun run() {
                 if (!isRunning) return
                 try {
+                    // Pull a short status string from native core
+                    try {
+                        val s = nativeGetStatus()
+                        if (s.isNotBlank()) statusText.text = s
+                    } catch (_: Exception) {
+                        // Ignore status errors
+                    }
                     val delay = nativeTickFrame().toLong().coerceIn(1L, 100L)
                     frameHandler?.postDelayed(this, delay)
                 } catch (e: Exception) {
