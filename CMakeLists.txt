@@ -5,22 +5,19 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# High-Performance Build Flags for Snapdragon 8s Gen 3 (Cortex-X4 + Adreno 735)
 if(ANDROID)
-    message(STATUS "🚀 PXS3C High-Performance Build Mode")
-    message(STATUS "Target: Snapdragon 8s Gen 3 (ARMv9-A + SVE2)")
-    
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Ofast -march=armv9-a+sve2")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto=full -fomit-frame-pointer -ffast-math")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftree-vectorize -fvectorize")
-    
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -Ofast -march=armv9-a+sve2")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -flto=full -fomit-frame-pointer -ffast-math")
-    
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flto=full -Wl,--gc-sections -Wl,-O3")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto=full -Wl,--gc-sections -Wl,-O3")
-    
-    set(LLVM_FOUND FALSE)
+  message(STATUS "Android build: portable ARM64 optimisations")
+  # IMPORTANT: Do NOT force CPU-specific flags like -march=armv9-a+sve2.
+  # That can crash on devices which don't support the targeted ISA.
+  # Keep compatibility across arm64-v8a while still optimising release builds.
+
+  if(CMAKE_BUILD_TYPE MATCHES "^Release$|^RelWithDebInfo$|^MinSizeRel$")
+    add_compile_options(-O3 -DNDEBUG -fomit-frame-pointer)
+    add_link_options(-Wl,--gc-sections -Wl,-O3)
+
+    # Enable LTO if supported by the toolchain.
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+  endif()
 endif()
 
 # Find LLVM for JIT compilation (unless explicitly disabled or cross-compiling for Android)
